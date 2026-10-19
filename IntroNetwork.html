@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction aux réseaux de neurones</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        color: #444;
+        margin-top: 25px;
+        margin-bottom: 15px;
+      }
+
+      p {
+        line-height: 1.6;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .image-container {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+      }
+
+      .image-container img {
+        max-width: 50%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .formula {
+        text-align: center;
+        margin: 20px 0;
+        padding: 10px;
+        background: #e8f5e9;
+        border-radius: 6px;
+        font-size: 16px;
+        font-family: monospace;
+      }
+
+      .weight-table {
+        margin: 20px 0;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .weight-table th,
+      .weight-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .weight-table th {
+        background: #f0f0f0;
+        font-weight: bold;
+      }
+
+      .weight-table tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      .instruction {
+        background: #fff3cd;
+        padding: 15px;
+        border-left: 4px solid #ffc107;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+
+      .code {
+        font-family: monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Introduction aux réseaux de neurones</h1>
+
+      <p>
+Un réseau de neurones transforme des données d'entrée en résultats, en propageant les valeurs de couche en couche via des opérations de pondération et de sommation. 
+      </p>
+
+      <h2>Le perceptron simple : un réseau sans couche cachée</h2>
+
+      <p>
+        les propagations sont directes de la couche d'entrée vers la couche de
+        sortie en appliquant des poids sur les entrées et en les sommant pour obtenir la sortie.
+      </p>
+
+      <div class="image-container">
+        <img src="img/NeuronesUneCouche.png" alt="Schéma d'un réseau de neurones à une couche" />
+        <p><em>Schéma d'un perceptron simple</em></p>
+      </div>
+
+  
+
+      <p>
+        Les calculs sont du type : <span class="code">Vecteur de sortie = vecteur d'entrée × matrice de coefficients </span>
+      </p>
+
+      <h2>Représentation matricielle</h2>
+
+      <p>Le même schéma en représentation matricielle est le suivant :</p>
+
+      <div class="image-container">
+        <img src="img/NeuronesUneCoucheVertical.png" alt="Représentation matricielle du réseau" />
+        <p><em>Représentation matricielle du réseau de neurones</em></p>
+      </div>
+
+<H2>Exemple d'application : le feu tricolore</h2>
+On va créer un réseau de neurones simple qui prend en entrée un code binaire représentant un numéro de feu tricolore et qui produit en sortie un code binaire indiquant quel feu est allumé.
+
+      <table class="weight-table">
+        <thead>
+          <tr>
+
+            <th>Entrée binaire (chiffre)</th>
+            <th>Sortie Vert Orange Rouge</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td><span class="code">00 (0)</span></td>
+                <td><span class="code">0 0 0</span></td>    
+            <td>aucun feu  </td>
+          </tr>
+          <tr>
+                
+            <td><span class="code">01 (1)</span></td>
+              <td><span class="code">1 0 0</span></td>
+            <td>feu vert uniquement </td>
+          </tr>
+          <tr>
+            <td><span class="code">10 (2)</span></td>
+            <td><span class="code">1 0 0</span></td>
+            <td>feu orange uniquement </td>
+          </tr>
+          <tr>
+            <td><span class="code">11 (3)   </span></td>
+            <td><span class="code">0 0 1</span></td>
+            <td>feu rouge uniquement    </td>
+          </tr>
+        </tbody>
+      </table>
+   <h3> Faire pour comprendre :
+    <a href = "./feu-modele-ia.html">créer votre perceptron </a>
+    </h3>
+
+    </div>
+ 
+  </body>
+</html>

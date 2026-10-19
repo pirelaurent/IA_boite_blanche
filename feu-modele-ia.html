@@ -538,20 +538,18 @@
   </head>
   <body>
     <div class="container">
-      <h1>Créez un modèle IA</h1>
+      <h1>Créez un perceptron</h1>
       <div class="subtitle">
-        <b>Entrées :</b> 2 bits (b1 et b0) soit 4 possibilités de 0 à 3
-        associées aux boutons de gauche
+        <b>Entrées :</b> 2 bits b0 b1 (valeur 0 ou 1) selon le choix de feu à allumer.
         <br />
-        <b>Modèle :</b> Une matrice de nombres qui calcule les sorties en
-        fonction des entrées.
+        <b>Modèle :</b> La matrice de poids à appliquer aux entrées .
         <br />
-        <b>Sorties :</b> 3 valeurs (s1, s2, s3) qui sont comparées à un seuil
-        pour déterminer si les feux s'allument.
-        <br />
-        <b>Seuil :</b> Un nombre qui détermine le courant minimal pour que les
-        feux s'allument.
+        <b>Sorties :</b> <br>Résultat de la convolution des entrées avec la matrice de poids. 
+        <br>0 si  le résultat est inférieur au seuil, <br>1 si supérieur : le feu correspondant s'allume.
       </div>
+
+      <b>Pensez à testez tous les cas de figure.</b>
+<h3> A vous de jouer</h3>
 
       <div class="top-row">
         <!-- Boutons compacts - ordre inversé -->
@@ -568,21 +566,21 @@
           </div>
           <div class="btn-wrapper">
             <div class="satisfied-indicator" id="satisfied-2">✗</div>
-            <div class="btn" onclick="setConfig(1, 0)">
+            <div class="btn" onclick="setConfig(0, 1)">
               <span class="btn-label">2 orange</span>
               <div class="btn-bits">
-                <span>b1 1</span>
-                <span>b0 0</span>
+                <span>b1 0</span>
+                <span>b0 1</span>
               </div>
             </div>
           </div>
           <div class="btn-wrapper">
             <div class="satisfied-indicator" id="satisfied-1">✗</div>
-            <div class="btn" onclick="setConfig(0, 1)">
+            <div class="btn" onclick="setConfig(1, 0)">
               <span class="btn-label">1 vert</span>
               <div class="btn-bits">
-                <span>b1 0</span>
-                <span>b0 1</span>
+                <span>b1 1</span>
+                <span>b0 0</span>
               </div>
             </div>
           </div>
@@ -834,11 +832,11 @@
           results0[0] < seuil && results0[1] < seuil && results0[2] < seuil;
         updateIndicator(0, satisfied0);
 
-        const s1_1 = 0 * matrix[0][0] + 1 * matrix[1][0];
+        const s1_1 = 1 * matrix[0][0] + 0 * matrix[1][0];
         const satisfied1 = s1_1 >= seuil;
         updateIndicator(1, satisfied1);
 
-        const s2_2 = 1 * matrix[0][1] + 0 * matrix[1][1];
+        const s2_2 = 0 * matrix[0][1] + 1 * matrix[1][1];
         const satisfied2 = s2_2 >= seuil;
         updateIndicator(2, satisfied2);
 
