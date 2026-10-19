@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Créez votre propre modèle </title>
+    <title>Créez un modèle </title>
     <style>
       * {
         box-sizing: border-box;
@@ -448,6 +448,32 @@
         text-align: center;
       }
 
+      /* Cadres gris pour les colonnes */
+      .column-frame {
+        border: 3px solid #999;
+        border-radius: 8px;
+        padding: 6px 4px;
+        background: rgba(240, 240, 240, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .column-group {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      /* Re-defining matrix-grid for column layout */
+      .matrix-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        align-items: center;
+      }
+
       /* Seuil */
       .seuil-control {
         margin: 4px 0;
@@ -512,7 +538,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Créez votre propre modèle IA</h1>
+      <h1>Créez un modèle IA</h1>
       <div class="subtitle">
         <b>Entrées :</b> 2 bits (b1 et b0) soit 4 possibilités de 0 à 3
         associées aux boutons de gauche
@@ -597,109 +623,100 @@
         <div class="matrix-output-section">
           <div class="section-label">Modèle</div>
           <div class="matrix-section">
-            <div class="matrix-grid">
-              <!-- Ligne 1 -->
-              <div class="matrix-row">
-                <div class="cell-container">
-                  <div class="cell" id="cell-0-0">
-                    <div class="cell-value" id="cell-value-0-0">0.0</div>
-                    <button class="cell-btn up" onclick="adjustCell(0, 0, 0.2)">
-                      +
-                    </button>
-                    <button
-                      class="cell-btn down"
-                      onclick="adjustCell(0, 0, -0.2)"
-                    >
-                      -
-                    </button>
+            <div class="column-group">
+              <!-- Colonne Vert (s1) -->
+              <div class="column-frame">
+                <div class="matrix-grid">
+                  <div class="cell-container">
+                    <div class="cell" id="cell-0-0">
+                      <div class="cell-value" id="cell-value-0-0">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(0, 0, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 0, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₁₁</div>
                   </div>
-                  <div class="coeff-label">w₁₁</div>
+                  <div class="plus-symbol">+</div>
+                  <div class="cell-container">
+                    <div class="cell" id="cell-1-0">
+                      <div class="cell-value" id="cell-value-1-0">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(1, 0, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 0, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₂₁</div>
+                  </div>
                 </div>
-                <div class="cell-container">
-                  <div class="cell" id="cell-0-1">
-                    <div class="cell-value" id="cell-value-0-1">0.0</div>
-                    <button class="cell-btn up" onclick="adjustCell(0, 1, 0.2)">
-                      +
-                    </button>
-                    <button
-                      class="cell-btn down"
-                      onclick="adjustCell(0, 1, -0.2)"
-                    >
-                      -
-                    </button>
-                  </div>
-                  <div class="coeff-label">w₁₂</div>
+                <div class="equal-symbol">=</div>
+                <div class="result-col">
+                  <div class="result-cell" id="result-0">0.0</div>
+                  <div class="result-label">s₁</div>
                 </div>
-                <div class="cell-container">
-                  <div class="cell" id="cell-0-2">
-                    <div class="cell-value" id="cell-value-0-2">0.0</div>
-                    <button class="cell-btn up" onclick="adjustCell(0, 2, 0.2)">
-                      +
-                    </button>
-                    <button
-                      class="cell-btn down"
-                      onclick="adjustCell(0, 2, -0.2)"
-                    >
-                      -
-                    </button>
-                  </div>
-                  <div class="coeff-label">w₁₃</div>
+                <div class="feu-container">
+                  <div class="feu vert off" id="feu-0"></div>
+                  <div class="feu-label">Vert</div>
                 </div>
               </div>
 
-              <!-- Ligne + -->
-              <div class="plus-row">
-                <div class="plus-symbol">+</div>
-                <div class="plus-symbol">+</div>
-                <div class="plus-symbol">+</div>
+              <!-- Colonne Orange (s2) -->
+              <div class="column-frame">
+                <div class="matrix-grid">
+                  <div class="cell-container">
+                    <div class="cell" id="cell-0-1">
+                      <div class="cell-value" id="cell-value-0-1">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(0, 1, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 1, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₁₂</div>
+                  </div>
+                  <div class="plus-symbol">+</div>
+                  <div class="cell-container">
+                    <div class="cell" id="cell-1-1">
+                      <div class="cell-value" id="cell-value-1-1">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(1, 1, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 1, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₂₂</div>
+                  </div>
+                </div>
+                <div class="equal-symbol">=</div>
+                <div class="result-col">
+                  <div class="result-cell" id="result-1">0.0</div>
+                  <div class="result-label">s₂</div>
+                </div>
+                <div class="feu-container">
+                  <div class="feu orange off" id="feu-1"></div>
+                  <div class="feu-label">Orange</div>
+                </div>
               </div>
 
-              <!-- Ligne 2 -->
-              <div class="matrix-row">
-                <div class="cell-container">
-                  <div class="cell" id="cell-1-0">
-                    <div class="cell-value" id="cell-value-1-0">0.0</div>
-                    <button class="cell-btn up" onclick="adjustCell(1, 0, 0.2)">
-                      +
-                    </button>
-                    <button
-                      class="cell-btn down"
-                      onclick="adjustCell(1, 0, -0.2)"
-                    >
-                      -
-                    </button>
+              <!-- Colonne Rouge (s3) -->
+              <div class="column-frame">
+                <div class="matrix-grid">
+                  <div class="cell-container">
+                    <div class="cell" id="cell-0-2">
+                      <div class="cell-value" id="cell-value-0-2">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(0, 2, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 2, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₁₃</div>
                   </div>
-                  <div class="coeff-label">w₂₁</div>
+                  <div class="plus-symbol">+</div>
+                  <div class="cell-container">
+                    <div class="cell" id="cell-1-2">
+                      <div class="cell-value" id="cell-value-1-2">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(1, 2, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 2, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₂₃</div>
+                  </div>
                 </div>
-                <div class="cell-container">
-                  <div class="cell" id="cell-1-1">
-                    <div class="cell-value" id="cell-value-1-1">0.0</div>
-                    <button class="cell-btn up" onclick="adjustCell(1, 1, 0.2)">
-                      +
-                    </button>
-                    <button
-                      class="cell-btn down"
-                      onclick="adjustCell(1, 1, -0.2)"
-                    >
-                      -
-                    </button>
-                  </div>
-                  <div class="coeff-label">w₂₂</div>
+                <div class="equal-symbol">=</div>
+                <div class="result-col">
+                  <div class="result-cell" id="result-2">0.0</div>
+                  <div class="result-label">s₃</div>
                 </div>
-                <div class="cell-container">
-                  <div class="cell" id="cell-1-2">
-                    <div class="cell-value" id="cell-value-1-2">0.0</div>
-                    <button class="cell-btn up" onclick="adjustCell(1, 2, 0.2)">
-                      +
-                    </button>
-                    <button
-                      class="cell-btn down"
-                      onclick="adjustCell(1, 2, -0.2)"
-                    >
-                      -
-                    </button>
-                  </div>
-                  <div class="coeff-label">w₂₃</div>
+                <div class="feu-container">
+                  <div class="feu rouge off" id="feu-2"></div>
+                  <div class="feu-label">Rouge</div>
                 </div>
               </div>
             </div>
@@ -707,48 +724,7 @@
           <br />
           <div class="section-label">Sorties</div>
 
-
-          <div class="output-wrapper">
-            <!-- Signe égal -->
-            <div class="equal-row">
-              <span class="equal-symbol">=</span>
-              <span class="equal-symbol">=</span>
-              <span class="equal-symbol">=</span>
-            </div>
-
-            <!-- Résultats -->
-            <div class="result-row">
-              <div class="result-col">
-                <div class="result-cell" id="result-0">0.0</div>
-                <div class="result-label">s₁</div>
-              </div>
-              <div class="result-col">
-                <div class="result-cell" id="result-1">0.0</div>
-                <div class="result-label">s₂</div>
-              </div>
-              <div class="result-col">
-                <div class="result-cell" id="result-2">0.0</div>
-                <div class="result-label">s₃</div>
-              </div>
-            </div>
-
-            <!-- Feux horizontaux -->
-            <div class="feux-row">
-              <div class="feu-container">
-                <div class="feu vert off" id="feu-0"></div>
-                <div class="feu-label">Vert</div>
-              </div>
-              <div class="feu-container">
-                <div class="feu orange off" id="feu-1"></div>
-                <div class="feu-label">Orange</div>
-              </div>
-              <div class="feu-container">
-                <div class="feu rouge off" id="feu-2"></div>
-                <div class="feu-label">Rouge</div>
-              </div>
-            </div>
-          </div>
-                    <!-- Seuil -->
+          <!-- Seuil -->
           <div class="seuil-control">
             <label>Seuil: </label>
             <span class="seuil-value" id="seuil-value">1.0</span>
@@ -762,8 +738,8 @@
               oninput="updateSeuil()"
             />
             <div class="formula">
-              Le feu s'allume si <code> b1 × w₁ⱼ + b0 × w₂ⱼ</code>
-              <code>&gt; seuil</code>
+              Selon sa colonne, le feu s'allume si  (b1 × w₁ⱼ) +  (b0 × w₂ⱼ)
+              &gt; seuil
             </div>
           </div>
         </div>

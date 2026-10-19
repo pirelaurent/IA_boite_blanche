@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Créez un modèle </title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        text-align: left;
+        color: #666;
+        margin-bottom: 20px;
+        font-style: italic;
+      }
+
+      .formula {
+        text-align: center;
+        margin: 1px 0;
+        padding: 4px;
+        background: #e8f5e9;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .formula code {
+        background: #c8e6c9;
+        padding: 1px 4px;
+        border-radius: 3px;
+        font-family: monospace;
+        font-size: 11px;
+      }
+
+      .top-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: nowrap;
+      }
+
+      /* Labels de section */
+      .section-label {
+        font-weight: bold;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 6px;
+        text-align: center;
+      }
+
+      /* Boutons compacts */
+      .buttons-section {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .btn-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .satisfied-indicator {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .satisfied-indicator.yes {
+        color: #4caf50;
+      }
+
+      .satisfied-indicator.no {
+        color: #f44336;
+      }
+
+      .btn {
+        padding: 8px;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        background: #f8f8f8;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        font-size: 13px;
+        width: 110px;
+        min-width: 110px;
+        white-space: nowrap;
+      }
+
+      .btn:hover {
+        background: #e8e8e8;
+      }
+
+      .btn-label {
+        font-weight: bold;
+        flex: 1;
+      }
+
+      .btn-bits {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.8em;
+        color: #555;
+        font-family: monospace;
+        line-height: 1.1;
+      }
+
+      /* Entrées */
+      .input-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 15px;
+      }
+
+      /* Bits et multiplicateurs */
+      .bits-multiplier-section {
+        display: flex;
+        gap: 4px;
+      }
+
+      .bits-section {
+        display: flex;
+        flex-direction: column;
+        gap: 47px;
+        padding: 8px;
+        border: 2px solid #333;
+        border-radius: 6px;
+        background: #f9f9f9;
+        align-items: center;
+      }
+
+      .bit-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .bit-label {
+        font-weight: bold;
+        color: #333;
+        font-size: 0.85em;
+        min-width: 18px;
+        text-align: right;
+      }
+
+      .bit-box {
+        width: 45px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 14px;
+        font-weight: bold;
+        border: 2px solid #333;
+        border-radius: 4px;
+        background: #f8f8f8;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .mult-column {
+        display: flex;
+        flex-direction: column;
+        gap: 47px;
+        padding: 8px 0;
+      }
+
+      .multiplier {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        padding: 0 5px;
+      }
+
+      /* Matrice et sorties */
+      .matrix-output-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .matrix-section {
+        padding: 8px;
+        border: 2px solid #333;
+        border-radius: 6px;
+        background: #f9f9f9;
+      }
+
+      .matrix-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .matrix-row {
+        display: flex;
+        gap: 6px;
+      }
+
+      .cell-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+      }
+
+      .cell {
+        width: 89px;
+        height: 35px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background: #f8f8f8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        cursor: default;
+        transition: all 0.2s;
+      }
+
+      .cell:hover {
+        border-color: #aaa;
+      }
+
+      .cell-value {
+        width: 45px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: bold;
+        border: none;
+        background: transparent;
+        cursor: default;
+      }
+
+      .cell.filled {
+        background: #ffd700;
+        border-color: #ffd700;
+      }
+
+      .cell-btn {
+        width: 20px;
+        height: 20px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+      }
+
+      .cell-btn.up {
+        background: #4caf50;
+        color: white;
+      }
+
+      .cell-btn.down {
+        background: #f44336;
+        color: white;
+      }
+
+      .cell-btn:hover {
+        opacity: 0.8;
+      }
+
+      .coeff-label {
+        font-size: 14px;
+        color: #666;
+        font-family: monospace;
+      }
+
+      /* Symbole plus entre les lignes */
+      .plus-row {
+        display: flex;
+        gap: 6px;
+        margin: 2px 0;
+        justify-content: center;
+      }
+
+      .plus-symbol {
+        width: 89px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      /* Sorties */
+      .output-wrapper {
+        padding: 8px;
+        border: 2px solid #333;
+        border-radius: 6px;
+        background: #f9f9f9;
+        margin-top: 10px;
+      }
+
+      /* Signe égal */
+      .equal-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+      }
+
+      .equal-symbol {
+        width: 89px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      /* Résultats */
+      .result-row {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+      }
+
+      .result-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+        width: 89px;
+      }
+
+      .result-cell {
+        width: 45px;
+        height: 30px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .result-label {
+        font-size: 9px;
+        color: #666;
+        text-align: center;
+        margin-top: 1px;
+      }
+
+      /* Feux horizontaux */
+      .feux-row {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        justify-content: center;
+      }
+
+      .feu-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        width: 89px;
+      }
+
+      .feu {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 2px solid #111;
+        transition: all 0.3s;
+      }
+
+      .feu.off {
+        background: #444;
+      }
+
+      .feu.active {
+        box-shadow: 0 0 12px currentColor;
+      }
+
+      .feu.vert.off {
+        background: #333;
+      }
+      .feu.vert.active {
+        background: #4caf50;
+        color: #4caf50;
+      }
+
+      .feu.orange.off {
+        background: #333;
+      }
+      .feu.orange.active {
+        background: #ff9800;
+        color: #ff9800;
+      }
+
+      .feu.rouge.off {
+        background: #333;
+      }
+      .feu.rouge.active {
+        background: #f44336;
+        color: #f44336;
+      }
+
+      .feu-label {
+        font-weight: bold;
+        font-size: 10px;
+        text-align: center;
+      }
+
+      /* Cadres gris pour les colonnes */
+      .column-frame {
+        border: 3px solid #999;
+        border-radius: 8px;
+        padding: 6px 4px;
+        background: rgba(240, 240, 240, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .column-group {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      /* Re-defining matrix-grid for column layout */
+      .matrix-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        align-items: center;
+      }
+
+      /* Seuil */
+      .seuil-control {
+        margin: 4px 0;
+        padding: 12px;
+        background: #f0f0f0;
+        border-radius: 6px;
+        text-align: center;
+      }
+
+      .seuil-control label {
+        font-weight: bold;
+        margin-right: 8px;
+        font-size: 14px;
+      }
+
+      .seuil-value {
+        display: inline-block;
+        background: white;
+        padding: 2px;
+        border-radius: 2px;
+        font-weight: bold;
+        color: #333;
+        margin: 0 8px;
+      }
+
+      input[type="range"] {
+        width: 180px;
+        height: 6px;
+        border-radius: 3px;
+        background: #ddd;
+        outline: none;
+        vertical-align: middle;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #333;
+        cursor: pointer;
+      }
+
+      .info {
+        margin-top: 15px;
+        padding: 12px;
+        background: #fff3cd;
+        border-radius: 6px;
+        border-left: 3px solid #ffc107;
+      }
+
+      .info h4 {
+        color: #856404;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .info p {
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Créez un modèle IA</h1>
+      <div class="subtitle">
+        <b>Entrées :</b> 2 bits (b1 et b0) soit 4 possibilités de 0 à 3
+        associées aux boutons de gauche
+        <br />
+        <b>Modèle :</b> Une matrice de nombres qui calcule les sorties en
+        fonction des entrées.
+        <br />
+        <b>Sorties :</b> 3 valeurs (s1, s2, s3) qui sont comparées à un seuil
+        pour déterminer si les feux s'allument.
+        <br />
+        <b>Seuil :</b> Un nombre qui détermine le courant minimal pour que les
+        feux s'allument.
+      </div>
+
+      <div class="top-row">
+        <!-- Boutons compacts - ordre inversé -->
+        <div class="buttons-section">
+          <div class="btn-wrapper">
+            <div class="satisfied-indicator" id="satisfied-3">✗</div>
+            <div class="btn" onclick="setConfig(1, 1)">
+              <span class="btn-label">3 rouge</span>
+              <div class="btn-bits">
+                <span>b1 1</span>
+                <span>b0 1</span>
+              </div>
+            </div>
+          </div>
+          <div class="btn-wrapper">
+            <div class="satisfied-indicator" id="satisfied-2">✗</div>
+            <div class="btn" onclick="setConfig(1, 0)">
+              <span class="btn-label">2 orange</span>
+              <div class="btn-bits">
+                <span>b1 1</span>
+                <span>b0 0</span>
+              </div>
+            </div>
+          </div>
+          <div class="btn-wrapper">
+            <div class="satisfied-indicator" id="satisfied-1">✗</div>
+            <div class="btn" onclick="setConfig(0, 1)">
+              <span class="btn-label">1 vert</span>
+              <div class="btn-bits">
+                <span>b1 0</span>
+                <span>b0 1</span>
+              </div>
+            </div>
+          </div>
+          <div class="btn-wrapper">
+            <div class="satisfied-indicator" id="satisfied-0">✗</div>
+            <div class="btn" onclick="setConfig(0, 0)">
+              <span class="btn-label">0 éteint</span>
+              <div class="btn-bits">
+                <span>b1 0</span>
+                <span>b0 0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entrées -->
+        <div class="input-section">
+          <div class="section-label">Entrées</div>
+          <div class="bits-multiplier-section">
+            <div class="bits-section">
+              <div class="bit-row">
+                <div class="bit-label">b1</div>
+                <div class="bit-box" id="b1" onclick="toggleBit('b1')">0</div>
+              </div>
+              <div class="bit-row">
+                <div class="bit-label">b0</div>
+                <div class="bit-box" id="b0" onclick="toggleBit('b0')">0</div>
+              </div>
+            </div>
+            <div class="mult-column">
+              <div class="multiplier">×</div>
+              <div class="multiplier">×</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Matrice et sorties -->
+        <div class="matrix-output-section">
+          <div class="section-label">Modèle</div>
+          <div class="matrix-section">
+            <div class="column-group">
+              <!-- Colonne Vert (s1) -->
+              <div class="column-frame">
+                <div class="matrix-grid">
+                  <div class="cell-container">
+                    <div class="cell" id="cell-0-0">
+                      <div class="cell-value" id="cell-value-0-0">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(0, 0, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 0, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₁₁</div>
+                  </div>
+                  <div class="plus-symbol">+</div>
+                  <div class="cell-container">
+                    <div class="cell" id="cell-1-0">
+                      <div class="cell-value" id="cell-value-1-0">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(1, 0, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 0, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₂₁</div>
+                  </div>
+                </div>
+                <div class="equal-symbol">=</div>
+                <div class="result-col">
+                  <div class="result-cell" id="result-0">0.0</div>
+                  <div class="result-label">s₁</div>
+                </div>
+                <div class="feu-container">
+                  <div class="feu vert off" id="feu-0"></div>
+                  <div class="feu-label">Vert</div>
+                </div>
+              </div>
+
+              <!-- Colonne Orange (s2) -->
+              <div class="column-frame">
+                <div class="matrix-grid">
+                  <div class="cell-container">
+                    <div class="cell" id="cell-0-1">
+                      <div class="cell-value" id="cell-value-0-1">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(0, 1, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 1, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₁₂</div>
+                  </div>
+                  <div class="plus-symbol">+</div>
+                  <div class="cell-container">
+                    <div class="cell" id="cell-1-1">
+                      <div class="cell-value" id="cell-value-1-1">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(1, 1, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 1, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₂₂</div>
+                  </div>
+                </div>
+                <div class="equal-symbol">=</div>
+                <div class="result-col">
+                  <div class="result-cell" id="result-1">0.0</div>
+                  <div class="result-label">s₂</div>
+                </div>
+                <div class="feu-container">
+                  <div class="feu orange off" id="feu-1"></div>
+                  <div class="feu-label">Orange</div>
+                </div>
+              </div>
+
+              <!-- Colonne Rouge (s3) -->
+              <div class="column-frame">
+                <div class="matrix-grid">
+                  <div class="cell-container">
+                    <div class="cell" id="cell-0-2">
+                      <div class="cell-value" id="cell-value-0-2">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(0, 2, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 2, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₁₃</div>
+                  </div>
+                  <div class="plus-symbol">+</div>
+                  <div class="cell-container">
+                    <div class="cell" id="cell-1-2">
+                      <div class="cell-value" id="cell-value-1-2">0.0</div>
+                      <button class="cell-btn up" onclick="adjustCell(1, 2, 0.2)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 2, -0.2)">-</button>
+                    </div>
+                    <div class="coeff-label">w₂₃</div>
+                  </div>
+                </div>
+                <div class="equal-symbol">=</div>
+                <div class="result-col">
+                  <div class="result-cell" id="result-2">0.0</div>
+                  <div class="result-label">s₃</div>
+                </div>
+                <div class="feu-container">
+                  <div class="feu rouge off" id="feu-2"></div>
+                  <div class="feu-label">Rouge</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="section-label">Sorties</div>
+
+          <!-- Seuil -->
+          <div class="seuil-control">
+            <label>Seuil: </label>
+            <span class="seuil-value" id="seuil-value">1.0</span>
+            <input
+              type="range"
+              id="seuil"
+              min="0.5"
+              max="2"
+              step="0.1"
+              value="1.0"
+              oninput="updateSeuil()"
+            />
+            <div class="formula">
+              Selon sa colonne, le feu s'allume si  (b1 × w₁ⱼ) +  (b0 × w₂ⱼ)
+              &gt; seuil
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+    <script>
+      let matrix = [
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
+      ];
+      let b1 = 0;
+      let b0 = 0;
+      let seuil = 1.0;
+
+      const b1El = document.getElementById("b1");
+      const b0El = document.getElementById("b0");
+      const seuilEl = document.getElementById("seuil");
+      const seuilValue = document.getElementById("seuil-value");
+
+      function adjustCell(row, col, delta) {
+        matrix[row][col] = parseFloat((matrix[row][col] + delta).toFixed(2));
+        if (matrix[row][col] < -5) matrix[row][col] = -5;
+        if (matrix[row][col] > 5) matrix[row][col] = 5;
+
+        document.getElementById(`cell-value-${row}-${col}`).textContent =
+          matrix[row][col] === 0 ? "0.0" : matrix[row][col].toFixed(1);
+
+        const cell = document.getElementById(`cell-${row}-${col}`);
+        cell.classList.toggle("filled", matrix[row][col] !== 0);
+
+        computeProducts();
+      }
+
+      function updateSeuil() {
+        seuil = parseFloat(seuilEl.value);
+        seuilValue.textContent = seuil.toFixed(1);
+        computeProducts();
+      }
+
+      function setConfig(newB1, newB0) {
+        b1 = newB1;
+        b0 = newB0;
+        b1El.textContent = b1;
+        b0El.textContent = b0;
+        computeProducts();
+      }
+
+      function toggleBit(bit) {
+        if (bit === "b1") b1 = b1 === 0 ? 1 : 0;
+        if (bit === "b0") b0 = b0 === 0 ? 1 : 0;
+        b1El.textContent = b1;
+        b0El.textContent = b0;
+        computeProducts();
+      }
+
+      function computeProducts() {
+        b1El.textContent = b1;
+        b0El.textContent = b0;
+
+        const results = [0, 0, 0];
+        for (let j = 0; j < 3; j++) {
+          results[j] = b1 * matrix[0][j] + b0 * matrix[1][j];
+        }
+
+        for (let j = 0; j < 3; j++) {
+          document.getElementById(`result-${j}`).textContent =
+            results[j].toFixed(1);
+        }
+
+        for (let j = 0; j < 3; j++) {
+          const feu = document.getElementById(`feu-${j}`);
+          feu.classList.remove("active");
+          feu.classList.add("off");
+
+          if (results[j] > seuil) {
+            feu.classList.remove("off");
+            feu.classList.add("active");
+          }
+        }
+
+        updateSatisfactionIndicators();
+      }
+
+      function updateSatisfactionIndicators() {
+        const results0 = [
+          0 * matrix[0][0] + 0 * matrix[1][0],
+          0 * matrix[0][1] + 0 * matrix[1][1],
+          0 * matrix[0][2] + 0 * matrix[1][2],
+        ];
+        const satisfied0 =
+          results0[0] < seuil && results0[1] < seuil && results0[2] < seuil;
+        updateIndicator(0, satisfied0);
+
+        const s1_1 = 0 * matrix[0][0] + 1 * matrix[1][0];
+        const satisfied1 = s1_1 >= seuil;
+        updateIndicator(1, satisfied1);
+
+        const s2_2 = 1 * matrix[0][1] + 0 * matrix[1][1];
+        const satisfied2 = s2_2 >= seuil;
+        updateIndicator(2, satisfied2);
+
+        const s3_3 = 1 * matrix[0][2] + 1 * matrix[1][2];
+        const satisfied3 = s3_3 >= seuil;
+        updateIndicator(3, satisfied3);
+      }
+
+      function updateIndicator(btnNum, satisfied) {
+        const el = document.getElementById(`satisfied-${btnNum}`);
+        el.textContent = satisfied ? "✓" : "✗";
+        el.className = "satisfied-indicator " + (satisfied ? "yes" : "no");
+      }
+
+      window.addEventListener("load", computeProducts);
+    </script>
+  </body>
+</html>
