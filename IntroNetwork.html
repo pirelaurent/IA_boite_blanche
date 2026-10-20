@@ -80,6 +80,7 @@
         border: 1px solid #ddd;
         padding: 10px;
         text-align: center;
+    
       }
 
       .weight-table th {
@@ -110,53 +111,39 @@
   </head>
   <body>
     <div class="container">
-      <h1>Introduction aux réseaux de neurones</h1>
+      <h1>Réseaux de neurones</h1>
 
-      <p>
-Un réseau de neurones transforme des données d'entrée en résultats, en propageant les valeurs de couche en couche via des opérations de pondération et de sommation. 
-      </p>
+    
 
-      <h2>Le perceptron simple : un réseau sans couche cachée</h2>
-
-      <p>
-        les propagations sont directes de la couche d'entrée vers la couche de
-        sortie en appliquant des poids sur les entrées et en les sommant pour obtenir la sortie.
-      </p>
-
-      <div class="image-container">
-        <img src="img/NeuronesUneCouche.png" alt="Schéma d'un réseau de neurones à une couche" />
-        <p><em>Schéma d'un perceptron simple</em></p>
-      </div>
+      <h2>La brique de base : le perceptron </h2>
 
   
+      <p> On cherche à reproduire en miniature la logique d'un neurone biologique 
+      qui ne transmet un influx nerveux que si ses stimulations cumulées franchissent son seuil d'excitation.</p>
 
-      <p>
-        Les calculs sont du type : <span class="code">Vecteur de sortie = vecteur d'entrée × matrice de coefficients </span>
+    <p>
+        Par analogie, les valeurs des <i> neurones </i>d'entrée (Ei) sont multipliées par des poids (Wij)  et sommées. 
+        <br>Si le résultat dépasse un certain seuil, la sortie est activée. 
       </p>
-
-      <h2>Représentation matricielle</h2>
-
-      <p>Le même schéma en représentation matricielle est le suivant :</p>
-
-      <div class="image-container">
-        <img src="img/NeuronesUneCoucheVertical.png" alt="Représentation matricielle du réseau" />
-        <p><em>Représentation matricielle du réseau de neurones</em></p>
+        <div class="image-container">
+        <img src="img/NeuronesUneCouche.png" alt="Schéma d'un réseau de neurones à une couche" />
+        <p><em>Schéma d'un perceptron </em></p>
       </div>
 
-<H2>Exemple d'application : le feu tricolore</h2>
-On va créer un réseau de neurones simple qui prend en entrée un code binaire représentant un numéro de feu tricolore et qui produit en sortie un code binaire indiquant quel feu est allumé.
-
-      <table class="weight-table">
+<H2>Exemple : Piloter un feu tricolore avec un perceptron</h2>
+On veut créer un réseau de neurones dont le jeu de test est le suivant :
+      <table class="weight-table" >
         <thead>
           <tr>
 
-            <th>Entrée binaire (chiffre)</th>
-            <th>Sortie Vert Orange Rouge</th>
+            <th>Entrée binaire</th>
+            <th>Sortie visée
+            <br>Vert Orange Rouge</th>
+            <th>Visuel</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-
             <td><span class="code">00 (0)</span></td>
                 <td><span class="code">0 0 0</span></td>    
             <td>aucun feu  </td>
@@ -169,7 +156,7 @@ On va créer un réseau de neurones simple qui prend en entrée un code binaire 
           </tr>
           <tr>
             <td><span class="code">10 (2)</span></td>
-            <td><span class="code">1 0 0</span></td>
+            <td><span class="code">0 1 0</span></td>
             <td>feu orange uniquement </td>
           </tr>
           <tr>
@@ -179,8 +166,13 @@ On va créer un réseau de neurones simple qui prend en entrée un code binaire 
           </tr>
         </tbody>
       </table>
+
+            <div class="image-container">
+        <img src="img/NeuronesUneCoucheVertical.png" alt="Représentation matricielle du réseau" />
+        <p><em>Représentation matricielle du réseau feu tricolore</em></p>
+      </div>
    <h3> Faire pour comprendre :
-    <a href = "./feu-modele-ia.html">créer votre perceptron </a>
+    <a href = "./feu-modele-ia.html">Ajuster les poids du réseau  </a>
     </h3>
 
     </div>
