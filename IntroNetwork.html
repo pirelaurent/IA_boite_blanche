@@ -111,31 +111,42 @@
   </head>
   <body>
     <div class="container">
-      <h1>Réseaux de neurones</h1>
+      <h1><i>Réseaux de neurones</i></h1>
 
-    
+      <p>Un réseau de neurones artificiels est un système informatique inspiré du fonctionnement du cerveau humain.</p>
+      <h2>Le neurone biologique</h2>
+      <p>Un neurone biologique ne transmet un influx nerveux que si ses stimulations reçues cumulées franchissent son seuil d'excitation.</p>
 
-      <h2>La brique de base : le perceptron </h2>
-
-  
-      <p> On cherche à reproduire en miniature la logique d'un neurone biologique 
-      qui ne transmet un influx nerveux que si ses stimulations cumulées franchissent son seuil d'excitation.</p>
-
-    <p>
-        Par analogie, les valeurs des <i> neurones </i>d'entrée (Ei) sont multipliées par des poids (Wij)  et sommées. 
-        <br>Si le résultat dépasse un certain seuil, la sortie est activée. 
-      </p>
-        <div class="image-container">
-        <img src="img/NeuronesUneCouche.png" alt="Schéma d'un réseau de neurones à une couche" />
-        <p><em>Schéma d'un perceptron </em></p>
+      <div class="image-container">
+        <img src="img/neurones.png" alt="Représentation de neurones biologiques " width="300" height="200"/>
+        <p><em>Représentation de neurones biologiques</em></p>
       </div>
 
-<H2>Exemple : Piloter un feu tricolore avec un perceptron</h2>
-On veut créer un réseau de neurones dont le jeu de test est le suivant :
+      <h2>Un  neurone simple: le perceptron </h2>
+
+  
+      <p> Un perceptron reproduit en miniature la logique d'un neurone biologique 
+      qui ne transmet un influx nerveux que si ses stimulations cumulées franchissent son seuil d'excitation.</p>
+    <p>
+    <h3>Les éléments d'un perceptron :</h3>
+     <b>Les entrées</b> Ei: arrivées des stimulations 0 ou 1.
+     <br><b>Les poids</b> Wij: nombres réels multiplicateurs : ils pondèrent l'importance de chaque stimulation .
+     <br><b>La somme pondérée</b> : somme des entrées multipliées par leurs poids respectifs.
+     <br><b>Le seuil</b> : valeur qui détermine si le neurone s'active ou non.
+     <br><b>La sortie d'un neurone</b> : excité (1) ou non excité (0).
+    </p>
+        
+        <div class="image-container">
+        <img src="img/NeuronesUneCouche.png" alt="Schéma d'un réseau de neurones à une couche" />
+        <p><em>Schéma d'un perceptron à 3 neurones dont les sorties réagissent à 2 entrées </em></p>
+      </div>
+
+<H2>Un réseau de neurones perceptron pour piloter un feu tricolore</h2>
+Faire pour comprendre: on se propose de créer un réseau de neurones dont le comportement attendu est le suivant :
+<div align="center" >
       <table class="weight-table" >
         <thead>
           <tr>
-
             <th>Entrée binaire</th>
             <th>Sortie visée
             <br>Vert Orange Rouge</th>
@@ -166,13 +177,12 @@ On veut créer un réseau de neurones dont le jeu de test est le suivant :
           </tr>
         </tbody>
       </table>
-
+</div>
             <div class="image-container">
         <img src="img/NeuronesUneCoucheVertical.png" alt="Représentation matricielle du réseau" />
-        <p><em>Représentation matricielle du réseau feu tricolore</em></p>
+        <p><em>Représentation matricielle des 3 neurones du réseau feu tricolore</em></p>
       </div>
-   <h3> Faire pour comprendre :
-    <a href = "./feu-modele-ia.html">Ajuster les poids du réseau  </a>
+   <h3 align="center" > <a href = "./feu-modele-ia.html"> Faire l'apprentissage de ce réseau </a>
     </h3>
 
     </div>

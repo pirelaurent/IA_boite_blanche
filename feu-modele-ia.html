@@ -538,17 +538,18 @@
   </head>
   <body>
     <div class="container">
-      <h1>Créez un perceptron</h1>
+      <h1>Créez un <i>modèle</i> </h1>
+      <h2> Ajustez les poids du réseau pour un taux de réussite de 100%</h2>
       <div class="subtitle">
-        <b>Entrées :</b> 2 bits b0 b1 (valeur 0 ou 1) selon le choix de feu à allumer.
-        <br />
-        <b>Modèle :</b> La matrice de poids à appliquer aux entrées .
-        <br />
-        <b>Sorties :</b> <br>Résultat de la convolution des entrées avec la matrice de poids. 
-        <br>0 si  le résultat est inférieur au seuil, <br>1 si supérieur : le feu correspondant s'allume.
+      Un bouton place le code binaire de son numéro à l'entrée b1 b0 du réseau. <br />
+        -Quand on appuie sur 0 éteint, on veut que tous les feux soient éteints.<br />
+        -Quand on appuie sur 1 vert, on veut que seul le feu vert s'allume.<br />
+        -Quand on appuie sur 2 orange, on veut que seul le feu orange s'allume.<br />
+        -Quand on appuie sur 3 rouge, on veut que seul le feu rouge s'allume.<br />
+        Quand on pense avoir fini, on repasse sur tous les boutons pour vérifier que le réseau répond correctement à toutes les entrées.<br />
       </div>
 
-      <b>Pensez à testez tous les cas de figure.</b>
+
 <h3> A vous de jouer</h3>
 
       <div class="top-row">
@@ -623,7 +624,7 @@
           <div class="matrix-section">
             <div class="column-group">
               <!-- Colonne Vert (s1) -->
-              <div class="column-frame">
+              <div class="column-frame" style="border-color: green;">
                 <div class="matrix-grid">
                   <div class="cell-container">
                     <div class="cell" id="cell-0-0">
@@ -655,7 +656,7 @@
               </div>
 
               <!-- Colonne Orange (s2) -->
-              <div class="column-frame">
+              <div class="column-frame" style="border-color: orange;">
                 <div class="matrix-grid">
                   <div class="cell-container">
                     <div class="cell" id="cell-0-1">
@@ -687,7 +688,7 @@
               </div>
 
               <!-- Colonne Rouge (s3) -->
-              <div class="column-frame">
+              <div class="column-frame" style="border-color: red;">
                 <div class="matrix-grid">
                   <div class="cell-container">
                     <div class="cell" id="cell-0-2">
@@ -725,7 +726,7 @@
           <!-- Seuil -->
           <div class="seuil-control">
             <label>Seuil: </label>
-            <span class="seuil-value" id="seuil-value">1.0</span>
+            <span class="seuil-value" id="seuil-value">0.99</span>
             <input
               type="range"
               id="seuil"
