@@ -155,7 +155,7 @@
       .bits-section {
         display: flex;
         flex-direction: column;
-        gap: 47px;
+        gap: 17px;
         padding: 8px;
         border: 2px solid #333;
         border-radius: 6px;
@@ -166,7 +166,8 @@
       .bit-row {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 10px;
+        margin: 10px 0;
       }
 
       .bit-label {
@@ -194,15 +195,15 @@
       .mult-column {
         display: flex;
         flex-direction: column;
-        gap: 47px;
-        padding: 8px 0;
+        gap: 37px;
+        padding: 18px 0;
       }
 
       .multiplier {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: bold;
         color: #333;
-        padding: 0 5px;
+        padding: 5px 5px;
       }
 
       /* Matrice et sorties */
@@ -319,7 +320,7 @@
       .plus-symbol {
         width: 89px;
         text-align: center;
-        font-size: 16px;
+        font-size: 24px;
         font-weight: bold;
         color: #333;
       }
@@ -346,7 +347,7 @@
       .equal-symbol {
         width: 89px;
         text-align: center;
-        font-size: 18px;
+        font-size: 24px;
         font-weight: bold;
         color: #333;
       }
@@ -518,16 +519,17 @@
       }
 
       .info {
-        margin-top: 15px;
-        padding: 12px;
+        margin-top: 12px;
+        padding: 8px;
         background: #fff3cd;
-        border-radius: 6px;
+        border-radius: 16px;
         border-left: 3px solid #ffc107;
       }
 
       .info h4 {
         color: #856404;
-        margin-bottom: 8px;
+          margin-top: 8px;
+        margin-bottom: 10px;
         font-size: 14px;
       }
 
@@ -538,16 +540,15 @@
   </head>
   <body>
     <div class="container">
-      <h1>Créez un <i>modèle</i> </h1>
-      <h2> Ajustez les poids du réseau pour un taux de réussite de 100%</h2>
-      <div class="subtitle">
-      Un bouton place le code binaire de son numéro à l'entrée b1 b0 du réseau. <br />
-        -Quand on appuie sur 0 éteint, on veut que tous les feux soient éteints.<br />
-        -Quand on appuie sur 1 vert, on veut que seul le feu vert s'allume.<br />
-        -Quand on appuie sur 2 orange, on veut que seul le feu orange s'allume.<br />
-        -Quand on appuie sur 3 rouge, on veut que seul le feu rouge s'allume.<br />
-        Quand on pense avoir fini, on repasse sur tous les boutons pour vérifier que le réseau répond correctement à toutes les entrées.<br />
-      </div>
+      <h1>Créez votre modèle</h1>
+      <h2> Ajustez les poids du réseau pour satisfaire aux exigences</h2>
+      <div class="info">
+        <h4>Instructions</h4>
+      Chaque bouton numéroté permet de placer son code binaire aux entrées b1 b0 du réseau. <br />
+      Quand on choisit un bouton, on veut que <b>seul</b> le feu correspondant s'allume.<br />
+        
+      Une coche verte ✓  à gauche du bouton indique que le cas est <b>toujours</b> satisfait par le modèle.<br />
+        </div>
 
 
 <h3> A vous de jouer</h3>
@@ -624,13 +625,13 @@
           <div class="matrix-section">
             <div class="column-group">
               <!-- Colonne Vert (s1) -->
-              <div class="column-frame" style="border-color: green;">
+              <div class="column-frame" style="border-color: #4caf50;">
                 <div class="matrix-grid">
                   <div class="cell-container">
                     <div class="cell" id="cell-0-0">
                       <div class="cell-value" id="cell-value-0-0">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(0, 0, 0.2)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(0, 0, -0.2)">-</button>
+                      <button class="cell-btn up" onclick="adjustCell(0, 0, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 0, -0.1)">-</button>
                     </div>
                     <div class="coeff-label">w₁₁</div>
                   </div>
@@ -638,8 +639,8 @@
                   <div class="cell-container">
                     <div class="cell" id="cell-1-0">
                       <div class="cell-value" id="cell-value-1-0">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(1, 0, 0.2)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(1, 0, -0.2)">-</button>
+                      <button class="cell-btn up" onclick="adjustCell(1, 0, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 0, -0.1)">-</button>
                     </div>
                     <div class="coeff-label">w₂₁</div>
                   </div>
@@ -661,8 +662,8 @@
                   <div class="cell-container">
                     <div class="cell" id="cell-0-1">
                       <div class="cell-value" id="cell-value-0-1">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(0, 1, 0.2)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(0, 1, -0.2)">-</button>
+                      <button class="cell-btn up" onclick="adjustCell(0, 1, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 1, -0.1)">-</button>
                     </div>
                     <div class="coeff-label">w₁₂</div>
                   </div>
@@ -670,8 +671,8 @@
                   <div class="cell-container">
                     <div class="cell" id="cell-1-1">
                       <div class="cell-value" id="cell-value-1-1">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(1, 1, 0.2)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(1, 1, -0.2)">-</button>
+                      <button class="cell-btn up" onclick="adjustCell(1, 1, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 1, -0.1)">-</button>
                     </div>
                     <div class="coeff-label">w₂₂</div>
                   </div>
@@ -693,8 +694,8 @@
                   <div class="cell-container">
                     <div class="cell" id="cell-0-2">
                       <div class="cell-value" id="cell-value-0-2">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(0, 2, 0.2)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(0, 2, -0.2)">-</button>
+                      <button class="cell-btn up" onclick="adjustCell(0, 2, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(0, 2, -0.1)">-</button>
                     </div>
                     <div class="coeff-label">w₁₃</div>
                   </div>
@@ -702,8 +703,8 @@
                   <div class="cell-container">
                     <div class="cell" id="cell-1-2">
                       <div class="cell-value" id="cell-value-1-2">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(1, 2, 0.2)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(1, 2, -0.2)">-</button>
+                      <button class="cell-btn up" onclick="adjustCell(1, 2, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustCell(1, 2, -0.1)">-</button>
                     </div>
                     <div class="coeff-label">w₂₃</div>
                   </div>
@@ -721,23 +722,23 @@
             </div>
           </div>
           <br />
-          <div class="section-label">Sorties</div>
+   
 
           <!-- Seuil -->
           <div class="seuil-control">
             <label>Seuil: </label>
-            <span class="seuil-value" id="seuil-value">0.99</span>
+            <span class="seuil-value" id="seuil-value">0.8</span>
             <input
               type="range"
               id="seuil"
               min="0.5"
               max="2"
               step="0.1"
-              value="1.0"
+              value="0.8"
               oninput="updateSeuil()"
             />
             <div class="formula">
-              Selon sa colonne, le feu s'allume si  (b1 × w₁ⱼ) +  (b0 × w₂ⱼ)
+             Un feu s'allume si  (b1 × w₁ⱼ) +  (b0 × w₂ⱼ)
               &gt; seuil
             </div>
           </div>
@@ -758,6 +759,8 @@
       const b0El = document.getElementById("b0");
       const seuilEl = document.getElementById("seuil");
       const seuilValue = document.getElementById("seuil-value");
+      updateSeuil();
+  
 
       function adjustCell(row, col, delta) {
         matrix[row][col] = parseFloat((matrix[row][col] + delta).toFixed(2));
@@ -824,26 +827,30 @@
       }
 
       function updateSatisfactionIndicators() {
-        const results0 = [
-          0 * matrix[0][0] + 0 * matrix[1][0],
-          0 * matrix[0][1] + 0 * matrix[1][1],
-          0 * matrix[0][2] + 0 * matrix[1][2],
-        ];
-        const satisfied0 =
-          results0[0] < seuil && results0[1] < seuil && results0[2] < seuil;
-        updateIndicator(0, satisfied0);
+        // Teste chaque bouton avec sa configuration spécifique
+        // Bouton 0 éteint: b1=0, b0=0 -> tous les feux doivent être éteints (<= seuil)
+        const r0_vert = 0 * matrix[0][0] + 0 * matrix[1][0];
+        const r0_orange = 0 * matrix[0][1] + 0 * matrix[1][1];
+        const r0_rouge = 0 * matrix[0][2] + 0 * matrix[1][2];
+        updateIndicator(0, r0_vert <= seuil && r0_orange <= seuil && r0_rouge <= seuil);
 
-        const s1_1 = 1 * matrix[0][0] + 0 * matrix[1][0];
-        const satisfied1 = s1_1 >= seuil;
-        updateIndicator(1, satisfied1);
+        // Bouton 1 vert: b1=1, b0=0 -> SEUL vert > seuil, orange <= seuil, rouge <= seuil
+        const r1_vert = 1 * matrix[0][0] + 0 * matrix[1][0];
+        const r1_orange = 1 * matrix[0][1] + 0 * matrix[1][1];
+        const r1_rouge = 1 * matrix[0][2] + 0 * matrix[1][2];
+        updateIndicator(1, r1_vert > seuil && r1_orange <= seuil && r1_rouge <= seuil);
 
-        const s2_2 = 0 * matrix[0][1] + 1 * matrix[1][1];
-        const satisfied2 = s2_2 >= seuil;
-        updateIndicator(2, satisfied2);
+        // Bouton 2 orange: b1=0, b0=1 -> SEUL orange > seuil, vert <= seuil, rouge <= seuil
+        const r2_vert = 0 * matrix[0][0] + 1 * matrix[1][0];
+        const r2_orange = 0 * matrix[0][1] + 1 * matrix[1][1];
+        const r2_rouge = 0 * matrix[0][2] + 1 * matrix[1][2];
+        updateIndicator(2, r2_vert <= seuil && r2_orange > seuil && r2_rouge <= seuil);
 
-        const s3_3 = 1 * matrix[0][2] + 1 * matrix[1][2];
-        const satisfied3 = s3_3 >= seuil;
-        updateIndicator(3, satisfied3);
+        // Bouton 3 rouge: b1=1, b0=1 -> SEUL rouge > seuil, vert <= seuil, orange <= seuil
+        const r3_vert = 1 * matrix[0][0] + 1 * matrix[1][0];
+        const r3_orange = 1 * matrix[0][1] + 1 * matrix[1][1];
+        const r3_rouge = 1 * matrix[0][2] + 1 * matrix[1][2];
+        updateIndicator(3, r3_vert <= seuil && r3_orange <= seuil && r3_rouge > seuil);
       }
 
       function updateIndicator(btnNum, satisfied) {
