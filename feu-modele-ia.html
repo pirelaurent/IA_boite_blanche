@@ -124,6 +124,21 @@
         background: #e8e8e8;
       }
 
+      .btn.active {
+        background: #ffc107;
+        border-color: #ff9800;
+        color: #333;
+        box-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+      }
+
+      .btn.active .btn-label {
+        color: #333;
+      }
+
+      .btn.active .btn-bits {
+        color: #555;
+      }
+
       .btn-label {
         font-weight: bold;
         flex: 1;
@@ -536,6 +551,62 @@
       .info p {
         font-size: 12px;
       }
+      
+      /* Message de bravo */
+      .bravo-message {
+        margin-top: 20px;
+        padding: 15px;
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        text-align: center;
+        display: none;
+      }
+      
+      .bravo-message.show {
+        display: block;
+      }
+      
+      .bravo-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2e7d32;
+        margin-bottom: 10px;
+      }
+      
+      .matrix-display {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 15px 0;
+        font-family: monospace;
+        font-size: 16px;
+      }
+      
+      .matrix-row-display {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .matrix-cell-display {
+        width: 50px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border: 2px solid #4caf50;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      
+      .note {
+        font-style: italic;
+        color: #2e7d32;
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
@@ -546,7 +617,7 @@
         <h4>Instructions</h4>
       Chaque bouton numéroté permet de placer son code binaire aux entrées b1 b0 du réseau. <br />
       Quand on choisit un bouton, on veut que <b>seul</b> le feu correspondant s'allume.<br />
-        
+      Ajuster les poids du neurone correspondant pour que son feu s'allume dans ce cas et reste éteint autrement<br /> 
       Une coche verte ✓  à gauche du bouton indique que le cas est <b>toujours</b> satisfait par le modèle.<br />
         </div>
 
@@ -558,7 +629,7 @@
         <div class="buttons-section">
           <div class="btn-wrapper">
             <div class="satisfied-indicator" id="satisfied-3">✗</div>
-            <div class="btn" onclick="setConfig(1, 1)">
+            <div class="btn" id="btn-3" onclick="setConfig(1, 1, 3)">
               <span class="btn-label">3 rouge</span>
               <div class="btn-bits">
                 <span>b1 1</span>
@@ -568,7 +639,7 @@
           </div>
           <div class="btn-wrapper">
             <div class="satisfied-indicator" id="satisfied-2">✗</div>
-            <div class="btn" onclick="setConfig(0, 1)">
+            <div class="btn" id="btn-2" onclick="setConfig(0, 1, 2)">
               <span class="btn-label">2 orange</span>
               <div class="btn-bits">
                 <span>b1 0</span>
@@ -578,7 +649,7 @@
           </div>
           <div class="btn-wrapper">
             <div class="satisfied-indicator" id="satisfied-1">✗</div>
-            <div class="btn" onclick="setConfig(1, 0)">
+            <div class="btn" id="btn-1" onclick="setConfig(1, 0, 1)">
               <span class="btn-label">1 vert</span>
               <div class="btn-bits">
                 <span>b1 1</span>
@@ -588,7 +659,7 @@
           </div>
           <div class="btn-wrapper">
             <div class="satisfied-indicator" id="satisfied-0">✗</div>
-            <div class="btn" onclick="setConfig(0, 0)">
+            <div class="btn" id="btn-0" onclick="setConfig(0, 0, 0)">
               <span class="btn-label">0 éteint</span>
               <div class="btn-bits">
                 <span>b1 0</span>
@@ -742,6 +813,25 @@
               &gt; seuil
             </div>
           </div>
+          
+          <!-- Message de bravo -->
+          <div class="bravo-message" id="bravo-message">
+            <div class="bravo-title">Bravo !</div>
+            <div class="matrix-display">
+              <div class="matrix-row-display">
+                <div class="matrix-cell-display" id="bravo-cell-0-0">0.0</div>
+                <div class="matrix-cell-display" id="bravo-cell-0-1">0.0</div>
+                <div class="matrix-cell-display" id="bravo-cell-0-2">0.0</div>
+              </div>
+              <div class="matrix-row-display">
+                <div class="matrix-cell-display" id="bravo-cell-1-0">0.0</div>
+                <div class="matrix-cell-display" id="bravo-cell-1-1">0.0</div>
+                <div class="matrix-cell-display" id="bravo-cell-1-2">0.0</div>
+              </div>
+            </div>
+            <div class="note">Votre matrice de poids est correcte et satisfait toutes les exigences !</div>
+          </div>
+
         </div>
         
       </div>
@@ -754,6 +844,7 @@
       let b1 = 0;
       let b0 = 0;
       let seuil = 1.0;
+      let activeButton = null;
 
       const b1El = document.getElementById("b1");
       const b0El = document.getElementById("b0");
@@ -782,7 +873,18 @@
         computeProducts();
       }
 
-      function setConfig(newB1, newB0) {
+      function setConfig(newB1, newB0, btnNum) {
+        // Retirer la classe active du bouton précédent
+        if (activeButton !== null) {
+          document.getElementById(`btn-${activeButton}`).classList.remove("active");
+        }
+        
+        // Ajouter la classe active au nouveau bouton
+        if (btnNum !== undefined) {
+          document.getElementById(`btn-${btnNum}`).classList.add("active");
+          activeButton = btnNum;
+        }
+        
         b1 = newB1;
         b0 = newB0;
         b1El.textContent = b1;
@@ -832,25 +934,49 @@
         const r0_vert = 0 * matrix[0][0] + 0 * matrix[1][0];
         const r0_orange = 0 * matrix[0][1] + 0 * matrix[1][1];
         const r0_rouge = 0 * matrix[0][2] + 0 * matrix[1][2];
-        updateIndicator(0, r0_vert <= seuil && r0_orange <= seuil && r0_rouge <= seuil);
+        const satisfied0 = r0_vert <= seuil && r0_orange <= seuil && r0_rouge <= seuil;
+        updateIndicator(0, satisfied0);
 
         // Bouton 1 vert: b1=1, b0=0 -> SEUL vert > seuil, orange <= seuil, rouge <= seuil
         const r1_vert = 1 * matrix[0][0] + 0 * matrix[1][0];
         const r1_orange = 1 * matrix[0][1] + 0 * matrix[1][1];
         const r1_rouge = 1 * matrix[0][2] + 0 * matrix[1][2];
-        updateIndicator(1, r1_vert > seuil && r1_orange <= seuil && r1_rouge <= seuil);
+        const satisfied1 = r1_vert > seuil && r1_orange <= seuil && r1_rouge <= seuil;
+        updateIndicator(1, satisfied1);
 
         // Bouton 2 orange: b1=0, b0=1 -> SEUL orange > seuil, vert <= seuil, rouge <= seuil
         const r2_vert = 0 * matrix[0][0] + 1 * matrix[1][0];
         const r2_orange = 0 * matrix[0][1] + 1 * matrix[1][1];
         const r2_rouge = 0 * matrix[0][2] + 1 * matrix[1][2];
-        updateIndicator(2, r2_vert <= seuil && r2_orange > seuil && r2_rouge <= seuil);
+        const satisfied2 = r2_vert <= seuil && r2_orange > seuil && r2_rouge <= seuil;
+        updateIndicator(2, satisfied2);
 
         // Bouton 3 rouge: b1=1, b0=1 -> SEUL rouge > seuil, vert <= seuil, orange <= seuil
         const r3_vert = 1 * matrix[0][0] + 1 * matrix[1][0];
         const r3_orange = 1 * matrix[0][1] + 1 * matrix[1][1];
         const r3_rouge = 1 * matrix[0][2] + 1 * matrix[1][2];
-        updateIndicator(3, r3_vert <= seuil && r3_orange <= seuil && r3_rouge > seuil);
+        const satisfied3 = r3_vert <= seuil && r3_orange <= seuil && r3_rouge > seuil;
+        updateIndicator(3, satisfied3);
+
+        // Vérifier si tous les cas sont satisfaits
+        updateBravoMessage(satisfied0 && satisfied1 && satisfied2 && satisfied3);
+      }
+
+      function updateBravoMessage(allSatisfied) {
+        const bravoMessage = document.getElementById('bravo-message');
+        if (allSatisfied) {
+          bravoMessage.classList.add('show');
+          // Mettre à jour l'affichage de la matrice
+          for (let row = 0; row < 2; row++) {
+            for (let col = 0; col < 3; col++) {
+              const value = matrix[row][col];
+              document.getElementById(`bravo-cell-${row}-${col}`).textContent = 
+                value === 0 ? '0.0' : value.toFixed(1);
+            }
+          }
+        } else {
+          bravoMessage.classList.remove('show');
+        }
       }
 
       function updateIndicator(btnNum, satisfied) {
