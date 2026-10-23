@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Créez un modèle </title>
+    <title>Jouer avec un modèle </title>
     <style>
       * {
         box-sizing: border-box;
@@ -563,6 +563,26 @@
         display: none;
       }
       
+      /* Lien solution */
+      .solution-link {
+        color: #2196f3;
+        text-decoration: none;
+        font-size: 13px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+      
+      .solution-link:hover {
+        text-decoration: underline;
+      }
+      
+      .model-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+      
       .bravo-message.show {
         display: block;
       }
@@ -611,18 +631,17 @@
   </head>
   <body>
     <div class="container">
-      <h1>Créez votre modèle</h1>
-      <h2> Ajustez les poids du réseau pour satisfaire aux exigences</h2>
+      <h1>Jouer à créer un modèle</h1>
+      <h2> Ajustez les paramètres du réseau pour satisfaire aux exigences</h2>
       <div class="info">
         <h4>Instructions</h4>
-      Chaque bouton numéroté permet de placer son code binaire aux entrées b1 b0 du réseau. <br />
-      Quand on choisit un bouton, on veut que <b>seul</b> le feu correspondant s'allume.<br />
-      Ajuster les poids du neurone correspondant pour que son feu s'allume dans ce cas et reste éteint autrement<br /> 
-      Une coche verte ✓  à gauche du bouton indique que le cas est <b>toujours</b> satisfait par le modèle.<br />
+      Le choix d'un bouton pousse son code binaire aux entrées du réseau et permet de tester. <br />
+      Ajuster les paramètres pour que son feu s'allume dans ce cas et reste éteint autrement<br /> 
+      Une coche ✓  à gauche du bouton indique si le cas est <b>toujours</b> satisfait.<br />
         </div>
 
 
-<h3> A vous de jouer</h3>
+<h3> A vous de jouer sur les paramètres</h3>
 
       <div class="top-row">
         <!-- Boutons compacts - ordre inversé -->
@@ -692,7 +711,10 @@
 
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
-          <div class="section-label">Modèle</div>
+          <div class="model-header">
+            <div class="section-label">Modèle</div>
+            <a class="solution-link" onclick="fillSolution()">(pas réussi : voir une solution)</a>
+          </div>
           <div class="matrix-section">
             <div class="column-group">
               <!-- Colonne Vert (s1) -->
@@ -791,26 +813,23 @@
                 </div>
               </div>
             </div>
-          </div>
-          <br />
-   
-
-          <!-- Seuil -->
-          <div class="seuil-control">
-            <label>Seuil: </label>
-            <span class="seuil-value" id="seuil-value">0.8</span>
-            <input
-              type="range"
-              id="seuil"
-              min="0.5"
-              max="2"
-              step="0.1"
-              value="0.8"
-              oninput="updateSeuil()"
-            />
-            <div class="formula">
-             Un feu s'allume si  (b1 × w₁ⱼ) +  (b0 × w₂ⱼ)
-              &gt; seuil
+            <!-- Seuil -->
+            <div class="seuil-control">
+              <label>Seuil: </label>
+              <span class="seuil-value" id="seuil-value">0.8</span>
+              <input
+                type="range"
+                id="seuil"
+                min="0.5"
+                max="2"
+                step="0.1"
+                value="0.8"
+                oninput="updateSeuil()"
+              />
+              <div class="formula">
+               Un feu s'allume si  (b1 × w₁ⱼ) +  (b0 × w₂ⱼ)
+                &gt; seuil
+              </div>
             </div>
           </div>
           
@@ -829,7 +848,7 @@
                 <div class="matrix-cell-display" id="bravo-cell-1-2">0.0</div>
               </div>
             </div>
-            <div class="note">Votre matrice de poids est correcte et satisfait toutes les exigences !</div>
+            <div class="note" >Votre matrice de poids satisfait tous les tests !</div>
           </div>
 
         </div>
@@ -843,7 +862,7 @@
       ];
       let b1 = 0;
       let b0 = 0;
-      let seuil = 1.0;
+      let seuil = 0.8;
       let activeButton = null;
 
       const b1El = document.getElementById("b1");
@@ -983,6 +1002,30 @@
         const el = document.getElementById(`satisfied-${btnNum}`);
         el.textContent = satisfied ? "✓" : "✗";
         el.className = "satisfied-indicator " + (satisfied ? "yes" : "no");
+      }
+
+      function fillSolution() {
+        // Remplir la matrice avec la solution : 0.9 -0.1 0.5 -0.1 0.9 0.4
+        matrix[0][0] = 0.9;  // w11
+        matrix[0][1] = -0.1; // w12
+        matrix[0][2] = 0.5;  // w13
+        matrix[1][0] = -0.1; // w21
+        matrix[1][1] = 0.9;  // w22
+        matrix[1][2] = 0.4;  // w23
+
+        // Mettre à jour l'affichage des cellules
+        for (let row = 0; row < 2; row++) {
+          for (let col = 0; col < 3; col++) {
+            const value = matrix[row][col];
+            document.getElementById(`cell-value-${row}-${col}`).textContent =
+              value === 0 ? "0.0" : value.toFixed(1);
+            const cell = document.getElementById(`cell-${row}-${col}`);
+            cell.classList.toggle("filled", value !== 0);
+          }
+        }
+
+        // Recalculer et vérifier
+        computeProducts();
       }
 
       window.addEventListener("load", computeProducts);
