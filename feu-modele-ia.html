@@ -650,6 +650,18 @@
         text-decoration: underline;
       }
       
+      .more-info-link {
+        color: #9c27b0;
+        text-decoration: none;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      
+      .more-info-link:hover {
+        text-decoration: underline;
+      }
+      
       .auto-learning-controls {
         display: flex;
         gap: 10px;
@@ -706,8 +718,8 @@
       Chaque bouton pousse son code binaire à l'entrée du réseau <br />
       Une coche ✓  à gauche indique si le cas est satisfait.<br />
       Il faut trouver un équilibre pour que les 4 cas soient <b>toujours</b> satisfaits.<br />
-
-        </div>
+      <br/>
+      </div>
 
 
 <h3> A vous de jouer sur les poids (+ ou -)</h3>
@@ -918,6 +930,9 @@
               </div>
             </div>
             <div class="note" >Votre matrice de poids satisfait tous les tests !</div>
+            <div style="margin-top: 15px;">
+              <a href="debriefing.html" class="more-info-link">En savoir plus sur les réseaux de neurones et leurs limites</a>
+            </div>
           </div>
 
         </div>
@@ -929,13 +944,14 @@
          <a class="solution-link" onclick="fillSolution()">Voir différentes solutions</a>
           </h4>
           <h4>Voir un apprentissage </h4>
-          <p>Variez le seuil <bR>
+          <p>Faites varier le seuil <bR>
           Observez le nombre d'itérations</p>
           <div class="auto-learning-controls">
             <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Lancer l'apprentissage</button>
             <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
             <span class="learning-status" id="learning-status"></span>
           </div>
+
         </div>
         
       </div>

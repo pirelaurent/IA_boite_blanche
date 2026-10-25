@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Comprendre le MLP - Multi Layer Perceptron</title>
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: #f5f5f5;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 1000px;
+                margin: 0 auto;
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            .back-link {
+                display: inline-block;
+                margin-bottom: 20px;
+                color: #777;
+                text-decoration: none;
+                font-size: 14px;
+            }
+            .back-link:hover {
+                text-decoration: underline;
+                color: #2196f3;
+            }
+            h1 {
+                text-align: center;
+                color: #333;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #4caf50;
+                padding-bottom: 10px;
+            }
+            h2 {
+                color: #2196f3;
+                margin-top: 30px;
+                margin-bottom: 15px;
+                padding-left: 15px;
+                border-left: 4px solid #2196f3;
+            }
+            h3 {
+                color: #444;
+                margin-top: 25px;
+                margin-bottom: 12px;
+            }
+            .concept-box {
+                margin: 25px 0;
+                padding: 20px;
+                border-radius: 8px;
+                border-left: 4px solid;
+            }
+            .concept-box.blue {
+                background: #e3f2fd;
+                border-color: #2196f3;
+            }
+            .concept-box.green {
+                background: #e8f5e9;
+                border-color: #4caf50;
+            }
+            .concept-box.orange {
+                background: #fff3e0;
+                border-color: #ff9800;
+            }
+            .concept-box.red {
+                background: #ffebee;
+                border-color: #f44336;
+            }
+            .concept-box h2 { color: #333; margin-top: 0; }
+            .concept-box h2.important { color: #d32f2f; }
+            .concept-box h2.success { color: #2e7d32; }
+            .highlight {
+                background: #fff3cd;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-family: monospace;
+                font-weight: bold;
+            }
+            code {
+                background: #f5f5f5;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-family: monospace;
+            }
+            .diagram {
+                text-align: center;
+                margin: 25px 0;
+                padding: 20px;
+                background: white;
+                border-radius: 8px;
+                border: 2px solid #ddd;
+            }
+            .neuron {
+                border: 2px solid #2196f3;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: #2196f3;
+                background: #e3f2fd;
+                margin: 5px;
+            }
+            .neuron-layer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin: 10px;
+            }
+            .layer-label {
+                font-weight: bold;
+                color: #666;
+                margin-top: 5px;
+                font-size: 14px;
+            }
+            .arrow {
+                font-size: 24px;
+                color: #999;
+                margin: 0 15px;
+            }
+            .xor-table {
+                border-collapse: collapse;
+                margin: 20px auto;
+                max-width: 350px;
+            }
+            .xor-table th,
+            .xor-table td {
+                border: 1px solid #ddd;
+                padding: 8px 12px;
+                text-align: center;
+            }
+            .xor-table th {
+                background: #2196f3;
+                color: white;
+            }
+            .xor-table tr:nth-child(even) {
+                background: #f2f2f2;
+            }
+            .xor-table .true {
+                background: #4caf50;
+                color: white;
+                font-weight: bold;
+            }
+            .xor-table .false {
+                background: #f44336;
+                color: white;
+                font-weight: bold;
+            }
+            .important {
+                background: #ffebee;
+                padding: 12px;
+                border-radius: 8px;
+                margin: 15px 0;
+                border-left: 4px solid #f44336;
+            }
+            .important h3 {
+                color: #d32f2f;
+                margin-top: 0;
+            }
+            .success {
+                background: #e8f5e9;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+                border-left: 4px solid #4caf50;
+            }
+            .success h3 {
+                color: #2e7d32;
+                margin-top: 0;
+            }
+            .nav-section {
+                background: #e3f2fd;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 25px 0;
+                border-left: 4px solid #2196f3;
+                text-align: center;
+            }
+            @media (max-width: 768px) {
+                .neuron-layer {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="debriefing.html" class="back-link">← Retour au débriefing</a>
+            
+            <h1>Comprendre le MLP : Multi Layer Perceptron</h1>
+            <p>Découvrez pourquoi on passe du perceptron simple au perceptron multicouche, et comment cette évolution permet de résoudre des problèmes plus complexes.</p>
+
+            <!-- ========================================
+                 SECTION 1: Rappel - Perceptron simple
+                 ======================================== -->
+            <div class="concept-box blue">
+                <h2>📚 Rappel : Le perceptron simple</h2>
+                
+                <p>Un <strong>perceptron simple</strong> est un neurone artificiel unique qui :</p>
+                
+                <div style="background: white; padding: 15px; border-radius: 4px; margin: 15px 0; text-align: center; font-size: 18px;">
+                    <code>z = (w<sub>1</sub> × x<sub>1</sub>) + (w<sub>2</sub> × x<sub>2</sub>) + ... + b</code><br>
+                    <code>sortie = step(z)</code>
+                </div>
+                
+                <p><strong>Visualisation :</strong></p>
+                <div class="diagram">
+                    <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <div class="neuron">x₁</div>
+                                <div class="neuron">x₂</div>
+                            </div>
+                            <div class="layer-label">Entrées</div>
+                        </div>
+                        <div class="arrow">→→→</div>
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="neuron" style="border-color: #4caf50; background: #c8e6c9; color: #2e7d32;">z</div>
+                            <div class="layer-label">Combinaison<br>linéaire + b</div>
+                        </div>
+                        <div class="arrow">→→→</div>
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="neuron" style="border-color: #ff9800; background: #fff3e0; color: #e65100;">y</div>
+                            <div class="layer-label">Sortie<br>(step)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p><strong>Caractéristiques :</strong></p>
+                <ul>
+                    <li>✓ Peut résoudre des problèmes <strong>linéairement séparables</strong> ;</li>
+                    <li>✗ <strong>Ne peut PAS</strong> résoudre des problèmes comme le XOR ;</li>
+                    <li>✓ Simple et rapide à entraîner ;</li>
+                    <li>✗ Capacité limitée.</li>
+                </ul>
+            </div>
+
+            <!-- ========================================
+                 SECTION 2: Limites du perceptron simple
+                 ======================================== -->
+            <div class="important">
+                <h2 class="important">⚠️ Les limites du perceptron simple</h2>
+                
+                <p><strong>Un perceptron simple ne peut représenter que des frontières de décision <em>linéaires</em>.</strong></p>
+                
+                <h3>Le problème du OU Exclusif (XOR)</h3>
+                <p>Le XOR est un problème classique <strong>non linéairement séparable</strong> :</p>
+                
+                <table class="xor-table">
+                    <thead>
+                        <tr>
+                            <th>x₁</th>
+                            <th>x₂</th>
+                            <th>x₁ XOR x₂</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td class="false">0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td class="true">1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="true">1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td class="false">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>Visualisation :</strong></p>
+                <div style="background: white; padding: 15px; border-radius: 4px; margin: 15px 0; text-align: center;">
+                    <p style="margin: 0; font-size: 14px;">
+                        Points : (0,0)→0, (0,1)→1, (1,0)→1, (1,1)→0<br>
+                        <strong>→ Aucune droite ne peut séparer parfaitement ces 4 points !</strong>
+                    </p>
+                </div>
+                
+                <p style="background: #fff3cd; padding: 10px; border-radius: 4px; text-align: center;">
+                    <strong>➡️ C'est pourquoi le perceptron simple ne peut PAS résoudre le XOR.</strong>
+                </p>
+            </div>
+
+            <!-- ========================================
+                 SECTION 3: Le MLP - Solution
+                 ======================================== -->
+            <div class="concept-box green">
+                <h2 class="success">✨ La solution : Le Perceptron Multi-Couche (MLP)</h2>
+                
+                <p><strong>Le MLP</strong> (Multi-Layer Perceptron) ajoute une ou plusieurs <strong>couches cachées</strong> de neurones entre les entrées et les sorties.</p>
+                
+                <p><strong>Structure typique :</strong></p>
+                <div class="diagram">
+                    <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+                        <!-- Entrées -->
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <div class="neuron">x₁</div>
+                                <div class="neuron">x₂</div>
+                            </div>
+                            <div class="layer-label">Couche<br>d'entrée</div>
+                        </div>
+                        
+                        <div class="arrow">→→→</div>
+                        
+                        <!-- Couche cachée -->
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <div class="neuron" style="border-color: #4caf50; background: #c8e6c9; color: #2e7d32;">h₁</div>
+                                <div class="neuron" style="border-color: #4caf50; background: #c8e6c9; color: #2e7d32;">h₂</div>
+                                <div class="neuron" style="border-color: #4caf50; background: #c8e6c9; color: #2e7d32;">h₃</div>
+                            </div>
+                            <div class="layer-label">Couche<br>cachée<br><small>(+ activation σ)</small></div>
+                        </div>
+                        
+                        <div class="arrow">→→→</div>
+                        
+                        <!-- Couche de sortie -->
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="neuron" style="border-color: #2196f3; background: #e3f2fd; color: #1976d2;">y</div>
+                            <div class="layer-label">Couche<br>de sortie</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p><strong>Ce qui change :</strong></p>
+                <ul>
+                    <li>✓ <strong>Ajout de couches cachées</strong> entre les entrées et les sorties ;</li>
+                    <li>✓ Chaque neurone caché utilise une <strong>fonction d'activation non-linéaire</strong> (ReLU, sigmoid, tanh...) ;</li>
+                    <li>✓ La composition de ces fonctions non-linéaires permet de représenter <strong>n'importe quelle frontière de décision</strong> ;</li>
+                    <li>✓ Peut résoudre des problèmes <strong>non linéairement séparables</strong> comme le XOR.</li>
+                </ul>
+            </div>
+
+            <!-- ========================================
+                 SECTION 4: Diagramme comparatif
+                 ======================================== -->
+            <div class="concept-box blue">
+                <h2>📊 Comparaison visuelle : Perceptron vs MLP</h2>
+                
+                <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 20px 0;">
+                    <!-- Perceptron simple -->
+                    <div style="flex: 1; min-width: 350px; background: white; padding: 20px; border-radius: 8px; border: 2px solid #f44336;">
+                        <h3 style="color: #d32f2f; text-align: center; margin-top: 0;">Perceptron simple</h3>
+                        
+                        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; margin: 15px 0;">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <div class="neuron">x₁</div>
+                                <div class="neuron">x₂</div>
+                            </div>
+                            <div class="arrow">→→→</div>
+                            <div class="neuron" style="border-color: #2196f3; background: #e3f2fd; color: #1976d2;">y</div>
+                        </div>
+                        
+                        <p style="text-align: center; font-size: 14px;"><strong>1 couche<br>linéaire + biais</strong></p>
+                        
+                        <div style="background: #ffebee; padding: 10px; border-radius: 4px; margin-top: 15px; text-align: center;">
+                            <strong>❌ Ne peut PAS résoudre le XOR</strong>
+                        </div>
+                    </div>
+                    
+                    <!-- MLP -->
+                    <div style="flex: 1; min-width: 350px; background: white; padding: 20px; border-radius: 8px; border: 2px solid #4caf50;">
+                        <h3 style="color: #2e7d32; text-align: center; margin-top: 0;">MLP (2 couches)</h3>
+                        
+                        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; margin: 15px 0;">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <div class="neuron">x₁</div>
+                                <div class="neuron">x₂</div>
+                            </div>
+                            <div class="arrow">→→→</div>
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <div class="neuron" style="border-color: #4caf50; background: #c8e6c9; color: #2e7d32;">h₁</div>
+                                <div class="neuron" style="border-color: #4caf50; background: #c8e6c9; color: #2e7d32;">h₂</div>
+                            </div>
+                            <div class="arrow">→→→</div>
+                            <div class="neuron" style="border-color: #2196f3; background: #e3f2fd; color: #1976d2;">y</div>
+                        </div>
+                        
+                        <p style="text-align: center; font-size: 14px;"><strong>3 couches<br>(cachée + sortie)<br>non-linéaires</strong></p>
+                        
+                        <div style="background: #e8f5e9; padding: 10px; border-radius: 4px; margin-top: 15px; text-align: center;">
+                            <strong>✅ Peut résoudre le XOR</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; margin: 20px 0; font-weight: bold;">
+                    La différence clé : <span class="highlight">les couches cachées avec fonctions d'activation non-linéaires</span>
+                </p>
+            </div>
+
+            <!-- ========================================
+                 SECTION 5: Tableau comparatif détaillé
+                 ======================================== -->
+            <div class="concept-box orange">
+                <h2>📋 Tableau comparatif complet</h2>
+                
+                <table style="border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 16px;">
+                    <thead>
+                        <tr style="background: #2196f3; color: white;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Critère</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Perceptron simple</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">MLP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #f9f9f9;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">Nombre de couches</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">≥ 2 (avec couches cachées)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Fonction d'activation</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">step(z)</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">ReLU, sigmoid, tanh, etc.</td>
+                        </tr>
+                        <tr style="background: #f9f9f9;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">Type de frontières</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">Linéaires</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">Non-linéaires (arbitraires)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Peut résoudre le XOR</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd; color: #f44336;">❌ Non</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd; color: #4caf50;">✅ Oui</td>
+                        </tr>
+                        <tr style="background: #f9f9f9;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">Capacité d'apprentissage</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">Limitée</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">Élevée (approximation universelle)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Formule du neurone</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">z = Σ w<sub>i</sub>x<sub>i</sub> + b</td>
+                            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">h = σ(Σ w<sub>i</sub>x<sub>i</sub> + b)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ========================================
+                 SECTION 6: Pourquoi ça marche ?
+                 ======================================== -->
+            <div class="success">
+                <h2 class="success">✨ Pourquoi le MLP résout le problème du XOR ?</h2>
+                
+                <p><strong>Grâce à la composition de fonctions non-linéaires !</strong></p>
+                
+                <p style="margin: 15px 0;">Avec un MLP à une couche cachée (2 neurones) :</p>
+                
+                <div style="background: white; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                    <p style="margin: 0 0 10px 0;"><strong>Couche cachée :</strong></p>
+                    <code style="font-size: 16px;">h₁ = σ(w₁₁·x₁ + w₁₂·x₂ + b₁)</code><br>
+                    <code style="font-size: 16px;">h₂ = σ(w₂₁·x₁ + w₂₂·x₂ + b₂)</code>
+                    <p style="margin: 10px 0 0 0; font-size: 14px; font-style: italic;">
+                        Chaque neurone caché apprend un <em>pattern</em> (ex: une ligne dans l'espace)
+                    </p>
+                    
+                    <p style="margin: 15px 0 10px 0;"><strong>Couche de sortie :</strong></p>
+                    <code style="font-size: 16px;">y = σ(w₃₁·h₁ + w₃₂·h₂ + b₃)</code>
+                    <p style="margin: 10px 0 0 0; font-size: 14px; font-style: italic;">
+                        La sortie <em>combine</em> ces patterns de manière non-linéaire
+                    </p>
+                </div>
+                
+                <p><strong>Résultat :</strong></p>
+                <p>Les frontières créées par les neurones cachés se <strong>combinent</strong> pour former une frontière complexe (en forme de "X" pour le XOR) qui sépare parfaitement les classes.</p>
+                
+                <div style="background: #fff3cd; padding: 10px; border-radius: 4px; margin: 15px 0; text-align: center;">
+                    <strong>➡️ C'est la <em>composition</em> de fonctions non-linéaires qui donne au MLP son pouvoir !</strong>
+                </div>
+            </div>
+
+            <!-- ========================================
+                 SECTION 7: Théorème de Cybenko
+                 ======================================== -->
+            <div class="concept-box purple">
+                <h2>🎓 Approfondissement : Le théorème de Cybenko</h2>
+                
+                <p><strong>Théorème (Cybenko, 1989) :</strong></p>
+                <p style="background: white; padding: 15px; border-radius: 4px; margin: 15px 0; text-align: center; font-size: 16px; font-style: italic;">
+                    "Un perceptron multicouche avec <strong>une seule couche cachée</strong> contenant un nombre <strong>fini de neurones</strong> avec des fonctions d'activation <strong>continues et bornées</strong> peut <strong>approximer n'importe quelle fonction continue</strong> avec une précision arbitraire."
+                </p>
+                
+                <p><strong>Conséquences :</strong></p>
+                <ul>
+                    <li>✓ Un MLP avec 1 couche cachée est un <strong>approximateur universel</strong> ;</li>
+                    <li>✓ Théoriquement, il peut représenter <strong>n'importe quelle fonction</strong> ;</li>
+                    <li>✓ En pratique, plus la fonction est complexe, plus on a besoin de neurones dans la couche cachée ;</li>
+                    <li>✓ C'est pourquoi les MLP sont si puissants !</li>
+                </ul>
+            </div>
+
+            <!-- ========================================
+                 SECTION 8: Conclusion et navigation
+                 ======================================== -->
+            <div class="nav-section">
+                <h3>🎯 Conclusion</h3>
+                <p style="margin: 0 0 15px 0;">
+                    Vous comprenez maintenant pourquoi les réseaux de neurones modernes utilisent des <strong>architectures multicouches</strong> :
+                </p>
+                <ul style="text-align: left; display: inline-block;">
+                    <li>Le perceptron simple est limité aux problèmes linéairement séparables ;</li>
+                    <li>Le MLP ajoute des couches cachées avec des fonctions d'activation non-linéaires ;</li>
+                    <li>Cela permet de représenter des frontières de décision arbitrairement complexes ;</li>
+                    <li>Le MLP est un approximateur universel de fonctions.</li>
+                </ul>
+                
+                <div style="margin: 20px 0 0 0;">
+                    <a href="debriefing.html" style="color: #2196f3; text-decoration: none; padding: 10px 20px; background: white; border-radius: 4px; border: 2px solid #2196f3; display: inline-block;">
+                        ← Retour aux concepts de base
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
