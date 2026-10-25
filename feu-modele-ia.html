@@ -567,7 +567,7 @@
       .solution-link {
         color: #2196f3;
         text-decoration: none;
-        font-size: 13px;
+        font-size: 16px;
         margin-left: 10px;
         cursor: pointer;
       }
@@ -627,21 +627,90 @@
         color: #2e7d32;
         font-size: 14px;
       }
+      
+      /* Apprentissage automatique */
+      .auto-learning-section {
+        margin-top: 20px;
+        padding: 12px;
+        background: #e3f2fd;
+        border-radius: 8px;
+        border-left: 3px solid #2196f3;
+      }
+      
+      .auto-learning-link {
+        color: #9c27b0;
+        text-decoration: none;
+        font-size: 13px;
+        margin-left: 10px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      
+      .auto-learning-link:hover {
+        text-decoration: underline;
+      }
+      
+      .auto-learning-controls {
+        display: flex;
+        gap: 10px;
+        margin-top: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      
+      .learning-status {
+        font-size: 13px;
+        color: #666;
+        margin-left: 10px;
+        font-weight: bold;
+      }
+      
+      .learning-active {
+        color: #4caf50;
+        animation: pulse 1s infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+      
+      .learning-btn {
+        padding: 6px 12px;
+        background: #9c27b0;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: bold;
+        transition: all 0.2s;
+      }
+      
+      .learning-btn:hover {
+        background: #7b1fa2;
+      }
+      
+      .learning-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Jouer à créer un modèle</h1>
-      <h2> Ajustez les paramètres du réseau pour satisfaire aux exigences</h2>
+      <h1>Entrainer un réseau <i> feu tricolore</i>  </h1>
+
       <div class="info">
-        <h4>Instructions</h4>
-      Le choix d'un bouton pousse son code binaire aux entrées du réseau et permet de tester. <br />
-      Ajuster les paramètres pour que son feu s'allume dans ce cas et reste éteint autrement<br /> 
-      Une coche ✓  à gauche du bouton indique si le cas est <b>toujours</b> satisfait.<br />
+        <h4>Ajustez les poids pour que les feux répondent à leurs numéros 1,2,3</h4>
+      Chaque bouton pousse son code binaire à l'entrée du réseau <br />
+      Une coche ✓  à gauche indique si le cas est satisfait.<br />
+      Il faut trouver un équilibre pour que les 4 cas soient <b>toujours</b> satisfaits.<br />
+
         </div>
 
 
-<h3> A vous de jouer sur les paramètres</h3>
+<h3> A vous de jouer sur les poids (+ ou -)</h3>
 
       <div class="top-row">
         <!-- Boutons compacts - ordre inversé -->
@@ -712,8 +781,8 @@
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
           <div class="model-header">
-            <div class="section-label">Modèle</div>
-            <a class="solution-link" onclick="fillSolution()">(pas réussi : voir une solution)</a>
+            <div class="section-label">Modèle à 3 neurones et 7 paramètres (6+1)</div>
+            
           </div>
           <div class="matrix-section">
             <div class="column-group">
@@ -853,6 +922,22 @@
 
         </div>
         
+        <!-- Apprentissage automatique -->
+        <div class="auto-learning-section">
+        <H3> Pas réussi ?</H3>
+        <h4>
+         <a class="solution-link" onclick="fillSolution()">Voir différentes solutions</a>
+          </h4>
+          <h4>Voir un apprentissage </h4>
+          <p>Variez le seuil <bR>
+          Observez le nombre d'itérations</p>
+          <div class="auto-learning-controls">
+            <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Lancer l'apprentissage</button>
+            <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
+            <span class="learning-status" id="learning-status"></span>
+          </div>
+        </div>
+        
       </div>
 
     <script>
@@ -864,15 +949,20 @@
       let b0 = 0;
       let seuil = 0.8;
       let activeButton = null;
+      let learningInterval = null;
+      let learningStepCount = 0;
 
       const b1El = document.getElementById("b1");
       const b0El = document.getElementById("b0");
       const seuilEl = document.getElementById("seuil");
       const seuilValue = document.getElementById("seuil-value");
+      const learningStatus = document.getElementById("learning-status");
+      const startLearningBtn = document.getElementById("start-learning-btn");
+      const stopLearningBtn = document.getElementById("stop-learning-btn");
       updateSeuil();
   
 
-      function adjustCell(row, col, delta) {
+      function adjustCell(row, col, delta, skipRecalc) {
         matrix[row][col] = parseFloat((matrix[row][col] + delta).toFixed(2));
         if (matrix[row][col] < -5) matrix[row][col] = -5;
         if (matrix[row][col] > 5) matrix[row][col] = 5;
@@ -883,7 +973,9 @@
         const cell = document.getElementById(`cell-${row}-${col}`);
         cell.classList.toggle("filled", matrix[row][col] !== 0);
 
-        computeProducts();
+        if (!skipRecalc) {
+          computeProducts();
+        }
       }
 
       function updateSeuil() {
@@ -978,7 +1070,7 @@
         updateIndicator(3, satisfied3);
 
         // Vérifier si tous les cas sont satisfaits
-        updateBravoMessage(satisfied0 && satisfied1 && satisfied2 && satisfied3);
+        return updateBravoMessage(satisfied0 && satisfied1 && satisfied2 && satisfied3);
       }
 
       function updateBravoMessage(allSatisfied) {
@@ -996,6 +1088,7 @@
         } else {
           bravoMessage.classList.remove('show');
         }
+        return allSatisfied;
       }
 
       function updateIndicator(btnNum, satisfied) {
@@ -1005,15 +1098,110 @@
       }
 
       function fillSolution() {
-        // Remplir la matrice avec la solution : 0.9 -0.1 0.5 -0.1 0.9 0.4
-        matrix[0][0] = 0.9;  // w11
-        matrix[0][1] = -0.1; // w12
-        matrix[0][2] = 0.5;  // w13
-        matrix[1][0] = -0.1; // w21
-        matrix[1][1] = 0.9;  // w22
-        matrix[1][2] = 0.4;  // w23
-
-        // Mettre à jour l'affichage des cellules
+        // Essayer jusqu'à trouver une solution valide
+        let attempts = 0;
+        const maxAttempts = 100;
+        
+        while (attempts < maxAttempts) {
+          attempts++;
+          
+          // Générer un seuil aléatoire entre 0.1 et 2
+          const randomSeuil = 0.1 + Math.random() * (2.0 - 0.1);
+          
+          // w11 doit être > randomSeuil (pour que vert s'allume dans cas 1: b1=1,b0=0)
+          const w11 = randomSeuil + 0.1 + Math.random() * (2.0 - randomSeuil - 0.1);
+          
+          // w12 doit être négatif
+          const w12 = -(0.1 + Math.random() * 0.8);
+          
+          // w13 doit être <= randomSeuil (pour que rouge ne s'allume pas dans cas 1)
+          const w13 = 0.1 + Math.random() * (randomSeuil - 0.1);
+          
+          // w21 doit être négatif et tel que w11 + w21 <= randomSeuil
+          const w21_positive = w11 - randomSeuil + 0.1 + Math.random() * 0.5;
+          const w21 = -w21_positive;
+          
+          // w22 doit être > randomSeuil (pour que orange s'allume dans cas 2)
+          // et w22 <= randomSeuil - w12 (pour que orange ne s'allume pas dans cas 3)
+          const w22_min = randomSeuil + 0.01;
+          const w22_max = randomSeuil - w12;
+          
+          // Si la plage n'est pas valide, on passe à l'attempt suivant
+          if (w22_max <= w22_min) continue;
+          
+          const w22 = w22_min + Math.random() * (w22_max - w22_min);
+          
+          // w23 doit être <= randomSeuil (pour que rouge ne s'allume pas dans cas 2)
+          // et w23 > randomSeuil - w13 (pour que rouge s'allume dans cas 3)
+          const w23_min = randomSeuil - w13 + 0.01;
+          const w23_max_val = randomSeuil;
+          
+          // Si la plage n'est pas valide, on passe à l'attempt suivant
+          if (w23_max_val <= w23_min) continue;
+          
+          const w23 = w23_min + Math.random() * (w23_max_val - w23_min);
+          
+          // Tester toutes les contraintes avant d'accepter
+          // Cas 1: b1=1, b0=0 -> s1 > seuil, s2 <= seuil, s3 <= seuil
+          const s1_c1 = w11;
+          const s2_c1 = w12;
+          const s3_c1 = w13;
+          
+          // Cas 2: b1=0, b0=1 -> s1 <= seuil, s2 > seuil, s3 <= seuil
+          const s1_c2 = w21;
+          const s2_c2 = w22;
+          const s3_c2 = w23;
+          
+          // Cas 3: b1=1, b0=1 -> s1 <= seuil, s2 <= seuil, s3 > seuil
+          const s1_c3 = w11 + w21;
+          const s2_c3 = w12 + w22;
+          const s3_c3 = w13 + w23;
+          
+          // Vérifier toutes les contraintes
+          if (s1_c1 > randomSeuil && s2_c1 <= randomSeuil && s3_c1 <= randomSeuil &&
+              s1_c2 <= randomSeuil && s2_c2 > randomSeuil && s3_c2 <= randomSeuil &&
+              s1_c3 <= randomSeuil && s2_c3 <= randomSeuil && s3_c3 > randomSeuil) {
+            
+            // Solution valide trouvée
+            matrix[0][0] = w11;
+            matrix[0][1] = w12;
+            matrix[0][2] = w13;
+            matrix[1][0] = w21;
+            matrix[1][1] = w22;
+            matrix[1][2] = w23;
+            
+            // Mettre à jour le seuil dans l'interface
+            seuil = randomSeuil;
+            seuilEl.value = randomSeuil;
+            seuilValue.textContent = randomSeuil.toFixed(1);
+            
+            // Mettre à jour l'affichage des cellules
+            for (let row = 0; row < 2; row++) {
+              for (let col = 0; col < 3; col++) {
+                const value = matrix[row][col];
+                document.getElementById(`cell-value-${row}-${col}`).textContent =
+                  value === 0 ? "0.0" : value.toFixed(1);
+                const cell = document.getElementById(`cell-${row}-${col}`);
+                cell.classList.toggle("filled", value !== 0);
+              }
+            }
+            
+            // Recalculer et vérifier
+            computeProducts();
+            return;
+          }
+        }
+        
+        // Si on arrive ici, aucune solution n'a été trouvée après maxAttempts
+        // On utilise une solution par défaut qui fonctionne
+        const defaultSeuil = 0.8;
+        matrix[0][0] = 1.5; matrix[0][1] = -0.3; matrix[0][2] = 0.4;
+        matrix[1][0] = -1.0; matrix[1][1] = 1.0; matrix[1][2] = 0.5;
+        
+        seuil = defaultSeuil;
+        seuilEl.value = defaultSeuil;
+        seuilValue.textContent = defaultSeuil.toFixed(1);
+        
         for (let row = 0; row < 2; row++) {
           for (let col = 0; col < 3; col++) {
             const value = matrix[row][col];
@@ -1023,9 +1211,194 @@
             cell.classList.toggle("filled", value !== 0);
           }
         }
-
-        // Recalculer et vérifier
+        
         computeProducts();
+      }
+
+      function checkAllSatisfied() {
+        // Vérifie si tous les cas sont satisfaits
+        const indicators = [];
+        for (let i = 0; i < 4; i++) {
+          const el = document.getElementById(`satisfied-${i}`);
+          indicators.push(el.textContent === "✓");
+        }
+        return indicators.every(x => x);
+      }
+
+      function getSatisfactionStatus() {
+        // Retourne un tableau avec le statut de chaque cas
+        return [
+          document.getElementById("satisfied-0").textContent === "✓",
+          document.getElementById("satisfied-1").textContent === "✓",
+          document.getElementById("satisfied-2").textContent === "✓",
+          document.getElementById("satisfied-3").textContent === "✓"
+        ];
+      }
+
+      let currentTestCase = 0;
+      
+      function startAutoLearning() {
+        if (learningInterval) return;
+        
+        // Réinitialiser la matrice
+        matrix = [
+          [0.0, 0.0, 0.0],
+          [0.0, 0.0, 0.0],
+        ];
+        
+        // Mettre à jour l'affichage
+        for (let row = 0; row < 2; row++) {
+          for (let col = 0; col < 3; col++) {
+            document.getElementById(`cell-value-${row}-${col}`).textContent = "0.0";
+            document.getElementById(`cell-${row}-${col}`).classList.remove("filled");
+          }
+        }
+        
+        learningStepCount = 0;
+        currentTestCase = 0;
+        learningStatus.textContent = "Apprentissage en cours... (0)";
+        learningStatus.classList.add("learning-active");
+        startLearningBtn.disabled = true;
+        stopLearningBtn.disabled = false;
+        
+        computeProducts();
+        
+        learningInterval = setInterval(() => {
+          learningStepCount++;
+          learningStatus.textContent = `Apprentissage... (${learningStepCount})`;
+          
+          const satisfied = getSatisfactionStatus();
+          if (satisfied.every(s => s)) {
+            learningStatus.textContent = `✓ Solution trouvée en ${learningStepCount} étapes !`;
+            learningStatus.classList.remove("learning-active");
+            stopAutoLearning();
+            return;
+          }
+          
+          // Taille de pas adaptative - plus grande au début, décroissance plus lente
+          const stepSize = Math.max(0.05, 1.0 / Math.sqrt(learningStepCount + 1));
+          
+          // Calculer tous les scores pour chaque cas
+          const scores = {
+            c0: { s1: 0, s2: 0, s3: 0 }, // (0,0) - toujours 0, donc toujours satisfait
+            c1: { s1: matrix[0][0], s2: matrix[0][1], s3: matrix[0][2] }, // (1,0)
+            c2: { s1: matrix[1][0], s2: matrix[1][1], s3: matrix[1][2] }, // (0,1)
+            c3: { s1: matrix[0][0] + matrix[1][0], 
+                  s2: matrix[0][1] + matrix[1][1], 
+                  s3: matrix[0][2] + matrix[1][2] }  // (1,1)
+          };
+          
+          // Fonction pour ajuster et vérifier
+          const wasSatisfiedCount = satisfied.filter(s => s).length;
+          const tryAdjust = (row, col, delta) => {
+            const oldValue = matrix[row][col];
+            matrix[row][col] = parseFloat((matrix[row][col] + delta).toFixed(2));
+            if (matrix[row][col] < -5) matrix[row][col] = -5;
+            if (matrix[row][col] > 5) matrix[row][col] = 5;
+
+            computeProducts();
+            const newSatisfied = getSatisfactionStatus();
+            const newSatisfiedCount = newSatisfied.filter(s => s).length;
+
+            // Accepter si cela n'empire pas la situation (au lieu de <=, on utilise <)
+            if (newSatisfiedCount < wasSatisfiedCount) {
+                matrix[row][col] = oldValue;
+                computeProducts();
+                return false;
+            }
+            return true;
+          };
+          
+          // Correction par priorité - toutes les corrections ont la même priorité
+          const errors = [];
+          
+          // Cas 1: s1 doit être > seuil, s2 et s3 <= seuil
+          if (scores.c1.s1 <= seuil) {
+            errors.push({ type: 'inc', row: 0, col: 0, priority: 1 });
+          }
+          if (scores.c1.s2 > seuil) {
+            errors.push({ type: 'dec', row: 0, col: 1, priority: 1 });
+          }
+          if (scores.c1.s3 > seuil) {
+            errors.push({ type: 'dec', row: 0, col: 2, priority: 1 });
+          }
+          
+          // Cas 2: s2 doit être > seuil, s1 et s3 <= seuil
+          if (scores.c2.s2 <= seuil) {
+            errors.push({ type: 'inc', row: 1, col: 1, priority: 1 });
+          }
+          if (scores.c2.s1 > seuil) {
+            errors.push({ type: 'dec', row: 1, col: 0, priority: 1 });
+          }
+          if (scores.c2.s3 > seuil) {
+            errors.push({ type: 'dec', row: 1, col: 2, priority: 1 });
+          }
+          
+          // Cas 3: s3 doit être > seuil, s1 et s2 <= seuil
+          if (scores.c3.s3 <= seuil) {
+            errors.push({ type: 'inc', row: 0, col: 2, priority: 1 });
+            errors.push({ type: 'inc', row: 1, col: 2, priority: 1 });
+          }
+          if (scores.c3.s1 > seuil) {
+            errors.push({ type: 'dec', row: 0, col: 0, priority: 1 });
+            errors.push({ type: 'dec', row: 1, col: 0, priority: 1 });
+          }
+          if (scores.c3.s2 > seuil) {
+            errors.push({ type: 'dec', row: 0, col: 1, priority: 1 });
+            errors.push({ type: 'dec', row: 1, col: 1, priority: 1 });
+          }
+          
+          // Trier par priorité (toutes ont la même priorité, donc l'ordre est aléatoire)
+          errors.sort((a, b) => a.priority - b.priority);
+          
+          // Essayer une correction à la fois
+          let adjusted = false;
+          for (const error of errors) {
+            const delta = error.type === 'inc' ? stepSize : -stepSize;
+            if (tryAdjust(error.row, error.col, delta)) {
+                adjusted = true;
+                break;
+            }
+          }
+          
+          // Si aucune correction n'a été acceptée, essayer des ajustements aléatoires
+          // pour éviter de rester bloqué
+          if (!adjusted) {
+            const row = Math.floor(Math.random() * 2);
+            const col = Math.floor(Math.random() * 3);
+            const delta = Math.random() < 0.5 ? stepSize : -stepSize;
+            tryAdjust(row, col, delta);
+          }
+          
+          // Mise à jour visuelle
+          for (let row = 0; row < 2; row++) {
+            for (let col = 0; col < 3; col++) {
+                document.getElementById(`cell-value-${row}-${col}`).textContent =
+                    matrix[row][col] === 0 ? "0.0" : matrix[row][col].toFixed(1);
+                document.getElementById(`cell-${row}-${col}`).classList.toggle(
+                    "filled", matrix[row][col] !== 0);
+            }
+          }
+          
+          // Arrêt après 500 itérations (augmenté de 200)
+          if (learningStepCount >= 500) {
+            learningStatus.textContent = "Arrêt après 500 itérations";
+            stopAutoLearning();
+          }
+          
+        }, 50);
+        
+      }
+
+      function stopAutoLearning() {
+        if (learningInterval) {
+          clearInterval(learningInterval);
+          learningInterval = null;
+        }
+        currentTestCase = 0;
+        startLearningBtn.disabled = false;
+        stopLearningBtn.disabled = true;
+        learningStatus.classList.remove("learning-active");
       }
 
       window.addEventListener("load", computeProducts);
