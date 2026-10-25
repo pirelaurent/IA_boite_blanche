@@ -52,7 +52,7 @@
       }
 
       .image-container img {
-        max-width: 50%;
+        max-width: 80%;
         height: auto;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -111,25 +111,34 @@
   </head>
   <body>
     <div class="container">
-      <h1><i>Réseau de neurones</i></h1>
+      <h1><i>Réseaux de neurones</i></h1>
 
-      <p>Un réseau de neurones artificiels est un système informatique inspiré du fonctionnement du cerveau humain.</p>
-      <h2>Le neurone biologique</h2>
-      <p>Un neurone biologique ne transmet un influx nerveux que si ses stimulations reçues cumulées franchissent son seuil d'excitation.</p>
-
+     <h2>Le neurone biologique</h2>
+      <p>Un neurone biologique ne s'active que si ses stimulations reçues cumulées franchissent son seuil d'excitation.<br>
+ Les neurones sont interconnectés et forment des réseaux de neurones.
+<br>Ces réseaux sont capables d'apprendre à partir d'exemples, ce qui est la base de l'intelligence artificielle.</p>
       <div class="image-container">
         <img src="img/neurones.png" alt="Représentation de neurones biologiques " width="300" height="200"/>
         <p><em>Illustration libre de neurones biologiques</em></p>
       </div>
 
-      <h2>Simulation d'un neurone: le perceptron </h2>
+      <h2>Un neurone artificiel basique: le perceptron </h2>
 
   
       <p> Un perceptron reproduit la logique d'un neurone biologique : 
-      des stimulations cumulées et un seuil d'excitation.</p>
+      des stimulations cumulées, un seuil d'excitation et une fonction d'activation.</p>
+
+<div class="image-container">
+        <img src="img/perceptronUnique.png" alt="Schéma d'un perceptron à deux entrées  " width="800" height="200"/>
+        <p><em>Schéma d'un perceptron à deux entrées</em></p>
+      </div>
+
+
+
     <p>
-    <h3>Eléments d'un perceptron :</h3>
-     <b>Les entrées</b> Ei: arrivées des stimulations 0 ou 1.
+     Les calculs sont simples:  S(sortie) = H(w1·x1 + w2·x2 − s)
+     <br> les w s sont les poids, les x s sont les entrées, s est le seuil et H est la fonction d'activation.
+
      <br><b>Les poids</b> Wij: nombres réels multiplicateurs : ils pondèrent l'importance de chaque stimulation .
      <br><b>La somme pondérée</b> : somme des entrées multipliées par leurs poids respectifs.
      <br><b>Le seuil</b> : valeur qui détermine si le neurone s'active ou non.

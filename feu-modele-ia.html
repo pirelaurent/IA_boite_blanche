@@ -731,8 +731,7 @@
       }
       
       #visualization-canvas {
-        width: 100%;
-        max-width: 500px;
+        width: 500px;
         height: 400px;
         background: #fafafa;
         border: 1px solid #ccc;
@@ -883,6 +882,15 @@
                   <div class="feu vert off" id="feu-0"></div>
                   <div class="feu-label">Vert</div>
                 </div>
+                <!-- Contrôle du seuil pour le feu Vert -->
+                <div class="cell-container">
+                  <div class="cell" id="seuil-cell-0">
+                    <div class="cell-value" id="seuil-value-0">0.8</div>
+                    <button class="cell-btn up" onclick="adjustSeuil(0, 0.1)">+</button>
+                    <button class="cell-btn down" onclick="adjustSeuil(0, -0.1)">-</button>
+                  </div>
+                  <div class="coeff-label">Seuil</div>
+                </div>
               </div>
 
               <!-- Colonne Orange (s2) -->
@@ -914,6 +922,15 @@
                 <div class="feu-container">
                   <div class="feu orange off" id="feu-1"></div>
                   <div class="feu-label">Orange</div>
+                </div>
+                <!-- Contrôle du seuil pour le feu Orange -->
+                <div class="cell-container">
+                  <div class="cell" id="seuil-cell-1">
+                    <div class="cell-value" id="seuil-value-1">0.8</div>
+                    <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
+                    <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
+                  </div>
+                  <div class="coeff-label">Seuil:</div>
                 </div>
               </div>
 
@@ -947,24 +964,21 @@
                   <div class="feu rouge off" id="feu-2"></div>
                   <div class="feu-label">Rouge</div>
                 </div>
+                <!-- Contrôle du seuil pour le feu Rouge -->
+                <div class="cell-container">
+                  <div class="cell" id="seuil-cell-2">
+                    <div class="cell-value" id="seuil-value-2">0.8</div>
+                    <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
+                    <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
+                  </div>
+                  <div class="coeff-label">Seuil:</div>
+                </div>
               </div>
             </div>
-            <!-- Seuil -->
+            <!-- Info sur le fonctionnement -->
             <div class="seuil-control">
-              <label>Seuil: </label>
-              <span class="seuil-value" id="seuil-value">0.8</span>
-              <input
-                type="range"
-                id="seuil"
-                min="0.5"
-                max="2"
-                step="0.1"
-                value="0.8"
-                oninput="updateSeuil()"
-              />
               <div class="formula">
-               Un feu s'allume si  (b1 × w₁ⱼ) +  (b0 × w₂ⱼ)
-                &gt; seuil
+               Chaque feu a son propre seuil. Un feu s'allume si (b1 × w₁ⱼ) + (b0 × w₂ⱼ) &gt; seuilⱼ
               </div>
             </div>
           </div>
@@ -977,8 +991,8 @@
             </div>
             <canvas id="visualization-canvas" width="500" height="400"></canvas>
             <div class="visualization-info">
-              Chaque droite représente l'équation : w₁ × b1 + w₂ × b0 = seuil pour chaque feu<br/>
-              <strong>Vert</strong> (w₁₁, w₂₁), <strong>Orange</strong> (w₁₂, w₂₂), <strong>Rouge</strong> (w₁₃, w₂₃)
+              Chaque droite représente l'équation : w₁ × b1 + w₂ × b0 = seuilⱼ pour chaque feu<br/>
+              <strong>Vert</strong> (w₁₁, w₂₁, seuil₀), <strong>Orange</strong> (w₁₂, w₂₂, seuil₁), <strong>Rouge</strong> (w₁₃, w₂₃, seuil₂)
             </div>
           </div>
           
@@ -1012,7 +1026,7 @@
          <a class="solution-link" onclick="fillSolution()">Voir différentes solutions</a>
           </h4>
           <h4>Voir un apprentissage </h4>
-          <p>Faites varier le seuil <bR>
+          <p>Faites varier les seuils<br>
           Observez le nombre d'itérations</p>
           <div class="auto-learning-controls">
             <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Lancer l'apprentissage</button>
@@ -1031,7 +1045,7 @@
       ];
       let b1 = 0;
       let b0 = 0;
-      let seuil = 0.8;
+      let seuils = [0.8, 0.8, 0.8]; // Un seuil par neurone (vert, orange, rouge)
       let activeButton = null;
       let learningInterval = null;
       let learningStepCount = 0;
@@ -1039,8 +1053,6 @@
 
       const b1El = document.getElementById("b1");
       const b0El = document.getElementById("b0");
-      const seuilEl = document.getElementById("seuil");
-      const seuilValue = document.getElementById("seuil-value");
       const learningStatus = document.getElementById("learning-status");
       const startLearningBtn = document.getElementById("start-learning-btn");
       const stopLearningBtn = document.getElementById("stop-learning-btn");
@@ -1065,9 +1077,24 @@
         }
       }
 
-      function updateSeuil() {
-        seuil = parseFloat(seuilEl.value);
-        seuilValue.textContent = seuil.toFixed(1);
+      function adjustSeuil(index, delta) {
+        seuils[index] = parseFloat((seuils[index] + delta).toFixed(2));
+        if (seuils[index] < 0.5) seuils[index] = 0.5;
+        if (seuils[index] > 2) seuils[index] = 2;
+        
+        document.getElementById(`seuil-value-${index}`).textContent = seuils[index].toFixed(1);
+        computeProducts();
+        drawVisualization();
+      }
+
+      function updateSeuil(index, value) {
+        if (value !== undefined) {
+          seuils[index] = parseFloat(value);
+        }
+        const seuilValue = document.getElementById(`seuil-value-${index}`);
+        if (seuilValue) {
+          seuilValue.textContent = seuils[index].toFixed(1);
+        }
         computeProducts();
         drawVisualization();
       }
@@ -1118,7 +1145,7 @@
           feu.classList.remove("active");
           feu.classList.add("off");
 
-          if (results[j] > seuil) {
+          if (results[j] > seuils[j]) {
             feu.classList.remove("off");
             feu.classList.add("active");
           }
@@ -1130,32 +1157,32 @@
 
       function updateSatisfactionIndicators() {
         // Teste chaque bouton avec sa configuration spécifique
-        // Bouton 0 éteint: b1=0, b0=0 -> tous les feux doivent être éteints (<= seuil)
+        // Bouton 0 éteint: b1=0, b0=0 -> tous les feux doivent être éteints (<= leur seuil)
         const r0_vert = 0 * matrix[0][0] + 0 * matrix[1][0];
         const r0_orange = 0 * matrix[0][1] + 0 * matrix[1][1];
         const r0_rouge = 0 * matrix[0][2] + 0 * matrix[1][2];
-        const satisfied0 = r0_vert <= seuil && r0_orange <= seuil && r0_rouge <= seuil;
+        const satisfied0 = r0_vert <= seuils[0] && r0_orange <= seuils[1] && r0_rouge <= seuils[2];
         updateIndicator(0, satisfied0);
 
-        // Bouton 1 vert: b1=1, b0=0 -> SEUL vert > seuil, orange <= seuil, rouge <= seuil
+        // Bouton 1 vert: b1=1, b0=0 -> SEUL vert > seuil[0], orange <= seuil[1], rouge <= seuil[2]
         const r1_vert = 1 * matrix[0][0] + 0 * matrix[1][0];
         const r1_orange = 1 * matrix[0][1] + 0 * matrix[1][1];
         const r1_rouge = 1 * matrix[0][2] + 0 * matrix[1][2];
-        const satisfied1 = r1_vert > seuil && r1_orange <= seuil && r1_rouge <= seuil;
+        const satisfied1 = r1_vert > seuils[0] && r1_orange <= seuils[1] && r1_rouge <= seuils[2];
         updateIndicator(1, satisfied1);
 
-        // Bouton 2 orange: b1=0, b0=1 -> SEUL orange > seuil, vert <= seuil, rouge <= seuil
+        // Bouton 2 orange: b1=0, b0=1 -> SEUL orange > seuil[1], vert <= seuil[0], rouge <= seuil[2]
         const r2_vert = 0 * matrix[0][0] + 1 * matrix[1][0];
         const r2_orange = 0 * matrix[0][1] + 1 * matrix[1][1];
         const r2_rouge = 0 * matrix[0][2] + 1 * matrix[1][2];
-        const satisfied2 = r2_vert <= seuil && r2_orange > seuil && r2_rouge <= seuil;
+        const satisfied2 = r2_vert <= seuils[0] && r2_orange > seuils[1] && r2_rouge <= seuils[2];
         updateIndicator(2, satisfied2);
 
-        // Bouton 3 rouge: b1=1, b0=1 -> SEUL rouge > seuil, vert <= seuil, orange <= seuil
+        // Bouton 3 rouge: b1=1, b0=1 -> SEUL rouge > seuil[2], vert <= seuil[0], orange <= seuil[1]
         const r3_vert = 1 * matrix[0][0] + 1 * matrix[1][0];
         const r3_orange = 1 * matrix[0][1] + 1 * matrix[1][1];
         const r3_rouge = 1 * matrix[0][2] + 1 * matrix[1][2];
-        const satisfied3 = r3_vert <= seuil && r3_orange <= seuil && r3_rouge > seuil;
+        const satisfied3 = r3_vert <= seuils[0] && r3_orange <= seuils[1] && r3_rouge > seuils[2];
         updateIndicator(3, satisfied3);
 
         // Vérifier si tous les cas sont satisfaits
@@ -1231,17 +1258,17 @@
           const w23 = w23_min + Math.random() * (w23_max_val - w23_min);
           
           // Tester toutes les contraintes avant d'accepter
-          // Cas 1: b1=1, b0=0 -> s1 > seuil, s2 <= seuil, s3 <= seuil
+          // Cas 1: b1=1, b0=0 -> s1 > randomSeuil, s2 <= randomSeuil, s3 <= randomSeuil
+          // Cas 2: b1=0, b0=1 -> s1 <= randomSeuil, s2 > randomSeuil, s3 <= randomSeuil
+          // Cas 3: b1=1, b0=1 -> s1 <= randomSeuil, s2 <= randomSeuil, s3 > randomSeuil
+          
+          // Pour simplifier, on utilise le même seuil pour les 3 neurones dans la génération aléatoire
           const s1_c1 = w11;
           const s2_c1 = w12;
           const s3_c1 = w13;
-          
-          // Cas 2: b1=0, b0=1 -> s1 <= seuil, s2 > seuil, s3 <= seuil
           const s1_c2 = w21;
           const s2_c2 = w22;
           const s3_c2 = w23;
-          
-          // Cas 3: b1=1, b0=1 -> s1 <= seuil, s2 <= seuil, s3 > seuil
           const s1_c3 = w11 + w21;
           const s2_c3 = w12 + w22;
           const s3_c3 = w13 + w23;
@@ -1259,10 +1286,16 @@
             matrix[1][1] = w22;
             matrix[1][2] = w23;
             
-            // Mettre à jour le seuil dans l'interface
-            seuil = randomSeuil;
-            seuilEl.value = randomSeuil;
-            seuilValue.textContent = randomSeuil.toFixed(1);
+            // Utiliser le même seuil pour les 3 neurones (simplification)
+            seuils = [randomSeuil, randomSeuil, randomSeuil];
+            
+            // Mettre à jour l'affichage des seuils
+            for (let j = 0; j < 3; j++) {
+              const seuilValue = document.getElementById(`seuil-value-${j}`);
+              if (seuilValue) {
+                seuilValue.textContent = randomSeuil.toFixed(1);
+              }
+            }
             
             // Mettre à jour l'affichage des cellules
             for (let row = 0; row < 2; row++) {
@@ -1287,10 +1320,18 @@
         matrix[0][0] = 1.5; matrix[0][1] = -0.3; matrix[0][2] = 0.4;
         matrix[1][0] = -1.0; matrix[1][1] = 1.0; matrix[1][2] = 0.5;
         
-        seuil = defaultSeuil;
-        seuilEl.value = defaultSeuil;
-        seuilValue.textContent = defaultSeuil.toFixed(1);
+        // Utiliser le même seuil pour les 3 neurones
+        seuils = [defaultSeuil, defaultSeuil, defaultSeuil];
         
+        // Mettre à jour l'affichage des seuils
+        for (let j = 0; j < 3; j++) {
+          const seuilValue = document.getElementById(`seuil-value-${j}`);
+          if (seuilValue) {
+            seuilValue.textContent = defaultSeuil.toFixed(1);
+          }
+        }
+        
+        // Mettre à jour l'affichage des cellules
         for (let row = 0; row < 2; row++) {
           for (let col = 0; col < 3; col++) {
             const value = matrix[row][col];
@@ -1401,38 +1442,38 @@
           // Correction par priorité - toutes les corrections ont la même priorité
           const errors = [];
           
-          // Cas 1: s1 doit être > seuil, s2 et s3 <= seuil
-          if (scores.c1.s1 <= seuil) {
+          // Cas 1: b1=1, b0=0 -> s1 > seuils[0], s2 <= seuils[1], s3 <= seuils[2]
+          if (scores.c1.s1 <= seuils[0]) {
             errors.push({ type: 'inc', row: 0, col: 0, priority: 1 });
           }
-          if (scores.c1.s2 > seuil) {
+          if (scores.c1.s2 > seuils[1]) {
             errors.push({ type: 'dec', row: 0, col: 1, priority: 1 });
           }
-          if (scores.c1.s3 > seuil) {
+          if (scores.c1.s3 > seuils[2]) {
             errors.push({ type: 'dec', row: 0, col: 2, priority: 1 });
           }
           
-          // Cas 2: s2 doit être > seuil, s1 et s3 <= seuil
-          if (scores.c2.s2 <= seuil) {
+          // Cas 2: b1=0, b0=1 -> s1 <= seuils[0], s2 > seuils[1], s3 <= seuils[2]
+          if (scores.c2.s2 <= seuils[1]) {
             errors.push({ type: 'inc', row: 1, col: 1, priority: 1 });
           }
-          if (scores.c2.s1 > seuil) {
+          if (scores.c2.s1 > seuils[0]) {
             errors.push({ type: 'dec', row: 1, col: 0, priority: 1 });
           }
-          if (scores.c2.s3 > seuil) {
+          if (scores.c2.s3 > seuils[2]) {
             errors.push({ type: 'dec', row: 1, col: 2, priority: 1 });
           }
           
-          // Cas 3: s3 doit être > seuil, s1 et s2 <= seuil
-          if (scores.c3.s3 <= seuil) {
+          // Cas 3: b1=1, b0=1 -> s1 <= seuils[0], s2 <= seuils[1], s3 > seuils[2]
+          if (scores.c3.s3 <= seuils[2]) {
             errors.push({ type: 'inc', row: 0, col: 2, priority: 1 });
             errors.push({ type: 'inc', row: 1, col: 2, priority: 1 });
           }
-          if (scores.c3.s1 > seuil) {
+          if (scores.c3.s1 > seuils[0]) {
             errors.push({ type: 'dec', row: 0, col: 0, priority: 1 });
             errors.push({ type: 'dec', row: 1, col: 0, priority: 1 });
           }
-          if (scores.c3.s2 > seuil) {
+          if (scores.c3.s2 > seuils[1]) {
             errors.push({ type: 'dec', row: 0, col: 1, priority: 1 });
             errors.push({ type: 'dec', row: 1, col: 1, priority: 1 });
           }
@@ -1508,18 +1549,19 @@
         if (!showVisualization) return;
         
         const canvasEl = document.getElementById("visualization-canvas");
-        if (!canvasEl) return;
+        if (!canvasEl) {
+          console.error("Canvas not found in drawVisualization");
+          return;
+        }
         const ctx = canvasEl.getContext("2d");
-        if (!ctx) return;
+        if (!ctx) {
+          console.error("Context not available");
+          return;
+        }
         
         // Utiliser les dimensions du canvas
         const width = canvasEl.width;
         const height = canvasEl.height;
-        
-        // Remplir avec une couleur visible pour debug
-        ctx.fillStyle = "#f0f0f0";
-        ctx.fillRect(0, 0, width, height);
-        
         const margin = 40;
         const graphWidth = width - 2 * margin;
         const graphHeight = height - 2 * margin;
@@ -1601,7 +1643,7 @@
             let activeFeu = null;
             for (let j = 0; j < 3; j++) {
               const score = b1_val * matrix[0][j] + b0_val * matrix[1][j];
-              if (score > seuil) {
+              if (score > seuils[j]) {
                 activeFeu = j;
                 break; // On prend le premier feu actif (par convention)
               }
@@ -1641,7 +1683,7 @@
           let activeFeu = null;
           for (let j = 0; j < 3; j++) {
             const score = b1_val * matrix[0][j] + b0_val * matrix[1][j];
-            if (score > seuil) {
+            if (score > seuils[j]) {
               activeFeu = j;
               break;
             }
@@ -1678,20 +1720,20 @@
         for (let j = 0; j < 3; j++) {
           const w1 = matrix[0][j].toFixed(2);
           const w2 = matrix[1][j].toFixed(2);
-          labels.push(`${feuNames[j]}: ${w1}·b1 + ${w2}·b0 > ${seuil.toFixed(2)}`);
+          labels.push(`${feuNames[j]}: ${w1}·b1 + ${w2}·b0 > ${seuils[j].toFixed(2)}`);
         }
         
         for (let j = 0; j < 3; j++) {
           const w1 = matrix[0][j];
           const w2 = matrix[1][j];
           
-          // Calculer 2 points pour la droite : w1 * b1 + w2 * b0 = seuil
+          // Calculer 2 points pour la droite : w1 * b1 + w2 * b0 = seuils[j]
           let x1, y1, x2, y2;
           
           // Cas 1 : droite verticale (w2 = 0)
           if (Math.abs(w2) < 1e-10) {
             if (Math.abs(w1) < 1e-10) continue; // pas de droite
-            const b1_val = seuil / w1;
+            const b1_val = seuils[j] / w1;
             x1 = b1ToX(b1_val);
             x2 = x1;
             y1 = margin;
@@ -1699,7 +1741,7 @@
           }
           // Cas 2 : droite horizontale (w1 = 0)
           else if (Math.abs(w1) < 1e-10) {
-            const b0_val = seuil / w2;
+            const b0_val = seuils[j] / w2;
             y1 = b0ToY(b0_val);
             y2 = y1;
             x1 = margin;
@@ -1708,12 +1750,12 @@
           // Cas 3 : droite générale
           else {
             // Point 1 : b1 = b1Min
-            const b0_1 = (seuil - w1 * b1Min) / w2;
+            const b0_1 = (seuils[j] - w1 * b1Min) / w2;
             x1 = b1ToX(b1Min);
             y1 = b0ToY(b0_1);
             
             // Point 2 : b1 = b1Max
-            const b0_2 = (seuil - w1 * b1Max) / w2;
+            const b0_2 = (seuils[j] - w1 * b1Max) / w2;
             x2 = b1ToX(b1Max);
             y2 = b0ToY(b0_2);
           }
@@ -1747,7 +1789,6 @@
         ctx.fillStyle = "#666";
         ctx.font = "11px Arial";
         ctx.fillText("Les zones colorées montrent quel feu s'allume. Les droites sont les limites de décision.", width / 2, margin - 25);
-        ctx.fillText("Seuil = " + seuil.toFixed(2), width / 2, margin - 40);
       }
 
       window.addEventListener("load", function() {
