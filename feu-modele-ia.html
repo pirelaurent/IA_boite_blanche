@@ -707,6 +707,61 @@
         background: #ccc;
         cursor: not-allowed;
       }
+      
+      /* Visualisation graphique */
+      .visualization-section {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fff;
+        border-radius: 8px;
+        border: 2px solid #ddd;
+      }
+      
+      .visualization-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      
+      .visualization-title {
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+      }
+      
+      #visualization-canvas {
+        width: 100%;
+        max-width: 500px;
+        height: 400px;
+        background: #fafafa;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto;
+      }
+      
+      .toggle-visibility {
+        padding: 6px 12px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .toggle-visibility:hover {
+        background: #388e3c;
+      }
+      
+      .visualization-info {
+        font-size: 12px;
+        color: #666;
+        margin-top: 10px;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -914,6 +969,19 @@
             </div>
           </div>
           
+          <!-- Visualisation graphique -->
+          <div class="visualization-section" id="visualization-section">
+            <div class="visualization-header">
+              <span class="visualization-title">Visualisation des séparations linéaires (Perceptron)</span>
+              <button class="toggle-visibility" onclick="toggleVisualization()" id="toggle-vis-btn">Masquer</button>
+            </div>
+            <canvas id="visualization-canvas" width="500" height="400"></canvas>
+            <div class="visualization-info">
+              Chaque droite représente l'équation : w₁ × b1 + w₂ × b0 = seuil pour chaque feu<br/>
+              <strong>Vert</strong> (w₁₁, w₂₁), <strong>Orange</strong> (w₁₂, w₂₂), <strong>Rouge</strong> (w₁₃, w₂₃)
+            </div>
+          </div>
+          
           <!-- Message de bravo -->
           <div class="bravo-message" id="bravo-message">
             <div class="bravo-title">Bravo !</div>
@@ -967,6 +1035,7 @@
       let activeButton = null;
       let learningInterval = null;
       let learningStepCount = 0;
+      let showVisualization = true;
 
       const b1El = document.getElementById("b1");
       const b0El = document.getElementById("b0");
@@ -975,7 +1044,9 @@
       const learningStatus = document.getElementById("learning-status");
       const startLearningBtn = document.getElementById("start-learning-btn");
       const stopLearningBtn = document.getElementById("stop-learning-btn");
-      updateSeuil();
+      let vizSection;
+      
+
   
 
       function adjustCell(row, col, delta, skipRecalc) {
@@ -998,6 +1069,7 @@
         seuil = parseFloat(seuilEl.value);
         seuilValue.textContent = seuil.toFixed(1);
         computeProducts();
+        drawVisualization();
       }
 
       function setConfig(newB1, newB0, btnNum) {
@@ -1053,6 +1125,7 @@
         }
 
         updateSatisfactionIndicators();
+        drawVisualization();
       }
 
       function updateSatisfactionIndicators() {
@@ -1417,7 +1490,271 @@
         learningStatus.classList.remove("learning-active");
       }
 
-      window.addEventListener("load", computeProducts);
+      // Fonction pour basculer l'affichage de la visualisation
+      function toggleVisualization() {
+        showVisualization = !showVisualization;
+        vizSection = vizSection || document.getElementById("visualization-section");
+        if (vizSection) {
+          vizSection.style.display = showVisualization ? "block" : "none";
+        }
+        document.getElementById("toggle-vis-btn").textContent = showVisualization ? "Masquer" : "Afficher";
+        if (showVisualization) {
+          drawVisualization();
+        }
+      }
+
+      // Fonction pour dessiner la visualisation des droites de séparation
+      function drawVisualization() {
+        if (!showVisualization) return;
+        
+        const canvasEl = document.getElementById("visualization-canvas");
+        if (!canvasEl) return;
+        const ctx = canvasEl.getContext("2d");
+        if (!ctx) return;
+        
+        // Utiliser les dimensions du canvas
+        const width = canvasEl.width;
+        const height = canvasEl.height;
+        
+        // Remplir avec une couleur visible pour debug
+        ctx.fillStyle = "#f0f0f0";
+        ctx.fillRect(0, 0, width, height);
+        
+        const margin = 40;
+        const graphWidth = width - 2 * margin;
+        const graphHeight = height - 2 * margin;
+        
+        // Échelle : b1 et b0 de -0.5 à 1.5
+        const b1Min = -0.5, b1Max = 1.5;
+        const b0Min = -0.5, b0Max = 1.5;
+        
+        // Fonction pour convertir b1 en x
+        const b1ToX = (b1) => margin + (b1 - b1Min) * graphWidth / (b1Max - b1Min);
+        // Fonction pour convertir b0 en y (inversé car le canvas a y vers le bas)
+        const b0ToY = (b0) => height - margin - (b0 - b0Min) * graphHeight / (b0Max - b0Min);
+        
+        // Effacer le canvas
+        ctx.fillStyle = "#fafafa";
+        ctx.fillRect(0, 0, width, height);
+        
+        // Dessiner le cadre
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(margin, margin, graphWidth, graphHeight);
+        
+        // Dessiner les axes
+        ctx.strokeStyle = "#666";
+        ctx.lineWidth = 1;
+        
+        // Axe b1 (horizontal)
+        ctx.beginPath();
+        ctx.moveTo(margin, b0ToY(0));
+        ctx.lineTo(width - margin, b0ToY(0));
+        ctx.stroke();
+        
+        // Axe b0 (vertical)
+        ctx.beginPath();
+        ctx.moveTo(b1ToX(0), margin);
+        ctx.lineTo(b1ToX(0), height - margin);
+        ctx.stroke();
+        
+        // Etiquettes des axes
+        ctx.fillStyle = "#333";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("b1", width - margin + 10, b0ToY(0) + 4);
+        ctx.save();
+        ctx.translate(b1ToX(0) - 20, height - margin - 10);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText("b0", 0, 0);
+        ctx.restore();
+        
+        // Dessiner les graduations
+        for (let b1 = 0; b1 <= 1; b1 += 0.5) {
+          const x = b1ToX(b1);
+          ctx.beginPath();
+          ctx.moveTo(x, b0ToY(0) - 5);
+          ctx.lineTo(x, b0ToY(0) + 5);
+          ctx.stroke();
+          ctx.fillText(b1.toFixed(1), x, b0ToY(0) + 20);
+        }
+        
+        for (let b0 = 0; b0 <= 1; b0 += 0.5) {
+          const y = b0ToY(b0);
+          ctx.beginPath();
+          ctx.moveTo(b1ToX(0) - 5, y);
+          ctx.lineTo(b1ToX(0) + 5, y);
+          ctx.stroke();
+          ctx.textAlign = "right";
+          ctx.fillText(b0.toFixed(1), b1ToX(0) - 8, y + 4);
+          ctx.textAlign = "center";
+        }
+        
+        // Colorier les régions selon le feu actif
+        // On divise l'espace [0,1]x[0,1] en petites cellules
+        const cellSize = 0.05;
+        const colors = ["#4caf50", "#ff9800", "#f44336"];
+        
+        for (let b1_val = 0; b1_val <= 1; b1_val += cellSize) {
+          for (let b0_val = 0; b0_val <= 1; b0_val += cellSize) {
+            // Calculer quels feux sont actifs à ce point
+            let activeFeu = null;
+            for (let j = 0; j < 3; j++) {
+              const score = b1_val * matrix[0][j] + b0_val * matrix[1][j];
+              if (score > seuil) {
+                activeFeu = j;
+                break; // On prend le premier feu actif (par convention)
+              }
+            }
+            
+            // Colorier la cellule
+            if (activeFeu !== null) {
+              const x = b1ToX(b1_val);
+              const y = b0ToY(b0_val + cellSize); // Inversé car y augmente vers le bas
+              const w = b1ToX(b1_val + cellSize) - x;
+              const h = b0ToY(b0_val) - y;
+              
+              ctx.fillStyle = colors[activeFeu] + "40"; // 40 = 25% d'opacité
+              ctx.fillRect(x, y, w, h);
+            }
+          }
+        }
+        
+        // Dessiner le rectangle [0,1]x[0,1] avec une bordure
+        ctx.strokeStyle = "#999";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(
+          b1ToX(0), b0ToY(1),
+          b1ToX(1) - b1ToX(0), b0ToY(0) - b0ToY(1)
+        );
+        
+        // Dessiner les 4 points d'entrée
+        const pointLabels = ["(0,0) éteint", "(1,0) vert", "(0,1) orange", "(1,1) rouge"];
+        
+        for (let idx = 0; idx < 4; idx++) {
+          const b1_val = idx === 1 || idx === 3 ? 1 : 0;
+          const b0_val = idx === 2 || idx === 3 ? 1 : 0;
+          const x = b1ToX(b1_val);
+          const y = b0ToY(b0_val);
+          
+          // Calculer quel feu est actif à ce point
+          let activeFeu = null;
+          for (let j = 0; j < 3; j++) {
+            const score = b1_val * matrix[0][j] + b0_val * matrix[1][j];
+            if (score > seuil) {
+              activeFeu = j;
+              break;
+            }
+          }
+          
+          // Dessiner un cercle de la couleur du feu actif (ou gris si aucun)
+          const pointColor = activeFeu !== null ? colors[activeFeu] : "#666";
+          
+          // Cercle autour du point
+          ctx.strokeStyle = "#000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(x, y, 8, 0, Math.PI * 2);
+          ctx.stroke();
+          
+          // Remplir le cercle avec la couleur du feu
+          ctx.fillStyle = pointColor;
+          ctx.beginPath();
+          ctx.arc(x, y, 6, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Label
+          ctx.fillStyle = "#333";
+          ctx.font = "11px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(pointLabels[idx], x, y - 15);
+        }
+        
+        // Dessiner les 3 droites de séparation
+        const feuNames = ["Vert", "Orange", "Rouge"];
+        
+        // Générer les labels avec les valeurs actuelles
+        const labels = [];
+        for (let j = 0; j < 3; j++) {
+          const w1 = matrix[0][j].toFixed(2);
+          const w2 = matrix[1][j].toFixed(2);
+          labels.push(`${feuNames[j]}: ${w1}·b1 + ${w2}·b0 > ${seuil.toFixed(2)}`);
+        }
+        
+        for (let j = 0; j < 3; j++) {
+          const w1 = matrix[0][j];
+          const w2 = matrix[1][j];
+          
+          // Calculer 2 points pour la droite : w1 * b1 + w2 * b0 = seuil
+          let x1, y1, x2, y2;
+          
+          // Cas 1 : droite verticale (w2 = 0)
+          if (Math.abs(w2) < 1e-10) {
+            if (Math.abs(w1) < 1e-10) continue; // pas de droite
+            const b1_val = seuil / w1;
+            x1 = b1ToX(b1_val);
+            x2 = x1;
+            y1 = margin;
+            y2 = height - margin;
+          }
+          // Cas 2 : droite horizontale (w1 = 0)
+          else if (Math.abs(w1) < 1e-10) {
+            const b0_val = seuil / w2;
+            y1 = b0ToY(b0_val);
+            y2 = y1;
+            x1 = margin;
+            x2 = width - margin;
+          }
+          // Cas 3 : droite générale
+          else {
+            // Point 1 : b1 = b1Min
+            const b0_1 = (seuil - w1 * b1Min) / w2;
+            x1 = b1ToX(b1Min);
+            y1 = b0ToY(b0_1);
+            
+            // Point 2 : b1 = b1Max
+            const b0_2 = (seuil - w1 * b1Max) / w2;
+            x2 = b1ToX(b1Max);
+            y2 = b0ToY(b0_2);
+          }
+          
+          // Dessiner la droite
+          ctx.strokeStyle = colors[j];
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+        
+        // Dessiner les légendes en bas à gauche
+        ctx.textAlign = "left";
+        ctx.font = "bold 12px Arial";
+        const legendX = margin + 10;
+        const legendYStart = height - margin - 10;
+        
+        for (let j = 0; j < 3; j++) {
+          ctx.fillStyle = colors[j];
+          ctx.fillText(labels[j], legendX, legendYStart - j * 25);
+        }
+        
+        // Ajouter un titre explicatif
+        ctx.fillStyle = "#333";
+        ctx.font = "bold 13px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Visualisation des séparations linéaires du Perceptron", width / 2, margin - 10);
+        
+        ctx.fillStyle = "#666";
+        ctx.font = "11px Arial";
+        ctx.fillText("Les zones colorées montrent quel feu s'allume. Les droites sont les limites de décision.", width / 2, margin - 25);
+        ctx.fillText("Seuil = " + seuil.toFixed(2), width / 2, margin - 40);
+      }
+
+      window.addEventListener("load", function() {
+        vizSection = document.getElementById("visualization-section");
+        computeProducts();
+        drawVisualization();
+      });
     </script>
   </body>
 </html>
