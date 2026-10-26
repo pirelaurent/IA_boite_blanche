@@ -154,7 +154,7 @@
             <p>
                 Le but de l'apprentissage est de trouver les bons poids et le
                 bon seuil pour que le perceptron réponde correctement à un
-                objectif, ce pour toutes les cas d'entrainement d'un ensemble d'exemples.
+                objectif, ce pour tous les cas d'entrainement présentés aux entrées.
             </p>
             <h2>Illustration : piloter un feu tricolore</h2>
             A partir d'un compteur qui va de 0 à 3, on veut que l'IA gère les feux selon le jeu de test suivant:
@@ -196,7 +196,7 @@
 
 
 <p> Comme un neurone ne peut pas gérer plusieurs sorties, il faut créer un réseau de trois neurones, un pour chaque feu. </p>
-<h3> Réseau de trois neurones perceptron</h3>
+<h3> Un réseau de trois neurones perceptron</h3>
 
             <div class="image-container">
                 <img
@@ -213,19 +213,18 @@
 
 <h3>Un réseau monocouche à 9 paramètres</h3>
  Ce réseau a 2 entrées et 3 sorties.<br>
- Il est défini par une matrice de poids de dimension 2x3 et par son vecteur de seuils de dimension 3. <br>
+ Il est défini par sa matrice de poids de dimension 2x3 et par son vecteur de seuils de dimension 3. <br>
  Au total il a donc <b>9 paramètres</b><br>
  
             <h4>Modestie assumée et facteur d'échelle 10, 10<sup>6</sup>, 10<sup>12</sup></h4>
 Notre réseau monocouche a une dizaine de paramètres et ne peut pas gérer des situations plus complexes, mais il est suffisant pour illustrer le fonctionnement d'un réseau de neurones. <br>
 A titre de comparaison, les réseaux de neurones profonds utilisés pour la reconnaissance d'images ont des millions (10<sup>6</sup>) de paramètres et des dizaines de couches. <br>
 Les LLM (Large Language Model) comme ChatGPT ou Mistral ont des centaines de milliards (10<sup>12</sup>) de paramètres et des centaines de couches. <br>
-Le fonctionnemet de base reste le même, mais la complexité est bien plus grande. <br>
-
+Le fonctionnement de base reste le même, mais la complexité est bien plus grande. <br>
 
 
             <h3 align="center">
-                <a href="./feu-modele-ia.html"> Paramétrer le réseau des feux tricolores</a>
+                <a href="./feu-modele-ia.html"> Entrainez le réseau des feux tricolores</a>
             </h3>
         </div>
     </body>

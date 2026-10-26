@@ -285,8 +285,8 @@
       }
 
       .cell.filled {
-        background: #ffd700;
-        border-color: #ffd700;
+        background: #fff3cd;
+        border-color: gold;
       }
 
       .cell-btn {
@@ -563,6 +563,28 @@
         display: none;
       }
       
+      /* Message de succès */
+      .success-message {
+        margin-top: 20px;
+        padding: 15px;
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        text-align: center;
+      }
+      
+      .success-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2e7d32;
+        margin-bottom: 10px;
+      }
+      
+      .success-title.full {
+        font-size: 24px;
+        color: #1b5e20;
+      }
+      
       /* Lien solution */
       .solution-link {
         color: #2196f3;
@@ -740,6 +762,12 @@
         margin: 0 auto;
       }
       
+      .visualization-title-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      
       .toggle-visibility {
         padding: 6px 12px;
         background: #4caf50;
@@ -765,14 +793,13 @@
   </head>
   <body>
     <div class="container">
-      <h1>Paramétrer le réseau des feux tricolores</h1>
+      <h1>Entrainez manuellement le réseau des feux tricolores</h1>
 
       <div class="info">
         <h4>Ajustez les poids et les seuils pour que les feux répondent à leurs numéros 1,2,3</h4>
-      Chaque bouton pousse son code binaire à l'entrée du réseau <br />
+      Chaque bouton pousse son code binaire à l'entrée du réseau ce qui permet de tester le cas. <br />
       Une coche ✓  à gauche indique si le cas est satisfait.<br />
-      Il faut trouver un équilibre pour que les 4 cas soient <b>toujours</b> satisfaits.<br />
-      <br/>
+      Réajustez jusqu'à trouver un équilibre pour que les 4 cas soient <b>toujours</b> satisfaits.<br />
       </div>
 
 
@@ -982,65 +1009,46 @@
               </div>
             </div>
           </div>
-          <h3>Visualisation graphique</h3>
-          <p> 
-           La formule de calcul <b>S =  H(w1·x1 + w2·x2 − s) </b> est l'équation d'une droite dans le plan (x1, x2).<br/>
-           Chaque feu est associé à une droite qui doit séparer les points (b1, b0) qui allument le feu de ceux qui ne l'allument pas. <br/> 
-           Selon les paramètres choisis, les droites peuvent se croiser ou non. <br/>
-
-          </p>
+          <!-- Message de succès -->
+          <div class="success-message" id="success-message">
+            <div class="success-title" id="success-title">Succès à <span id="success-percentage">0%</span></div>
+            <div class="note">Votre matrice de poids satisfait <span id="satisfied-count">0</span> sur 4 cas !</div>
+          </div>
+          <!-- Apprentissage automatique -->
+          <div class="auto-learning-section">
+          <H3> Laisser faire la machine</H3>
+          <h4>
+           <a class="solution-link" onclick="fillSolution()">Changer de solution</a>
+          </h4>
+            <h4>Voir un apprentissage </h4>
+            <p>Faites varier les seuils<br>
+            Regardez la visualisation graphique : les essais suivis des corrections d'erreur</p>
+            <div class="auto-learning-controls">
+              <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Lancer l'apprentissage</button>
+              <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
+              <span class="learning-status" id="learning-status"></span>
+            </div>
+          </div>
+          <div class="visualization-title-container">
+            <h3 style="display: inline; margin-right: 15px;">Visualisation graphique</h3>
+            <button class="toggle-visibility" onclick="toggleVisualization()" id="toggle-vis-btn">Masquer</button>
+          </div>
           <!-- Visualisation graphique -->
           <div class="visualization-section" id="visualization-section">
-            <div class="visualization-header">
-              <span class="visualization-title">Visualisation des séparations linéaires (Perceptron)</span>
-              <button class="toggle-visibility" onclick="toggleVisualization()" id="toggle-vis-btn">Masquer</button>
-            </div>
+            <p> 
+             La formule <b>S =  H(w1·x1 + w2·x2 − s) </b> est l'équation d'une droite dans le plan (x1, x2).<br/>
+             Chaque droite doit séparer les points (b1, b0) de son feu des autres feux <br/> 
+             Selon les paramètres choisis, les droites peuvent se croiser ou non. <br/>
+
+            </p>
             <canvas id="visualization-canvas" width="500" height="400"></canvas>
             <div class="visualization-info">
               Chaque droite représente l'équation : w₁ × b1 + w₂ × b0 = seuilⱼ pour chaque feu<br/>
               <strong>Vert</strong> (w₁₁, w₂₁, seuil₀), <strong>Orange</strong> (w₁₂, w₂₂, seuil₁), <strong>Rouge</strong> (w₁₃, w₂₃, seuil₂)
             </div>
           </div>
-          
-          <!-- Message de bravo -->
-          <div class="bravo-message" id="bravo-message">
-            <div class="bravo-title">Bravo !</div>
-            <div class="matrix-display">
-              <div class="matrix-row-display">
-                <div class="matrix-cell-display" id="bravo-cell-0-0">0.0</div>
-                <div class="matrix-cell-display" id="bravo-cell-0-1">0.0</div>
-                <div class="matrix-cell-display" id="bravo-cell-0-2">0.0</div>
-              </div>
-              <div class="matrix-row-display">
-                <div class="matrix-cell-display" id="bravo-cell-1-0">0.0</div>
-                <div class="matrix-cell-display" id="bravo-cell-1-1">0.0</div>
-                <div class="matrix-cell-display" id="bravo-cell-1-2">0.0</div>
-              </div>
-            </div>
-            <div class="note" >Votre matrice de poids satisfait tous les tests !</div>
-            <div style="margin-top: 15px;">
-              <a href="debriefing.html" class="more-info-link">En savoir plus sur les réseaux de neurones et leurs limites</a>
-            </div>
-          </div>
 
         </div>
-        
-        <!-- Apprentissage automatique -->
-        <div class="auto-learning-section">
-        <H3> Pas réussi ?</H3>
-        <h4>
-         <a class="solution-link" onclick="fillSolution()">Voir différentes solutions</a>
-          </h4>
-          <h4>Voir un apprentissage </h4>
-          <p>Faites varier les seuils<br>
-          Observez le nombre d'itérations</p>
-          <div class="auto-learning-controls">
-            <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Lancer l'apprentissage</button>
-            <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
-            <span class="learning-status" id="learning-status"></span>
-          </div>
-
-      </div>
         
       </div>
 
@@ -1192,25 +1200,34 @@
         updateIndicator(3, satisfied3);
 
         // Vérifier si tous les cas sont satisfaits
-        return updateBravoMessage(satisfied0 && satisfied1 && satisfied2 && satisfied3);
+        return updateSuccessMessage();
       }
 
-      function updateBravoMessage(allSatisfied) {
-        const bravoMessage = document.getElementById('bravo-message');
-        if (allSatisfied) {
-          bravoMessage.classList.add('show');
-          // Mettre à jour l'affichage de la matrice
-          for (let row = 0; row < 2; row++) {
-            for (let col = 0; col < 3; col++) {
-              const value = matrix[row][col];
-              document.getElementById(`bravo-cell-${row}-${col}`).textContent = 
-                value === 0 ? '0.0' : value.toFixed(1);
-            }
-          }
+      function updateSuccessMessage() {
+        const satisfied = getSatisfactionStatus();
+        const satisfiedCount = satisfied.filter(s => s).length;
+        const percentage = Math.round((satisfiedCount / 4) * 100);
+        
+        // Arrondir aux paliers de 25%
+        const displayPercentage = Math.round(percentage / 25) * 25;
+
+        const percentageEl = document.getElementById('success-percentage');
+        const countEl = document.getElementById('satisfied-count');
+        const titleEl = document.getElementById('success-title');
+
+        if (percentageEl) percentageEl.textContent = displayPercentage + '%';
+        if (countEl) countEl.textContent = satisfiedCount;
+
+        // À 100%, afficher "Succès !" comme demandé
+        if (displayPercentage === 100) {
+          if (titleEl) titleEl.textContent = 'Succès !';
+          if (titleEl) titleEl.classList.add('full');
         } else {
-          bravoMessage.classList.remove('show');
+          if (titleEl) titleEl.textContent = 'Succès à ' + displayPercentage + '%';
+          if (titleEl) titleEl.classList.remove('full');
         }
-        return allSatisfied;
+
+        return satisfiedCount === 4;
       }
 
       function updateIndicator(btnNum, satisfied) {
@@ -1522,7 +1539,7 @@
             stopAutoLearning();
           }
           
-        }, 50);
+        }, 500);
         
       }
 
@@ -1803,5 +1820,8 @@
         drawVisualization();
       });
     </script>
+    <div style="margin-top: 20px; text-align: center;">
+      <a href="debriefing.html" class="more-info-link">En savoir plus sur les réseaux de neurones et leurs limites</a>
+    </div>
   </body>
 </html>
