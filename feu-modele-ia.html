@@ -765,10 +765,10 @@
   </head>
   <body>
     <div class="container">
-      <h1>Entrainer un réseau <i> feu tricolore</i>  </h1>
+      <h1>Paramétrer le réseau <i> feu tricolore</i>  </h1>
 
       <div class="info">
-        <h4>Ajustez les poids pour que les feux répondent à leurs numéros 1,2,3</h4>
+        <h4>Ajustez les poids et les seuils pour que les feux répondent à leurs numéros 1,2,3</h4>
       Chaque bouton pousse son code binaire à l'entrée du réseau <br />
       Une coche ✓  à gauche indique si le cas est satisfait.<br />
       Il faut trouver un équilibre pour que les 4 cas soient <b>toujours</b> satisfaits.<br />
@@ -776,7 +776,7 @@
       </div>
 
 
-<h3> A vous de jouer sur les poids (+ ou -)</h3>
+<h3> A vous de jouer sur les différents paramètres (+ ou -)</h3>
 
       <div class="top-row">
         <!-- Boutons compacts - ordre inversé -->
@@ -982,7 +982,12 @@
               </div>
             </div>
           </div>
-          
+          <p> 
+           La formule de calcul <b>S =  H(w1·x1 + w2·x2 − s) </b> est l'équation d'une droite dans le plan (x1, x2).<br/>
+           Chaque feu est associé à une droite qui doit séparer les points (b1, b0) qui allument le feu de ceux qui ne l'allument pas. <br/> 
+           Selon les paramètres choisis, les droites peuvent se croiser ou non. <br/>
+
+          </p>
           <!-- Visualisation graphique -->
           <div class="visualization-section" id="visualization-section">
             <div class="visualization-header">

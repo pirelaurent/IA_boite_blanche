@@ -1,202 +1,240 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction aux réseaux de neurones</title>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Introduction aux réseaux de neurones</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
 
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background: #f5f5f5;
-      }
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: #f5f5f5;
+            }
 
-      .container {
-        max-width: 1000px;
-        margin: 0 auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
+            .container {
+                max-width: 1000px;
+                margin: 0 auto;
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
 
-      h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 20px;
-      }
+            h1 {
+                text-align: center;
+                color: #333;
+                margin-bottom: 20px;
+            }
 
-      h2 {
-        color: #444;
-        margin-top: 25px;
-        margin-bottom: 15px;
-      }
+            h2 {
+                color: #444;
+                margin-top: 25px;
+                margin-bottom: 15px;
+            }
 
-      p {
-        line-height: 1.6;
-        color: #333;
-        margin-bottom: 15px;
-      }
+            p {
+                line-height: 1.6;
+                color: #333;
+                margin-bottom: 15px;
+            }
 
-      .image-container {
-        text-align: center;
-        margin: 20px 0;
-        padding: 15px;
-        background: #f9f9f9;
-        border-radius: 8px;
-      }
+            .image-container {
+                text-align: center;
+                margin: 20px 0;
+                padding: 15px;
+                background: #f9f9f9;
+                border-radius: 8px;
+            }
 
-      .image-container img {
-        max-width: 80%;
-        height: auto;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
+            .image-container img {
+                max-width: 80%;
+                height: auto;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
 
-      .formula {
-        text-align: center;
-        margin: 20px 0;
-        padding: 10px;
-        background: #e8f5e9;
-        border-radius: 6px;
-        font-size: 16px;
-        font-family: monospace;
-      }
+            .formula {
+                text-align: center;
+                margin: 20px 0;
+                padding: 10px;
+                background: #e8f5e9;
+                border-radius: 6px;
+                font-size: 16px;
+                font-family: monospace;
+            }
 
-      .weight-table {
-        margin: 20px 0;
-        border-collapse: collapse;
-        width: 100%;
-        max-width: 600px;
-      }
+            .weight-table {
+                margin: 20px 0;
+                border-collapse: collapse;
+                width: 100%;
+                max-width: 600px;
+            }
 
-      .weight-table th,
-      .weight-table td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: center;
-    
-      }
+            .weight-table th,
+            .weight-table td {
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: center;
+            }
 
-      .weight-table th {
-        background: #f0f0f0;
-        font-weight: bold;
-      }
+            .weight-table th {
+                background: #f0f0f0;
+                font-weight: bold;
+            }
 
-      .weight-table tr:nth-child(even) {
-        background: #f9f9f9;
-      }
+            .weight-table tr:nth-child(even) {
+                background: #f9f9f9;
+            }
 
-      .instruction {
-        background: #fff3cd;
-        padding: 15px;
-        border-left: 4px solid #ffc107;
-        margin: 20px 0;
-        border-radius: 4px;
-      }
+            .instruction {
+                background: #fff3cd;
+                padding: 15px;
+                border-left: 4px solid #ffc107;
+                margin: 20px 0;
+                border-radius: 4px;
+            }
 
-      .code {
-        font-family: monospace;
-        background: #f0f0f0;
-        padding: 2px 6px;
-        border-radius: 3px;
-        font-size: 14px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1><i>Réseaux de neurones</i></h1>
+            .code {
+                font-family: monospace;
+                background: #f0f0f0;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1><i>Réseaux de neurones</i></h1>
 
-     <h2>Le neurone biologique</h2>
-      <p>Un neurone biologique ne s'active que si ses stimulations reçues cumulées franchissent son seuil d'excitation.<br>
- Les neurones sont interconnectés et forment des réseaux de neurones.
-<br>Ces réseaux sont capables d'apprendre à partir d'exemples, ce qui est la base de l'intelligence artificielle.</p>
-      <div class="image-container">
-        <img src="img/neurones.png" alt="Représentation de neurones biologiques " width="300" height="200"/>
-        <p><em>Illustration libre de neurones biologiques</em></p>
-      </div>
-
-      <h2>Un neurone artificiel basique: le perceptron </h2>
-
-  
-      <p> Un perceptron reproduit la logique d'un neurone biologique : 
-      des stimulations cumulées, un seuil d'excitation et une fonction d'activation.</p>
-
-<div class="image-container">
-        <img src="img/perceptronUnique.png" alt="Schéma d'un perceptron à deux entrées  " width="800" height="200"/>
-        <p><em>Schéma d'un perceptron à deux entrées</em></p>
-      </div>
-
-
-
-    <p>
-     Les calculs sont simples:  S(sortie) = H(w1·x1 + w2·x2 − s)
-     <br> les w s sont les poids, les x s sont les entrées, s est le seuil et H est la fonction d'activation.
-
-     <br><b>Les poids</b> Wij: nombres réels multiplicateurs : ils pondèrent l'importance de chaque stimulation .
-     <br><b>La somme pondérée</b> : somme des entrées multipliées par leurs poids respectifs.
-     <br><b>Le seuil</b> : valeur qui détermine si le neurone s'active ou non.
-     <br><b>La sortie d'un neurone</b> : excité (1) ou non excité (0).
-    </p>
-        
-        <div class="image-container">
-        <img src="img/NeuronesUneCouche.png" alt="Schéma d'un réseau de neurones à une couche" />
-        <p><em>Schéma d'un perceptron à 3 neurones dont les sorties réagissent à 2 entrées </em></p>
-      </div>
-
-<H2>Entrainer un réseau de neurones pour piloter un feu tricolore</h2>
-A titre d'exemple, on se propose de créer un réseau de neurones dont le comportement attendu est le suivant :
-<div align="center" >
-      <table class="weight-table" >
-        <thead>
-          <tr>
-            <th>Entrée binaire</th>
-            <th>Sortie visée
-            <br>Vert Orange Rouge</th>
-            <th>Visuel</th>
-          </tr>
-        </thead>
-        <tbody>
-                  <tr>
-            <td><span class="code">11 (3)   </span></td>
-            <td><span class="code">0 0 1</span></td>
-            <td>feu rouge uniquement    </td>
-          </tr>
-          <tr>
-            <td><span class="code">10 (2)</span></td>
-            <td><span class="code">0 1 0</span></td>
-            <td>feu orange uniquement </td>
-          </tr>
-
-          <tr>
-                
-            <td><span class="code">01 (1)</span></td>
-              <td><span class="code">1 0 0</span></td>
-            <td>feu vert uniquement </td>
-          </tr>
-          <tr>
-            <td><span class="code">00 (0)</span></td>
-                <td><span class="code">0 0 0</span></td>    
-            <td>aucun feu  </td>
-          </tr>
-
-        </tbody>
-      </table>
-</div>
+            <h2>Le neurone biologique</h2>
+            <p>
+                Un neurone biologique ne s'active que si ses stimulations reçues
+                cumulées franchissent son seuil d'excitation.<br />
+                Les neurones sont interconnectés et forment des réseaux de
+                neurones.
+                <br />Ces réseaux sont capables d'apprendre à partir d'exemples,
+                ce qui est la base de l'intelligence artificielle.
+            </p>
             <div class="image-container">
-        <img src="img/NeuronesUneCoucheVertical.png" alt="Représentation matricielle du réseau" />
-        <p><em>Représentation matricielle des 3 neurones du réseau feu tricolore</em></p>
-      </div>
-   <h3 align="center" > <a href = "./feu-modele-ia.html"> Fabriquer ce réseau </a>
-    </h3>
+                <img
+                    src="img/neurones.png"
+                    alt="Représentation de neurones biologiques "
+                    width="300"
+                    height="200"
+                />
+                <p><em>Illustration libre de neurones biologiques</em></p>
+            </div>
 
-    </div>
+            <h2>Le premier neurone artificiel: le perceptron</h2>
+
+            <p>
+                Ancêtre de tous les réseaux de neurones, le perceptron reproduit
+                la logique d'un neurone biologique : <br />
+                <h4> Des calculs simples</h4>
+                   Les stimulations sont pondérées puis cumulées, le résultat est comparé à un seuil par une fonction d'activation
+            </p>
+
+            <div class="image-container">
+                <img
+                    src="img/perceptronUnique.png"
+                    alt="Schéma d'un perceptron à deux entrées  "
+                    width="800"
+                   
+                />
+                <p><em>Schéma d'un perceptron avec deux entrées</em></p>
+            </div>
+
+            <p>
+   : <br>
+               
+                Dans la formule  <b>S =  H(w1·x1 + w2·x2 − s) </b> <br />
+                 La fonction d'activation H ( H vient du nom d'Oliver Heaviside, inventeur du perceptron) effectue un test sur le résultat du calcul : 
+
+                <br /> Si le résultat est positif ou nul, la sortie est excitée (1) sinon la sortie reste  non excité (0).
+            </p>
+
+            <h3>But de l'apprentissage</h3>
+            <p>
+                Le but de l'apprentissage est de trouver les bons poids et le
+                bon seuil pour que le perceptron réponde correctement à un
+                objectif pour toutes les entrées d'un ensemble d'exemples.
+            </p>
+            <h2>Illustration : piloter un feu tricolore</h2>
+            On veut utilliser un compteur qui permette de faire avancer les feux selon le jeu de test suivant:
+
+            <div align="center">
+                <table class="weight-table">
+                    <thead>
+                        <tr>
+                            <th>compteur</th>
+                            <th>entrée binaire</th>
+                            <th>sortie visée</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td><span class="code">00</span></td>
+                            <td>aucun feu</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><span class="code">01</span></td>
+                            <td>feu vert allumé seul</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><span class="code">10</span></td>
+                            <td>feu orange allumé seul</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><span class="code">11 </span></td>
+                            <td><span>feu rouge allumé seul</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+<p> Comme un neurone ne peut pas gérer plusieurs sorties, il faut créer un réseau de neurones avec trois neurones, un pour chaque feu. </p>
+<h3> Réseau de trois neurones perceptron</h3>
+
+            <div class="image-container">
+                <img
+                  width="400"
+                    src="img/NeuronesUneCoucheVertical.png"
+                    alt="Représentation matricielle du réseau"
+                />
+                <p>
+                    <em
+                        >Représentation matricielle des 3 neurones du réseau feu
+                        tricolore</em>
+                </p>
+            </div>
+
+<h3>Un réseau monocouche à 9 paramètres</h3>
+ Ce réseau est défini par une matrice de poids et un vecteur de seuils. <br>
+ Il a 2 entrées et 3 sorties, sa matrice de poids est de dimension 2x3 et son vecteur de seuils de dimension 3, au total il a <b>9 paramètres</b><br>
  
-  </body>
+            <h4>Modestie assumée</h4>
+Notre réseau est très simple, il ne peut pas gérer des situations plus complexes, mais il est suffisant pour illustrer le fonctionnement d'un réseau de neurones. <br>
+A titre de comparaison, les réseaux de neurones profonds utilisés pour la reconnaissance d'images ont des millions de paramètres et des dizaines de couches. <br>
+Les LLM (Large Language Model) comme ChatGPT ou Mistral ont des centaines de milliards de paramètres et des centaines de couches. <br>
+Le fonctionnemet de base reste le même, mais la complexité est bien plus grande. <br>
+
+
+
+            <h3 align="center">
+                <a href="./feu-modele-ia.html"> Paramétrer le réseau des feux tricolores</a>
+            </h3>
+        </div>
+    </body>
 </html>
