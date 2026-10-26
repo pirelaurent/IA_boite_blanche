@@ -765,7 +765,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Paramétrer le réseau <i> feu tricolore</i>  </h1>
+      <h1>Paramétrer le réseau des feux tricolores</h1>
 
       <div class="info">
         <h4>Ajustez les poids et les seuils pour que les feux répondent à leurs numéros 1,2,3</h4>
@@ -847,7 +847,7 @@
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
           <div class="model-header">
-            <div class="section-label">Modèle à 3 neurones et 7 paramètres (6+1)</div>
+            <div class="section-label">Modèle à 2 entrées et 3 neurones avec seuil, soit 9 paramètres (6+3)</div>
             
           </div>
           <div class="matrix-section">
@@ -930,7 +930,7 @@
                     <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
                     <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
                   </div>
-                  <div class="coeff-label">Seuil:</div>
+                  <div class="coeff-label">Seuil</div>
                 </div>
               </div>
 
@@ -971,17 +971,18 @@
                     <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
                     <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
                   </div>
-                  <div class="coeff-label">Seuil:</div>
+                  <div class="coeff-label">Seuil</div>
                 </div>
               </div>
             </div>
             <!-- Info sur le fonctionnement -->
             <div class="seuil-control">
               <div class="formula">
-               Chaque feu a son propre seuil. Un feu s'allume si (b1 × w₁ⱼ) + (b0 × w₂ⱼ) &gt; seuilⱼ
+               Un feu s'allume si (b1 × w₁ⱼ) + (b0 × w₂ⱼ) &gt; seuilⱼ
               </div>
             </div>
           </div>
+          <h3>Visualisation graphique</h3>
           <p> 
            La formule de calcul <b>S =  H(w1·x1 + w2·x2 − s) </b> est l'équation d'une droite dans le plan (x1, x2).<br/>
            Chaque feu est associé à une droite qui doit séparer les points (b1, b0) qui allument le feu de ceux qui ne l'allument pas. <br/> 
@@ -1039,7 +1040,7 @@
             <span class="learning-status" id="learning-status"></span>
           </div>
 
-        </div>
+      </div>
         
       </div>
 
