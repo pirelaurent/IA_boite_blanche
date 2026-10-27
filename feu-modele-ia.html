@@ -172,7 +172,7 @@
         flex-direction: column;
         gap: 17px;
         padding: 8px;
-        border: 2px solid #333;
+        border: 2px solid #c0baba;
         border-radius: 6px;
         background: #f9f9f9;
         align-items: center;
@@ -181,8 +181,8 @@
       .bit-row {
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin: 10px 0;
+        gap: 5px;
+        margin: 5px 0;
       }
 
       .bit-label {
@@ -199,7 +199,7 @@
         line-height: 35px;
         font-size: 14px;
         font-weight: bold;
-        border: 2px solid #333;
+        border: 2px solid #ada8a8;
         border-radius: 4px;
         background: #f8f8f8;
         text-align: center;
@@ -215,9 +215,9 @@
       }
 
       .multiplier {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
-        color: #333;
+        color: #3A8EBA;
         padding: 5px 5px;
       }
 
@@ -229,7 +229,7 @@
       }
 
       .matrix-section {
-        padding: 8px;
+        padding: 4px;
         border: 2px solid #333;
         border-radius: 6px;
         background: #f9f9f9;
@@ -305,12 +305,12 @@
       }
 
       .cell-btn.up {
-        background: #4caf50;
+        background: #3A8EBA;
         color: white;
       }
 
       .cell-btn.down {
-        background: #f44336;
+        background: #BF3030;
         color: white;
       }
 
@@ -335,9 +335,9 @@
       .plus-symbol {
         width: 89px;
         text-align: center;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
-        color: #333;
+        color: #3A8EBA;
       }
 
       /* Sorties */
@@ -362,9 +362,9 @@
       .equal-symbol {
         width: 89px;
         text-align: center;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
-        color: #333;
+        color: #3A8EBA;
       }
 
       /* Résultats */
@@ -385,7 +385,7 @@
       .result-cell {
         width: 45px;
         height: 30px;
-        border: 2px solid #ddd;
+        border: 2px solid #3A8EBA;
         border-radius: 4px;
         background: #f0f0f0;
         display: flex;
@@ -435,7 +435,7 @@
       }
 
       .feu.vert.off {
-        background: #333;
+        background: #325a43;
       }
       .feu.vert.active {
         background: #4caf50;
@@ -443,7 +443,7 @@
       }
 
       .feu.orange.off {
-        background: #333;
+        background: #63410e;
       }
       .feu.orange.active {
         background: #ff9800;
@@ -451,7 +451,7 @@
       }
 
       .feu.rouge.off {
-        background: #333;
+        background: #5b1915;
       }
       .feu.rouge.active {
         background: #f44336;
@@ -493,7 +493,7 @@
       /* Seuil */
       .seuil-control {
         margin: 4px 0;
-        padding: 12px;
+        padding: 4px;
         background: #f0f0f0;
         border-radius: 6px;
         text-align: center;
@@ -581,7 +581,7 @@
       }
       
       .success-title.full {
-        font-size: 24px;
+        font-size: 20px;
         color: #1b5e20;
       }
       
@@ -610,7 +610,7 @@
       }
       
       .bravo-title {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
         color: #2e7d32;
         margin-bottom: 10px;
@@ -652,8 +652,8 @@
       
       /* Apprentissage automatique */
       .auto-learning-section {
-        margin-top: 20px;
-        padding: 12px;
+        margin-top: 10px;
+        padding: 8px;
         background: #e3f2fd;
         border-radius: 8px;
         border-left: 3px solid #2196f3;
@@ -732,8 +732,8 @@
       
       /* Visualisation graphique */
       .visualization-section {
-        margin-top: 20px;
-        padding: 15px;
+        margin-top: 10px;
+        padding: 10px;
         background: #fff;
         border-radius: 8px;
         border: 2px solid #ddd;
@@ -749,7 +749,7 @@
       .visualization-title {
         font-weight: bold;
         color: #333;
-        font-size: 14px;
+        font-size: 12px;
       }
       
       #visualization-canvas {
@@ -793,21 +793,21 @@
   </head>
   <body>
     <div class="container">
-      <h1>Entrainez manuellement le réseau des feux tricolores</h1>
+      <h1>Mettre au point un réseau de neurones</h1>
 
       <div class="info">
-        <h4>Ajustez les poids et les seuils pour que les feux répondent à leurs numéros 1,2,3</h4>
-      Chaque bouton pousse son code binaire à l'entrée du réseau ce qui permet de tester le cas. <br />
-      Une coche ✓  à gauche indique si le cas est satisfait.<br />
-      Réajustez jusqu'à trouver un équilibre pour que les 4 cas soient <b>toujours</b> satisfaits.<br />
-      </div>
+        <h4>A la main : Ajustez les poids et les seuils pour que les 4 cas fonctionnent
+        <br> Apprentissage automatique : voir au ralenti les essais suivis des corrections d'erreur 
+        
+        </h4>
+            </div>
 
 
-<h3> A vous de jouer sur les différents paramètres (+ ou -)</h3>
-
+<br>
       <div class="top-row">
         <!-- Boutons compacts - ordre inversé -->
         <div class="buttons-section">
+          <div class="section-label">Tester</div>
           <div class="btn-wrapper">
             <div class="satisfied-indicator" id="satisfied-3">✗</div>
             <div class="btn" id="btn-3" onclick="setConfig(1, 1, 3)">
@@ -850,6 +850,12 @@
           </div>
         </div>
 
+        <!-- Message de succès -->
+        <div class="success-message" id="success-message">
+          <div class="success-title" id="success-title">Succès à <span id="success-percentage">0%</span></div>
+          <div class="note">Votre matrice de poids satisfait <span id="satisfied-count">0</span> sur 4 cas !</div>
+        </div>
+
         <!-- Entrées -->
         <div class="input-section">
           <div class="section-label">Entrées</div>
@@ -874,8 +880,7 @@
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
           <div class="model-header">
-            <div class="section-label">Modèle à 2 entrées et 3 neurones avec seuil, soit 9 paramètres (6+3)</div>
-            
+            <div class="section-label">Ajuster les poids de la matrice pour réussir les tests </div>
           </div>
           <div class="matrix-section">
             <div class="column-group">
@@ -1005,46 +1010,33 @@
             <!-- Info sur le fonctionnement -->
             <div class="seuil-control">
               <div class="formula">
-               Un feu s'allume si (b1 × w₁ⱼ) + (b0 × w₂ⱼ) &gt; seuilⱼ
+               Allumé si (b1 × w₁ⱼ) + (b0 × w₂ⱼ) &gt; seuilⱼ
               </div>
             </div>
           </div>
-          <!-- Message de succès -->
-          <div class="success-message" id="success-message">
-            <div class="success-title" id="success-title">Succès à <span id="success-percentage">0%</span></div>
-            <div class="note">Votre matrice de poids satisfait <span id="satisfied-count">0</span> sur 4 cas !</div>
-          </div>
           <!-- Apprentissage automatique -->
           <div class="auto-learning-section">
-          <H3> Laisser faire la machine</H3>
-          <h4>
-           <a class="solution-link" onclick="fillSolution()">Changer de solution</a>
-          </h4>
-            <h4>Voir un apprentissage </h4>
-            <p>Faites varier les seuils<br>
-            Regardez la visualisation graphique : les essais suivis des corrections d'erreur</p>
+
+<button class="learning-btn" onclick="fillSolution()" id="start-learning-btn">Solution aléatoire</button>
+
             <div class="auto-learning-controls">
-              <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Lancer l'apprentissage</button>
+              <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Apprentissage automatique</button>
               <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
               <span class="learning-status" id="learning-status"></span>
             </div>
           </div>
-          <div class="visualization-title-container">
-            <h3 style="display: inline; margin-right: 15px;">Visualisation graphique</h3>
-            <button class="toggle-visibility" onclick="toggleVisualization()" id="toggle-vis-btn">Masquer</button>
-          </div>
+
           <!-- Visualisation graphique -->
           <div class="visualization-section" id="visualization-section">
-            <p> 
-             La formule <b>S =  H(w1·x1 + w2·x2 − s) </b> est l'équation d'une droite dans le plan (x1, x2).<br/>
-             Chaque droite doit séparer les points (b1, b0) de son feu des autres feux <br/> 
-             Selon les paramètres choisis, les droites peuvent se croiser ou non. <br/>
 
-            </p>
             <canvas id="visualization-canvas" width="500" height="400"></canvas>
             <div class="visualization-info">
-              Chaque droite représente l'équation : w₁ × b1 + w₂ × b0 = seuilⱼ pour chaque feu<br/>
+              Chaque droite représente l'équation : w₁ × b1 + w₂ × b0 = seuilⱼ pour un feu:<br/>
               <strong>Vert</strong> (w₁₁, w₂₁, seuil₀), <strong>Orange</strong> (w₁₂, w₂₂, seuil₁), <strong>Rouge</strong> (w₁₃, w₂₃, seuil₂)
+          <p> 
+             Les feux doivent s'allumer individuellement et indépendamment <br/>
+            </p>
+          
             </div>
           </div>
 
@@ -1807,11 +1799,11 @@
         ctx.fillStyle = "#333";
         ctx.font = "bold 13px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Visualisation des séparations linéaires du Perceptron", width / 2, margin - 10);
+        ctx.fillText("Visualisation des séparations linéaires du Perceptron", width / 2, margin - 25);
         
         ctx.fillStyle = "#666";
         ctx.font = "11px Arial";
-        ctx.fillText("Les zones colorées montrent quel feu s'allume. Les droites sont les limites de décision.", width / 2, margin - 25);
+        ctx.fillText("Les zones colorées montrent quel feu s'allume. Les droites sont les limites de décision.", width / 2, margin - 10);
       }
 
       window.addEventListener("load", function() {

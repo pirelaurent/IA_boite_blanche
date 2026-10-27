@@ -106,6 +106,33 @@
                 border-radius: 3px;
                 font-size: 14px;
             }
+
+            .keyword {
+                font-weight: bold;
+                color: #2c3e50;
+                background-color: #e8f5e9;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-family: 'Courier New', monospace;
+            }
+
+            .keyword-definition {
+                margin: 8px 0;
+                padding-left: 15px;
+                border-left: 3px solid #4CAF50;
+            }
+
+            .keyword-list {
+                padding-left: 20px;
+            }
+
+            .keyword-list li {
+                margin-bottom: 8px;
+            }
+
+            .center {
+                text-align: center;
+            }
         </style>
     </head>
     <body>
@@ -117,52 +144,51 @@
                 Un neurone biologique ne s'active que si ses stimulations reçues
                 (par ses dendrites) et cumulées (dans son corps cellulaire)
                 franchissent son seuil d'excitation. Il transmet ensuite un
-                signal en aval (par son axone)<br />
+                signal en aval (par son axone).
+            </p>
+            <p>
                 Les neurones sont interconnectés et forment des réseaux de
-                neurones.
-                <br />Ces réseaux sont capables d'apprendre à partir d'exemples,
+                neurones. Ces réseaux sont capables d'apprendre à partir d'exemples,
                 ce qui est la base de l'intelligence artificielle.
             </p>
             <h2>Un neurone artificiel</h2>
 
             <p>
                 Un neurone artificiel reproduit la logique d'un neurone
-                biologique par des calculs simples: <br />
-
-                Les stimulations sont pondérées puis cumulées, le résultat est
-                comparé à un seuil par une fonction d'activation
+                biologique par des calculs simples :
+                les stimulations sont pondérées puis cumulées, le résultat est
+                comparé à un seuil par une fonction d'activation.
             </p>
 
             <div class="image-container">
                 <img
                     src="img/perceptronUnique.png"
-                    alt="Schéma d'un perceptron à deux entrées  "
+                    alt="Schéma d'un neurone à deux entrées"
                     width="800"
                 />
-                <p><em>Schéma d'un perceptron avec deux entrées</em></p>
+                <p><em>Schéma d'un neurone avec deux entrées</em></p>
             </div>
-            <br />
 
             <h3>Les mots-clés</h3>
-            <ul>
+            <ul class="keyword-list">
                 <li>
-                    <b>Poids</b> (w): coefficient multiplicateur appliqué à une
+                    <span class="keyword">Poids</span> (w): coefficient multiplicateur appliqué à une
                     entrée — il code l'importance de cette entrée dans la
                     décision
                 </li>
                 <li>
-                    <b>Biais</b> (-s): valeur constante ajoutée à la somme
+                    <span class="keyword">Biais</span> (-s): valeur constante ajoutée à la somme
                     pondérée des entrées, indépendante de celles-ci ; elle
                     décale le seuil d'activation et, géométriquement, la
                     frontière de décision (droite en 2D, hyperplan au-delà)
                 </li>
                 <li>
-                    <b>Fonction d'activation</b> : fonction qui transforme le
+                    <span class="keyword">Fonction d'activation</span> : fonction qui transforme le
                     résultat du calcul et détermine la sortie du neurone
                     (activation ou non)
                 </li>
                 <li>
-                    <b> apprentissage</b> : processus d'ajustement des poids et
+                    <span class="keyword">Apprentissage</span> : processus d'ajustement des poids et
                     du biais pour que le neurone produise les sorties attendues
                     à partir des entrées fournies
                 </li>
@@ -170,22 +196,26 @@
 
             <h3>Le neurone ancêtre : le perceptron</h3>
             <p>
-                Pour le perceptron du schéma, la formule est:
-                <b>S = H(w1·x1 + w2·x2 − s) </b> <br />
-                La fonction d'activation H ( H de Oliver Heaviside ) fonctionne
+                Pour le perceptron du schéma, la formule est :
+                <span class="keyword">S = H(w1·x1 + w2·x2 − s)</span>
+            </p>
+            <p>
+                La <span class="keyword">fonction d'activation</span> <span class="keyword">H</span> (de Oliver Heaviside) fonctionne
                 en tout ou rien : 1 si le résultat est positif ou nul, 0 sinon.
-                <br />
-                Géométriquement c'est une droite dans un plan (ici à deux
+            </p>
+            <p>
+                Géométriquement, c'est <b>une droite dans un plan</b> (ici à deux
                 dimensions) qui sépare l'espace entre les points calculés à 1 de
                 ceux à 0.
             </p>
 
             <h2>Illustration pratique</h2>
             <h3>Faire avancer un feu tricolore</h3>
-            A partir d'un compteur, on veut que le modèle fasse avancer les feux
-            selon le jeu de test suivant:
-
-            <div align="center">
+            <p>
+                À partir d'un compteur, on veut que le modèle fasse avancer les feux
+                selon le jeu de test suivant :
+            </p>
+            <div class="center">
                 <table class="weight-table">
                     <thead>
                         <tr>
@@ -212,71 +242,75 @@
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td><span class="code">11 </span></td>
-                            <td><span>feu rouge allumé seul</span></td>
+                            <td><span class="code">11</span></td>
+                            <td>feu rouge allumé seul</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <h3>Mots-clés</h3>
-<b>Réseau de neurones</b> : association d'une ou plusieurs couches de neurones.
-On distingue la couche d'entrée, la couche de sortie et, éventuellement, des
-couches intermédiaires dites <b>cachées</b>.<br />
-<b>Couche de neurones</b> : un ensemble de neurones en parallèle, qui reçoivent
-tous les mêmes entrées et dont les sorties alimentent la même couche suivante
-(ils ne sont pas connectés entre eux).<br />
-<b>Paramètres</b> : l'ensemble des variables ajustables du réseau — les poids et
-les biais. Pour une couche : <b>(nombre d'entrées + 1) × nombre de neurones</b>
-(le +1 étant le biais de chaque neurone).
+            <ul class="keyword-list">
+                <li>
+                    <span class="keyword">Réseau de neurones</span> : association d'une ou plusieurs couches de neurones.<br>
+                    On distingue la couche d'entrée, la couche de sortie et, éventuellement, des
+                    couches intermédiaires dites <span class="keyword">cachées</span>.
+                </li>
+                <li>
+                    <span class="keyword">Couche de neurones</span> : un ensemble de neurones en parallèle, qui reçoivent
+                    tous les mêmes entrées et dont les sorties alimentent la même couche suivante
+                    (ils ne sont pas connectés entre eux).
+                </li>
+                <li>
+                    <span class="keyword">Paramètres</span> : l'ensemble des variables ajustables du réseau — les poids et
+                    les biais. <br>Par couche : nombre de paramètres = <span class="keyword">(nombre d'entrées + 1) × nombre de neurones</span>
+                    (le +1 est le biais par neurone).
+                </li>
+            </ul>
 
-<h3>Un réseau à une couche et trois neurones, soit 9 paramètres</h3>
+<h3>Les feux: un réseau monocouche et trois neurones</h3>
 <p>
     Pour les feux tricolores (un neurone ne produit qu'une seule sortie), il faut
-    un <b>réseau</b> de trois neurones, un pour chaque feu.<br>
-
-            Avec 2 entrées et 3 sorties sa <b>matrice</b> de poids est de dimension 2x3 et par son
-            <b>vecteur</b> de seuils de dimension 3. <br />
-            Au total il a donc <b>9 paramètres</b>
+    un <span class="keyword">réseau</span> de trois neurones, un pour chaque feu.
+<br>
+    Avec 2 entrées et 3 sorties, sa <span class="keyword">matrice</span> de poids est de  2×3 et son
+    <span class="keyword">vecteur</span> de seuils de dimension 3. 
+    Au total,  <span class="keyword">9 paramètres</span>.
 </p>
             <div class="image-container">
                 <img
-                    width="360"
+                    width="300"
                     src="img/NeuronesUneCoucheVertical.png"
                     alt="Représentation matricielle du réseau"
                 />
-                <p>
-                    <em
-                        >Représentation des 3 neurones du réseau feu
-                        tricolore</em
-                    >
-                </p>
+                <p><em>Représentation des 3 neurones du réseau feu tricolore</em></p>
             </div>
 
-     
+            <h4>Facteur d'échelle : de 10 à 10<sup>6</sup>, 10<sup>12</sup></h4>
+            <p>
+                Notre réseau monocouche a une dizaine de paramètres et ne peut pas
+                gérer des situations plus complexes, mais il est suffisant pour
+                illustrer le fonctionnement d'un réseau de neurones.
+            </p>
+            <p>
+                À titre de comparaison, les réseaux de neurones profonds utilisés
+                pour la reconnaissance d'images ont des millions (10<sup>6</sup>) de
+                paramètres et des dizaines de couches.
+            </p>
+            <p>
+                Les grands <span class="keyword">LLM (Large Language Model) </span>comme ChatGPT ou Mistral ont des
+                centaines de milliards (10<sup>12</sup>) de paramètres et des
+                centaines de couches. Le fonctionnement de base reste le même, mais la complexité est bien
+                plus grande.
+            </p>
+            <P> 
+            <span class="keyword">GPU</span> (Graphic Process Unit) On effectue des opérations mathématiques entre une <span class="keyword">matrice</span> de poids et un <span class="keyword">vecteur</span> d'entrées,  ce qui est typiquement le domaine de calcul des <b>GPU</b>, ce qui relie nombre de paramètres et course aux équipements.  
+            </p>
+<h3> Faire pour comprendre </h3>
 
-
-            <h4>
-                Facteur d'échelle  de 10 à 10<sup>6</sup>, 10<sup
-                    >12</sup
-                >
-            </h4>
-            Notre réseau monocouche a une dizaine de paramètres et ne peut pas
-            gérer des situations plus complexes, mais il est suffisant pour
-            illustrer le fonctionnement d'un réseau de neurones. <br />
-            A titre de comparaison, les réseaux de neurones profonds utilisés
-            pour la reconnaissance d'images ont des millions (10<sup>6</sup>) de
-            paramètres et des dizaines de couches. <br />
-            Les grands LLM (Large Language Model) comme ChatGPT ou Mistral ont des
-            centaines de milliards (10<sup>12</sup>) de paramètres et des
-            centaines de couches. <br />
-            Le fonctionnement de base reste le même, mais la complexité est bien
-            plus grande. <br />
-
-            <h3 align="center">
+            <h4 >
                 <a href="./feu-modele-ia.html">
-                    Un jeu pour comprendre: Paramétrez votre réseau de feux tricolores</a
-                >
-            </h3>
+                 Paramétrez le réseau de feux tricolores</a>
+            </h4>
         </div>
     </body>
 </html>
