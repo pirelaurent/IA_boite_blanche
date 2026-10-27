@@ -110,25 +110,27 @@
     </head>
     <body>
         <div class="container">
-            <h1><i>Réseaux de neurones</i></h1>
+            <h1><i>Comprendre les réseaux de neurones</i></h1>
 
             <h2>Le neurone biologique</h2>
             <p>
-
-                Un neurone biologique ne s'active que si ses stimulations reçues (par ses dendrites) et
-                cumulées (dans son corps cellulaire) franchissent son seuil d'excitation. Il transmet ensuite un signal en aval (par son axone)<br />
+                Un neurone biologique ne s'active que si ses stimulations reçues
+                (par ses dendrites) et cumulées (dans son corps cellulaire)
+                franchissent son seuil d'excitation. Il transmet ensuite un
+                signal en aval (par son axone)<br />
                 Les neurones sont interconnectés et forment des réseaux de
                 neurones.
                 <br />Ces réseaux sont capables d'apprendre à partir d'exemples,
                 ce qui est la base de l'intelligence artificielle.
             </p>
-            <h2>Le premier neurone artificiel: le perceptron</h2>
+            <h2>Un neurone artificiel</h2>
 
             <p>
-                Ancêtre de tous les réseaux de neurones, le perceptron reproduit
-                la logique d'un neurone biologique : <br />
-                <h4> Des calculs simples</h4>
-                   Les stimulations sont pondérées puis cumulées, le résultat est comparé à un seuil par une fonction d'activation
+                Un neurone artificiel reproduit la logique d'un neurone
+                biologique par des calculs simples: <br />
+
+                Les stimulations sont pondérées puis cumulées, le résultat est
+                comparé à un seuil par une fonction d'activation
             </p>
 
             <div class="image-container">
@@ -136,28 +138,52 @@
                     src="img/perceptronUnique.png"
                     alt="Schéma d'un perceptron à deux entrées  "
                     width="800"
-                   
                 />
                 <p><em>Schéma d'un perceptron avec deux entrées</em></p>
             </div>
+            <br />
 
+            <h3>Les mots-clés</h3>
+            <ul>
+                <li>
+                    <b>Poids</b> (w): coefficient multiplicateur appliqué à une
+                    entrée — il code l'importance de cette entrée dans la
+                    décision
+                </li>
+                <li>
+                    <b>Biais</b> (-s): valeur constante ajoutée à la somme
+                    pondérée des entrées, indépendante de celles-ci ; elle
+                    décale le seuil d'activation et, géométriquement, la
+                    frontière de décision (droite en 2D, hyperplan au-delà)
+                </li>
+                <li>
+                    <b>Fonction d'activation</b> : fonction qui transforme le
+                    résultat du calcul et détermine la sortie du neurone
+                    (activation ou non)
+                </li>
+                <li>
+                    <b> apprentissage</b> : processus d'ajustement des poids et
+                    du biais pour que le neurone produise les sorties attendues
+                    à partir des entrées fournies
+                </li>
+            </ul>
+
+            <h3>Le neurone ancêtre : le perceptron</h3>
             <p>
-   : <br>
-               
-                Sa formule de calcul est: <b>S =  H(w1·x1 + w2·x2 − s) </b> <br />
-                 La fonction d'activation H ( du nom d'Oliver Heaviside, inventeur du perceptron) effectue un test sur le résultat du calcul : 
-
-                <br /> Si le résultat est positif ou nul, la sortie est excitée (1) sinon la sortie reste  non excitée (0).
+                Pour le perceptron du schéma, la formule est:
+                <b>S = H(w1·x1 + w2·x2 − s) </b> <br />
+                La fonction d'activation H ( H de Oliver Heaviside ) fonctionne
+                en tout ou rien : 1 si le résultat est positif ou nul, 0 sinon.
+                <br />
+                Géométriquement c'est une droite dans un plan (ici à deux
+                dimensions) qui sépare l'espace entre les points calculés à 1 de
+                ceux à 0.
             </p>
 
-            <h3>But de l'apprentissage</h3>
-            <p>
-                Le but de l'apprentissage est de trouver les bons poids et le
-                bon seuil pour que le perceptron réponde correctement à un
-                objectif, ce pour tous les cas d'entrainement présentés aux entrées.
-            </p>
-            <h2>Illustration : piloter un feu tricolore</h2>
-            A partir d'un compteur qui va de 0 à 3, on veut que l'IA gère les feux selon le jeu de test suivant:
+            <h2>Illustration pratique</h2>
+            <h3>Faire avancer un feu tricolore</h3>
+            A partir d'un compteur, on veut que le modèle fasse avancer les feux
+            selon le jeu de test suivant:
 
             <div align="center">
                 <table class="weight-table">
@@ -192,39 +218,64 @@
                     </tbody>
                 </table>
             </div>
+            <h3>Mots-clés</h3>
+<b>Réseau de neurones</b> : association d'une ou plusieurs couches de neurones.
+On distingue la couche d'entrée, la couche de sortie et, éventuellement, des
+couches intermédiaires dites <b>cachées</b>.<br />
+<b>Couche de neurones</b> : un ensemble de neurones en parallèle, qui reçoivent
+tous les mêmes entrées et dont les sorties alimentent la même couche suivante
+(ils ne sont pas connectés entre eux).<br />
+<b>Paramètres</b> : l'ensemble des variables ajustables du réseau — les poids et
+les biais. Pour une couche : <b>(nombre d'entrées + 1) × nombre de neurones</b>
+(le +1 étant le biais de chaque neurone).
 
+<h3>Un réseau à une couche et trois neurones, soit 9 paramètres</h3>
+<p>
+    Pour les feux tricolores (un neurone ne produit qu'une seule sortie), il faut
+    un <b>réseau</b> de trois neurones, un pour chaque feu.<br>
 
-
-<p> Comme un neurone ne peut pas gérer plusieurs sorties, il faut créer un réseau de trois neurones, un pour chaque feu. </p>
-<h3> Un réseau de trois neurones perceptron</h3>
-
+            Avec 2 entrées et 3 sorties sa <b>matrice</b> de poids est de dimension 2x3 et par son
+            <b>vecteur</b> de seuils de dimension 3. <br />
+            Au total il a donc <b>9 paramètres</b>
+</p>
             <div class="image-container">
                 <img
-                  width="400"
+                    width="360"
                     src="img/NeuronesUneCoucheVertical.png"
                     alt="Représentation matricielle du réseau"
                 />
                 <p>
                     <em
-                        >Représentation matricielle des 3 neurones du réseau feu
-                        tricolore</em>
+                        >Représentation des 3 neurones du réseau feu
+                        tricolore</em
+                    >
                 </p>
             </div>
 
-<h3>Un réseau monocouche à 9 paramètres</h3>
- Ce réseau a 2 entrées et 3 sorties.<br>
- Il est défini par sa matrice de poids de dimension 2x3 et par son vecteur de seuils de dimension 3. <br>
- Au total il a donc <b>9 paramètres</b><br>
- 
-            <h4>Modestie assumée et facteur d'échelle 10, 10<sup>6</sup>, 10<sup>12</sup></h4>
-Notre réseau monocouche a une dizaine de paramètres et ne peut pas gérer des situations plus complexes, mais il est suffisant pour illustrer le fonctionnement d'un réseau de neurones. <br>
-A titre de comparaison, les réseaux de neurones profonds utilisés pour la reconnaissance d'images ont des millions (10<sup>6</sup>) de paramètres et des dizaines de couches. <br>
-Les LLM (Large Language Model) comme ChatGPT ou Mistral ont des centaines de milliards (10<sup>12</sup>) de paramètres et des centaines de couches. <br>
-Le fonctionnement de base reste le même, mais la complexité est bien plus grande. <br>
+     
 
+
+            <h4>
+                Facteur d'échelle  de 10 à 10<sup>6</sup>, 10<sup
+                    >12</sup
+                >
+            </h4>
+            Notre réseau monocouche a une dizaine de paramètres et ne peut pas
+            gérer des situations plus complexes, mais il est suffisant pour
+            illustrer le fonctionnement d'un réseau de neurones. <br />
+            A titre de comparaison, les réseaux de neurones profonds utilisés
+            pour la reconnaissance d'images ont des millions (10<sup>6</sup>) de
+            paramètres et des dizaines de couches. <br />
+            Les grands LLM (Large Language Model) comme ChatGPT ou Mistral ont des
+            centaines de milliards (10<sup>12</sup>) de paramètres et des
+            centaines de couches. <br />
+            Le fonctionnement de base reste le même, mais la complexité est bien
+            plus grande. <br />
 
             <h3 align="center">
-                <a href="./feu-modele-ia.html"> Entrainez le réseau des feux tricolores</a>
+                <a href="./feu-modele-ia.html">
+                    Un jeu pour comprendre: Paramétrez votre réseau de feux tricolores</a
+                >
             </h3>
         </div>
     </body>
