@@ -319,7 +319,7 @@
       }
 
       .coeff-label {
-        font-size: 14px;
+        font-size: 10px;
         color: #666;
         font-family: monospace;
       }
@@ -692,6 +692,24 @@
         flex-wrap: wrap;
       }
       
+      .matrix-and-learning-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 20px;
+        margin-top: 10px;
+      }
+      
+      .matrix-section {
+        flex: 1;
+      }
+      
+      .learning-controls-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      
       .learning-status {
         font-size: 13px;
         color: #666;
@@ -796,7 +814,7 @@
       <h1>Mettre au point un réseau de neurones</h1>
 
       <div class="info">
-        <h4>A la main : Ajustez les poids et les seuils pour que les 4 cas fonctionnent
+        <h4>A la main : Ajustez les poids pour que les 4 cas fonctionnent. (Vous pouvez aussi varier les seuils)
         <br> Apprentissage automatique : voir au ralenti les essais suivis des corrections d'erreur jusqu'au succès.
         
         </h4>
@@ -882,7 +900,8 @@
           <div class="model-header">
             <div class="section-label">Ajuster les poids de la matrice pour réussir les tests </div>
           </div>
-          <div class="matrix-section">
+          <div class="matrix-and-learning-row">
+            <div class="matrix-section">
             <div class="column-group">
               <!-- Colonne Vert (s1) -->
               <div class="column-frame" style="border-color: #4caf50;">
@@ -921,7 +940,7 @@
                     <button class="cell-btn up" onclick="adjustSeuil(0, 0.1)">+</button>
                     <button class="cell-btn down" onclick="adjustSeuil(0, -0.1)">-</button>
                   </div>
-                  <div class="coeff-label">Seuil</div>
+                  <div class="coeff-label">Seuil 1</div>
                 </div>
               </div>
 
@@ -962,7 +981,7 @@
                     <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
                     <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
                   </div>
-                  <div class="coeff-label">Seuil</div>
+                  <div class="coeff-label">Seuil 2</div>
                 </div>
               </div>
 
@@ -1003,7 +1022,7 @@
                     <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
                     <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
                   </div>
-                  <div class="coeff-label">Seuil</div>
+                  <div class="coeff-label">Seuil 3</div>
                 </div>
               </div>
             </div>
@@ -1014,17 +1033,19 @@
               </div>
             </div>
           </div>
-          <!-- Apprentissage automatique -->
-          <div class="auto-learning-section">
-
-          <button class="learning-btn" onclick="fillSolution()" id="start-learning-btn">Solution aléatoire</button>
-
-            <div class="auto-learning-controls">
-              <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Apprentissage<br> automatique</button>
-              <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
-              <span class="learning-status" id="learning-status"></span>
+          
+          <!-- Apprentissage automatique et Solution aléatoire -->
+          <div class="learning-controls-section">
+            <div class="auto-learning-section">
+              <button class="learning-btn" onclick="fillSolution()" id="start-learning-btn">Solution aléatoire</button>
+              <div class="auto-learning-controls">
+                <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Apprentissage<br> automatique</button>
+                <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
+                <span class="learning-status" id="learning-status"></span>
+              </div>
             </div>
           </div>
+        </div>
 
           <!-- Visualisation graphique -->
           <div class="visualization-section" id="visualization-section">
@@ -1034,7 +1055,7 @@
               Chaque droite représente l'équation : w₁ × b1 + w₂ × b0 = seuilⱼ pour un feu:<br/>
               <strong>Vert</strong> (w₁₁, w₂₁, seuil₀), <strong>Orange</strong> (w₁₂, w₂₂, seuil₁), <strong>Rouge</strong> (w₁₃, w₂₃, seuil₂)
           <p> 
-             Les feux doivent s'allumer individuellement et indépendamment <br/>
+             C'est un réseau Classifieur : Les feux doivent s'allumer individuellement et indépendamment. <br/>
             </p>
           
             </div>
@@ -1813,7 +1834,6 @@
       });
     </script>
     <div style="margin-top: 20px; text-align: center;">
-      <a href="debriefing.html" class="more-info-link">En savoir plus sur les réseaux de neurones et leurs limites</a>
-    </div>
+      <a href="debriefing.html" class="more-info-link">En savoir plus sur l'apprentissage
   </body>
 </html>
