@@ -158,13 +158,22 @@
                 neurones. <br />Ces réseaux sont capables d'apprendre à partir
                 d'exemples, ce qui est la base de l'intelligence artificielle.
             </p>
-            <h2>Un neurone artificiel</h2>
+            <h2>Un neurone artificiel : un simple calcul</h2>
 
             <p>
                 Un neurone artificiel reproduit la logique d'un neurone
-                biologique par des calculs simples : les stimulations des
-                entrées sont pondérées, puis cumulées et le résultat est comparé
-                à un seuil par une fonction d'activation.
+                biologique par des calculs simples.
+               </p>
+               <p>  
+                 Les valeurs des entrées sont multipliées par des <span class="keyword">Poids</span> 
+                 qui codent l'importance de chaque entrée dans la décision.
+                <br>Les résultats sont ensuite cumulées et on  ajoute 1 fois un  <span class="keyword">biais </span> (seuil) à cette somme.
+                <br> En deux dimensions, c'est l'équation d'une droite dans un plan, éventuellement décalée par rapport à l'origine par le biais.
+             
+                <br> Une <span class="keyword">fonction d'activation </span>décide si le neurone s'active ou non et  
+                transforme ce résultat pour produire une <span class="keyword">prédiction</span>.
+                <br> L'<span class="keyword">apprentissage</span> consiste à ajuster les poids et le biais 
+                itérativement pour réduire l'erreur entre les prédictions et les sorties attendues.
             </p>
 
             <div class="image-container">
@@ -176,60 +185,20 @@
                 <p><em>Schéma d'un neurone à deux entrées</em></p>
             </div>
 
-            <h3>Les mots-clés</h3>
-            <ul class="keyword-list">
-                <li>
-                    <span class="keyword">Poids</span> (w): coefficient
-                    multiplicateur appliqué à une entrée — il code l'importance
-                    de cette entrée dans la décision
-                </li>
-                <li>
-                    <span class="keyword">Biais</span> (-s): valeur constante
-                    ajoutée à la somme pondérée des entrées, indépendante de
-                    celles-ci ; elle décale le seuil d'activation et,
-                    géométriquement, la frontière de décision (droite en 2D,
-                    hyperplan au-delà)
-                </li>
-                <li>
-                    <span class="keyword">Fonction d'activation</span> :
-                    fonction qui transforme le résultat du calcul et détermine
-                    la sortie du neurone (activation ou non)
-                </li>
-                <li>
-                    <span class="keyword">Apprentissage</span> : processus
-                    d'ajustement des poids et du biais pour que le neurone
-                    produise les sorties attendues à partir des entrées fournies
-                </li>
-            </ul>
 
             <h3>Le neurone ancêtre : le perceptron</h3>
             <p>
-                Un neurone avec une fonction d'activation H (de Oliver Heaviside
-                son inventeur) est un <b>perceptron</b>.<br />
-                Sa formule est :
-                <span class="keyword">S = H(w1·x1 + w2·x2 − s)</span> pour 2
-                entrées.
+                Un neurone avec <span class="keyword">fonction d'activation H</span>(du nom de son inventeur Oliver Heaviside) est un <b>perceptron</b>.
                 <br />
-                Sa <span class="keyword">fonction d'activation</span>
-                <span class="keyword">H</span> fonctionne en tout ou rien :
-                sortie à 1 si le résultat du calcul est positif (ou nul), 0
-                sinon.
-            </p>
-            <p>
-                Géométriquement, la formule précédente est
-                <b>une droite dans un plan</b> qui sépare l'espace entre les
-                points calculés à 1 de ceux à 0. <br />
-                Pour 3 entrées, ce serait un plan qui découpe l'espace à trois
-                dimensions. <br />
-                Au delà, les calculs restent les mêmes mais ce n'est plus
-                représentable directement.
+                La fonction H est directe :  si le résultat du calcul est supérieur ou égal à 0, la prédiction est 1, sinon elle est 0. <br />
+                Le perceptron est le plus simple des neurones artificiels, mais il est suffisant pour illustrer le fonctionnement d'un réseau de neurones.
             </p>
 
             <h2>Illustration pratique</h2>
             <h3>Faire avancer un feu tricolore avec un réseau de perceptron</h3>
             <p>
-                À partir d'un compteur, on veut un modèle IA qui allume chaque
-                feu selon la valeur (binaire) d'un compteur :
+                On veut un modèle IA qui allume chaque
+                feu individuellement ( un contre tous = un classificateur) selon la valeur (binaire) d'un compteur :
             </p>
             <div class="center">
                 <table class="weight-table">
@@ -237,7 +206,7 @@
                         <tr>
                             <th>compteur</th>
                             <th>entrée binaire b1b0</th>
-                            <th>sortie visée</th>
+                            <th>sortie attendue</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -271,25 +240,29 @@
 
             <h3>Pour les trois feux: un réseau monocouche avec trois neurones</h3>
             <p>
-                Un neurone ne produit qu'une seule sortie, il en fautdonc un pour
-                chaque feu afin de former un réseau de trois neurones.
+                Un neurone ne produit qu'une seule sortie, il en faut donc un pour
+                chaque feu et former un réseau de trois neurones.
                 <br />
                 Avec 2 entrées et 3 sorties, sa matrice de poids est de 2×3 et
                 le vecteur des seuils est de dimension 3.
                 <br />
-                C'est un réseau à 9 paramètres (6+3)
+                C'est un réseau à 9 paramètres (6+3).
+                <br> Un écran de saisie expérimental permettra de modifier ces paramètres et de voir le résultat sur les feux.
+
             </p>
             <div class="image-container">
                 <img
-                    width="300"
+                    width="500"
                     src="img/NeuronesUneCoucheVertical.png"
                     alt="Représentation matricielle du réseau"
                 />
                 <p>
                     <em
                         >Représentation des 3 neurones du réseau feu
-                        tricolore</em
-                    >
+                        tricolore.
+                        <br>Modèle « un contre tous » : un classificateur binaire indépendant par feu,
+                        <br> chacun lisant la valeur binaire du compteur et répondant 1 (allumé) ou 0 (éteint).
+                </em>
                 </p>
             </div>
             <h3>Mots-clés</h3>
@@ -300,17 +273,19 @@
                     On distingue la couche d'entrée, la couche de sortie et,
                     éventuellement, des couches intermédiaires dites
                     <span class="keyword">cachées</span>.
+                <br />Un réseau monocouche come ici n'a qu'une seule couche de neurones, la
+                    couche de sortie.
                 </li>
                 <li>
                     <span class="keyword">Couche de neurones</span> : un
                     ensemble de neurones en parallèle, qui reçoivent tous les
                     mêmes entrées et dont les sorties alimentent la même couche
-                    suivante (ils ne sont pas connectés entre eux).
+                    suivante (ils ne sont pas connectés entre eux au sein d'une couche).
                 </li>
                 <li>
                     <span class="keyword">Paramètres</span> : l'ensemble des
                     variables ajustables du réseau — les poids et les biais.
-                    <br />Par couche : nombre de paramètres = (nombre d'entrées
+                    <br />Par couche :<span class="keyword"> nombre de paramètres</span> = (nombre d'entrées
                     + 1) × nombre de neurones (le +1 est le biais par neurone).
                 </li>
             </ul>
@@ -340,13 +315,13 @@
                 course à ces équipements.
             </p>
             <h2>Faire pour comprendre</h2>
-<p> On a créé une interface visuelle pour voir le réseau de pilotage des feux tricolores en action.
+<p> On a créé une interface visuelle pour voir le réseau de neurones des feux tricolores en action.
 <br> Une représentation graphique des trois droites dans le plan montre la discrimination réalisée par le réseau.
 
-<br>Vous pourrez jouer le rôle de l'entraineur et ajuster vous-même les poids et seuils jusqu'à obtenir un succès.
+<br>Vous pouvez jouer le rôle de l'entraineur et ajuster vous-même les poids et seuils jusqu'à obtenir un succès.
             <h4>
                 <a href="./feu-modele-ia.html">
-                    Paramétrez le réseau de feux tricolores</a
+                    Paramétrez le réseau de neurones des feux tricolores</a
                 >
             </h4>
         </div>
