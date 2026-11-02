@@ -9,3 +9,6 @@ Paradigme : Algorithmes -> capacités de langage et de raisonnement
 
 
 --- 
+R : 82
+V: 86
+B: 66

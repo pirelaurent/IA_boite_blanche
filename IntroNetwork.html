@@ -206,11 +206,13 @@
                 neurones.
             </p>
 
-            <h2>Illustration pratique:
-             un feu tricolore piloté par un réseau de perceptrons</h2>
+            <h2>
+                Illustration pratique: un feu tricolore piloté par un réseau de
+                perceptrons
+            </h2>
             <p>
-                On va entrainer un modèle qui allume chaque feu
-                individuellement ( un contre tous = un
+                On va entrainer un modèle qui allume chaque feu individuellement
+                ( un contre tous = un
                 <span class="keyword">classificateur</span>) selon la valeur
                 d'un compteur.
             </p>
@@ -297,11 +299,15 @@
 
             <h3>Un réseau monocouche avec trois neurones</h3>
             <p>
-                Un neurone n'a qu'une sortie.Pour 3 sorties il faut un <span class="keyword">réseau </span> de 3 neurones.
-                 <br />Il a un <span class="keyword">vecteur </span>d'entrées de dimension 3 ( 2 pour le compteur +biais) et un vecteur de sorties de dimension 3 (les feux). <br />
-                 Sa
-                <span class="keyword">matrice de poids </span>est alors de dimension
-                3×3 : ce réseau a 9 <span class="keyword">paramètres.</span>
+                Un neurone n'a qu'une sortie.Pour 3 sorties il faut un
+                <span class="keyword">réseau </span> de 3 neurones. <br />Il a
+                un <span class="keyword">vecteur </span>d'entrées de dimension 3
+                ( 2 pour le compteur +biais) et un vecteur de sorties de
+                dimension 3 (les feux). <br />
+                Sa
+                <span class="keyword">matrice de poids </span>est alors de
+                dimension 3×3 : ce réseau a 9
+                <span class="keyword">paramètres.</span>
             </p>
             <div class="image-container">
                 <img
@@ -311,31 +317,33 @@
                 />
                 <p>
                     <em
-                        >Représentation des 3 neurones perceptrons du réseau feu tricolore.
-                        <br />Modèle « un contre tous » : un classificateur
-                        binaire indépendant par feu,
+                        >Représentation des 3 neurones perceptrons du réseau feu
+                        tricolore. <br />Modèle « un contre tous » : un
+                        classificateur binaire indépendant par feu,
                     </em>
                 </p>
             </div>
 
             <h3>Le jeu d'entrainement est de 3 neurones x 4 cas = 12 tests</h3>
-<p>
-            Avec 3 neurones en sortie (un par feu), chaque neurone apprend à
-            prédire sa propre sortie (1 ou 0) pour chaque entrée.
-            <br />Les données d'entraînement sont donc de 4 exemples (00, 01, 10, 11), à répéter 3 fois (une fois par neurone) 
-            avec une sortie ciblée :
+            <p>
+                Avec 3 neurones en sortie (un par feu), chaque neurone apprend à
+                prédire sa propre sortie (1 ou 0) pour chaque entrée.
+                <br />Les données d'entraînement sont donc de 4 exemples (00,
+                01, 10, 11), à répéter 3 fois (une fois par neurone) avec une
+                sortie ciblée :
+            </p>
+
             <ul>
                 <li>Neurone vert : (1 pour 01, 0 sinon)</li>
                 <li>Neurone orange : (1 pour 10, 0 sinon)</li>
                 <li>Neurone rouge : (1 pour 11, 0 sinon)</li>
             </ul>
-</p
-            <h3>Mots-cl>és</h3>
+
+            <h3>Mots-clés</h3>
             <ul class="keyword-list">
                 <li>
                     <span class="keyword">Réseau de neurones</span> :
                     association d'une ou plusieurs couches de neurones.<br />
-                    
                 </li>
                 <li>
                     <span class="keyword">Couche de neurones</span> : un
@@ -343,7 +351,11 @@
                     mêmes entrées et dont les sorties alimentent la même couche
                     suivante (ils ne sont pas connectés entre eux au sein d'une
                     couche).
-                     </li><li>On distingue la <span class="keyword">couche d'entrée</span>, la <span class="keyword">couche de sortie</span> et,
+                </li>
+                <li>
+                    On distingue la
+                    <span class="keyword">couche d'entrée</span>, la
+                    <span class="keyword">couche de sortie</span> et,
                     éventuellement, des couches intermédiaires dites
                     <span class="keyword">couchescachées</span>. <br />Un réseau
                     monocouche comme ici n'a qu'une seule couche de neurones, la
@@ -373,9 +385,10 @@
                 ChatGPT ou Mistral ont des centaines de milliards
                 (10<sup>12</sup>) de paramètres et des centaines de couches.
 
-          <br />
+                <br />
                 Le fonctionnement de base reste le même, mais avec des
                 complexités de plus en plus grandes.
+            </p>
 
             <p>
                 <br />On effectue des milliards d'opérations mathématiques en
@@ -389,13 +402,21 @@
             <p>
                 On a créé une interface visuelle pour voir le réseau de neurones
                 des feux tricolores en action. <br />
-                Une représentation graphique des trois droites dans le plan
-                illustre la discrimination réalisée par le réseau.
-
-                <br />Vous pouvez jouer le rôle de l'entraineur et ajuster
-                vous-même les poids et seuils jusqu'à obtenir un succès.
             </p>
 
+            <h4>Le seuil du perceptron équivaut à un biais négatif</h4>
+            <p>
+            Le dépassement d'un seuil Perceptron est:
+            <b><i>somme pondérée &gt; = seuil</i></b> soit équivalent à:
+            <b><i>somme pondérée - seuil &gt; = 0</i></b>
+
+            <br /> Le biais est donc l'opposé du seuil : <b><i>biais = -seuil</i></b>
+            Dans l'exercice suivant qui affiche des seuils, on les retirera de la somme pondérée.
+
+
+            <br />Vous pouvez jouer le rôle de l'entraineur et ajuster vous-même
+            les poids et les seuils jusqu'à obtenir un succès.
+</p >
             <h4>
                 <a href="./feu-modele-ia.html">
                     Paramétrez le réseau de neurones des feux tricolores</a

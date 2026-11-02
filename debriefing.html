@@ -96,164 +96,20 @@
             <strong>s'allumer uniquement pour son cas spécifique</strong> et rester éteint pour les autres.
             C'est un <strong>problème de classification</strong> : le réseau doit discriminer les 4 configurations d'entrée.
         </p>
-        
+        <p> Le réseau du feu tricolore est un exemple simple de réseau de neurones à une seule couche (perceptron multi-sorties). 
+         il teste 2 entrées soit  4 cas fois 3 neurones, soit 12 calculs par itération. </p>
+<h3>Réseau de neurones classifieur d'images</h3>
         <p>
-            À chaque itération, l'algorithme évalue les 4 cas pour les 3 neurones, soit 
-            <strong>12 calculs par itération</strong> (et non 16, car il y a 3 feux, pas 4 neurones).
+            Un réseaux de neurones classifieur d'images prend en entrée une image sous forme de tableau de pixels et doit déterminer à quelle catégorie elle appartient (chien, chat, voiture, etc.).
+            Chaque neurone de sortie correspond à une catégorie et doit s'activer uniquement pour les images de cette catégorie.
+        </p>
+        <p>
+            Dans notre exemple, les entrées sont les 4 configurations possibles des feux (vert, orange, rouge, éteint) et les sorties sont les 3 neurones correspondant aux feux.
         </p>
     </div>
 
-    <div class="section">
-        <h2>Configuration des entrées et sorties attendues</h2>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Bouton</th>
-                    <th>Entrées</th>
-                    <th>Vert (s₁)</th>
-                    <th>Orange (s₂)</th>
-                    <th>Rouge (s₃)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>0</td>
-                    <td>b₁=0, b₀=0</td>
-                    <td class="ok">✓ éteint</td>
-                    <td class="ok">✓ éteint</td>
-                    <td class="ok">✓ éteint</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>b₁=1, b₀=0</td>
-                    <td class="feu-vert">✓ allumé</td>
-                    <td class="ok">✓ éteint</td>
-                    <td class="ok">✓ éteint</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>b₁=0, b₀=1</td>
-                    <td class="ok">✓ éteint</td>
-                    <td class="feu-orange">✓ allumé</td>
-                    <td class="ok">✓ éteint</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>b₁=1, b₀=1</td>
-                    <td class="ok">✓ éteint</td>
-                    <td class="ok">✓ éteint</td>
-                    <td class="feu-rouge">✓ allumé</td>
-                </tr>
-            </tbody>
-        </table>
 
-        <div class="formula">
-            <strong>Règle d'allumage :</strong> 
-            Un feu j s'allume si <span class="highlight">(b₁ × w₁ⱼ) + (b₀ × w₂ⱼ) > seuilⱼ</span>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Exemple détaillé : apprentissage pour le feu vert</h2>
-        
-        <p>
-            Le feu vert doit s'allumer <strong>uniquement</strong> pour le cas <span class="highlight">b₁=1, b₀=0</span> (bouton 1).
-        </p>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Cas</th>
-                    <th>Entrées</th>
-                    <th>Score vert = b₁×w₁₁ + b₀×w₂₁</th>
-                    <th>Attendu</th>
-                    <th>Correction si erreur</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>0</td>
-                    <td>b₁=0, b₀=0</td>
-                    <td>0 × w₁₁ + 0 × w₂₁ = 0</td>
-                    <td class="ok">≤ seuil₁ (éteint)</td>
-                    <td class="ok">✓ Toujours OK</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>b₁=1, b₀=0</td>
-                    <td>1 × w₁₁ + 0 × w₂₁ = w₁₁</td>
-                    <td class="ok">> seuil₁ (allumé)</td>
-                    <td class="nok">➜ Si w₁₁ ≤ seuil₁ : <strong>augmenter w₁₁</strong> ou <strong>diminuer seuil₁</strong></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>b₁=0, b₀=1</td>
-                    <td>0 × w₁₁ + 1 × w₂₁ = w₂₁</td>
-                    <td class="ok">≤ seuil₁ (éteint)</td>
-                    <td class="nok">➜ Si w₂₁ > seuil₁ : <strong>diminuer w₂₁</strong> ou <strong>augmenter seuil₁</strong></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>b₁=1, b₀=1</td>
-                    <td>1 × w₁₁ + 1 × w₂₁ = w₁₁ + w₂₁</td>
-                    <td class="ok">≤ seuil₁ (éteint)</td>
-                    <td class="nok">➜ Si w₁₁ + w₂₁ > seuil₁ : <strong>diminuer w₁₁ et/ou w₂₁</strong> ou <strong>augmenter seuil₁</strong></td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p>
-            <strong>Remarque importante :</strong> L'algorithme d'apprentissage corrige <strong>à la fois les poids ET les seuils</strong>.
-            Pour chaque erreur, il peut choisir d'ajuster soit le poids, soit le seuil, soit les deux.
-        </p>
-    </div>
-
-    <div class="section">
-        <h2>Apprentissage pour les autres feux</h2>
-        
-        <h3 class="feu-orange">Feu orange (s₂)</h3>
-        <p>
-            Doit s'allumer <strong>uniquement</strong> pour <span class="highlight">b₁=0, b₀=1</span> (bouton 2).
-        </p>
-        <ul>
-            <li>Cas 2 : score = w₂₂ → doit être <strong>> seuil₂</strong> ➜ si w₂₂ ≤ seuil₂ : <strong>augmenter w₂₂</strong> ou <strong>diminuer seuil₂</strong></li>
-            <li>Cas 1 : score = w₁₂ → doit être <strong>≤ seuil₂</strong> ➜ si w₁₂ > seuil₂ : <strong>diminuer w₁₂</strong> ou <strong>augmenter seuil₂</strong></li>
-            <li>Cas 3 : score = w₁₂ + w₂₂ → doit être <strong>≤ seuil₂</strong> ➜ si w₁₂ + w₂₂ > seuil₂ : <strong>diminuer w₁₂ et/ou w₂₂</strong> ou <strong>augmenter seuil₂</strong></li>
-        </ul>
-
-        <h3 class="feu-rouge">Feu rouge (s₃)</h3>
-        <p>
-            Doit s'allumer <strong>uniquement</strong> pour <span class="highlight">b₁=1, b₀=1</span> (bouton 3).
-        </p>
-        <ul>
-            <li>Cas 3 : score = w₁₃ + w₂₃ → doit être <strong>> seuil₃</strong> ➜ si w₁₃ + w₂₃ ≤ seuil₃ : <strong>augmenter w₁₃ et w₂₃</strong> ou <strong>diminuer seuil₃</strong></li>
-            <li>Cas 1 : score = w₁₃ → doit être <strong>≤ seuil₃</strong> ➜ si w₁₃ > seuil₃ : <strong>diminuer w₁₃</strong> ou <strong>augmenter seuil₃</strong></li>
-            <li>Cas 2 : score = w₂₃ → doit être <strong>≤ seuil₃</strong> ➜ si w₂₃ > seuil₃ : <strong>diminuer w₂₃</strong> ou <strong>augmenter seuil₃</strong></li>
-        </ul>
-    </div>
-
-    <div class="important">
-        <h2>Interactions entre les neurones</h2>
-        <p>
-            <strong>⚠️ Attention :</strong> Comme les entrées <code>b₁</code> et <code>b₀</code> sont partagées entre tous les neurones, 
-            une correction pour un feu peut impacter les autres feux.
-        </p>
-        <p>
-            Par exemple, dans le cas 3 (<span class="highlight">b₁=1, b₀=1</span>) :
-        </p>
-        <ul>
-            <li>Si le <span class="feu-rouge">rouge ne s'allume pas</span> : il faut augmenter <code>w₁₃</code> et <code>w₂₃</code></li>
-            <li>Mais si cela fait que le <span class="feu-vert">vert s'allume</span> : il faut diminuer <code>w₁₁</code> et <code>w₂₁</code></li>
-            <li>Et si cela fait que l'<span class="feu-orange">orange s'allume</span> : il faut diminuer <code>w₁₂</code> et <code>w₂₂</code></li>
-        </ul>
-        <p>
-            C'est pourquoi l'algorithme doit corriger <strong>toutes les erreurs simultanément</strong>, 
-            ce qui explique pourquoi on peut voir <code>w₂₁</code> ou <code>w₂₂</code> changer 
-            "à cause du rouge" : c'est en réalité pour maintenir l'extinction du vert et de l'orange 
-            pendant que le rouge s'allume.
-        </p>
-    </div>
 
     <div class="section">
         <h2>Algorithme d'apprentissage</h2>

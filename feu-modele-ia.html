@@ -831,8 +831,8 @@
             <div class="btn" id="btn-3" onclick="setConfig(1, 1, 3)">
               <span class="btn-label">3 rouge</span>
               <div class="btn-bits">
-                <span>b1 1</span>
-                <span>b0 1</span>
+                <span>x1 1</span>
+                <span>x2 1</span>
               </div>
             </div>
           </div>
@@ -841,8 +841,8 @@
             <div class="btn" id="btn-2" onclick="setConfig(0, 1, 2)">
               <span class="btn-label">2 orange</span>
               <div class="btn-bits">
-                <span>b1 0</span>
-                <span>b0 1</span>
+                <span>x1 0</span>
+                <span>x2 1</span>
               </div>
             </div>
           </div>
@@ -851,8 +851,8 @@
             <div class="btn" id="btn-1" onclick="setConfig(1, 0, 1)">
               <span class="btn-label">1 vert</span>
               <div class="btn-bits">
-                <span>b1 1</span>
-                <span>b0 0</span>
+                <span>x1 1</span>
+                <span>x2 0</span>
               </div>
             </div>
           </div>
@@ -861,8 +861,8 @@
             <div class="btn" id="btn-0" onclick="setConfig(0, 0, 0)">
               <span class="btn-label">0 éteint</span>
               <div class="btn-bits">
-                <span>b1 0</span>
-                <span>b0 0</span>
+                <span>x1 0</span>
+                <span>x2 0</span>
               </div>
             </div>
           </div>
@@ -880,11 +880,11 @@
           <div class="bits-multiplier-section">
             <div class="bits-section">
               <div class="bit-row">
-                <div class="bit-label">b1</div>
+                <div class="bit-label">x1</div>
                 <div class="bit-box" id="b1" onclick="toggleBit('b1')">0</div>
               </div>
               <div class="bit-row">
-                <div class="bit-label">b0</div>
+                <div class="bit-label">x2</div>
                 <div class="bit-box" id="b0" onclick="toggleBit('b0')">0</div>
               </div>
             </div>
@@ -923,6 +923,15 @@
                     </div>
                     <div class="coeff-label">w₂₁</div>
                   </div>
+                  <div class="plus-symbol">-</div>
+                  <div class="cell-container">
+                    <div class="cell" id="seuil-cell-0">
+                      <div class="cell-value" id="seuil-value-0">0.8</div>
+                      <button class="cell-btn up" onclick="adjustSeuil(0, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustSeuil(0, -0.1)">-</button>
+                    </div>
+                    <div class="coeff-label">seuil</div>
+                  </div>
                 </div>
                 <div class="equal-symbol">=</div>
                 <div class="result-col">
@@ -932,15 +941,6 @@
                 <div class="feu-container">
                   <div class="feu vert off" id="feu-0"></div>
                   <div class="feu-label">Vert</div>
-                </div>
-                <!-- Contrôle du seuil pour le feu Vert -->
-                <div class="cell-container">
-                  <div class="cell" id="seuil-cell-0">
-                    <div class="cell-value" id="seuil-value-0">0.8</div>
-                    <button class="cell-btn up" onclick="adjustSeuil(0, 0.1)">+</button>
-                    <button class="cell-btn down" onclick="adjustSeuil(0, -0.1)">-</button>
-                  </div>
-                  <div class="coeff-label">Seuil 1</div>
                 </div>
               </div>
 
@@ -964,6 +964,15 @@
                     </div>
                     <div class="coeff-label">w₂₂</div>
                   </div>
+                  <div class="plus-symbol">-</div>
+                  <div class="cell-container">
+                    <div class="cell" id="seuil-cell-1">
+                      <div class="cell-value" id="seuil-value-1">0.8</div>
+                      <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
+                    </div>
+                    <div class="coeff-label">seuil</div>
+                  </div>
                 </div>
                 <div class="equal-symbol">=</div>
                 <div class="result-col">
@@ -973,15 +982,6 @@
                 <div class="feu-container">
                   <div class="feu orange off" id="feu-1"></div>
                   <div class="feu-label">Orange</div>
-                </div>
-                <!-- Contrôle du seuil pour le feu Orange -->
-                <div class="cell-container">
-                  <div class="cell" id="seuil-cell-1">
-                    <div class="cell-value" id="seuil-value-1">0.8</div>
-                    <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
-                    <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
-                  </div>
-                  <div class="coeff-label">Seuil 2</div>
                 </div>
               </div>
 
@@ -1005,6 +1005,15 @@
                     </div>
                     <div class="coeff-label">w₂₃</div>
                   </div>
+                  <div class="plus-symbol">-</div>
+                  <div class="cell-container">
+                    <div class="cell" id="seuil-cell-2">
+                      <div class="cell-value" id="seuil-value-2">0.8</div>
+                      <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
+                      <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
+                    </div>
+                    <div class="coeff-label">seuil</div>
+                  </div>
                 </div>
                 <div class="equal-symbol">=</div>
                 <div class="result-col">
@@ -1015,21 +1024,12 @@
                   <div class="feu rouge off" id="feu-2"></div>
                   <div class="feu-label">Rouge</div>
                 </div>
-                <!-- Contrôle du seuil pour le feu Rouge -->
-                <div class="cell-container">
-                  <div class="cell" id="seuil-cell-2">
-                    <div class="cell-value" id="seuil-value-2">0.8</div>
-                    <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
-                    <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
-                  </div>
-                  <div class="coeff-label">Seuil 3</div>
-                </div>
               </div>
             </div>
             <!-- Info sur le fonctionnement -->
             <div class="seuil-control">
               <div class="formula">
-               Allumé si (b1 × w₁ⱼ) + (b0 × w₂ⱼ) &gt; seuilⱼ
+               Allumé si w₀ⱼ + (x1 × w₁ⱼ) + (x2 × w₂ⱼ) &gt; 0
               </div>
             </div>
           </div>
@@ -1055,7 +1055,6 @@
                 <p> 
              C'est un réseau <b>Classifieur</b> : Les feux doivent s'allumer individuellement et indépendamment. <br/>
             </p>
-          
             </div>
           </div>
 
@@ -1068,16 +1067,16 @@
         [0.0, 0.0, 0.0],
         [0.0, 0.0, 0.0],
       ];
-      let b1 = 0;
-      let b0 = 0;
-      let seuils = [0.8, 0.8, 0.8]; // Un seuil par neurone (vert, orange, rouge)
+      let x1 = 0;
+      let x2 = 0;
+      let seuils = [0.8, 0.8, 0.8]; // Un biais par neurone (vert, orange, rouge)
       let activeButton = null;
       let learningInterval = null;
       let learningStepCount = 0;
       let showVisualization = true;
 
-      const b1El = document.getElementById("b1");
-      const b0El = document.getElementById("b0");
+      const x1El = document.getElementById("b1");
+      const x2El = document.getElementById("b0");
       const learningStatus = document.getElementById("learning-status");
       const startLearningBtn = document.getElementById("start-learning-btn");
       const stopLearningBtn = document.getElementById("stop-learning-btn");
@@ -1124,7 +1123,7 @@
         drawVisualization();
       }
 
-      function setConfig(newB1, newB0, btnNum) {
+      function setConfig(newX1, newX2, btnNum) {
         // Retirer la classe active du bouton précédent
         if (activeButton !== null) {
           document.getElementById(`btn-${activeButton}`).classList.remove("active");
@@ -1136,28 +1135,28 @@
           activeButton = btnNum;
         }
         
-        b1 = newB1;
-        b0 = newB0;
-        b1El.textContent = b1;
-        b0El.textContent = b0;
+        x1 = newX1;
+        x2 = newX2;
+        x1El.textContent = x1;
+        x2El.textContent = x2;
         computeProducts();
       }
 
       function toggleBit(bit) {
-        if (bit === "b1") b1 = b1 === 0 ? 1 : 0;
-        if (bit === "b0") b0 = b0 === 0 ? 1 : 0;
-        b1El.textContent = b1;
-        b0El.textContent = b0;
+        if (bit === "b1") x1 = x1 === 0 ? 1 : 0;
+        if (bit === "b0") x2 = x2 === 0 ? 1 : 0;
+        x1El.textContent = x1;
+        x2El.textContent = x2;
         computeProducts();
       }
 
       function computeProducts() {
-        b1El.textContent = b1;
-        b0El.textContent = b0;
+        x1El.textContent = x1;
+        x2El.textContent = x2;
 
         const results = [0, 0, 0];
         for (let j = 0; j < 3; j++) {
-          results[j] = b1 * matrix[0][j] + b0 * matrix[1][j];
+          results[j] = x1 * matrix[0][j] + x2 * matrix[1][j];
         }
 
         for (let j = 0; j < 3; j++) {
@@ -1182,28 +1181,28 @@
 
       function updateSatisfactionIndicators() {
         // Teste chaque bouton avec sa configuration spécifique
-        // Bouton 0 éteint: b1=0, b0=0 -> tous les feux doivent être éteints (<= leur seuil)
+        // Bouton 0 éteint: x1=0, x2=0 -> tous les feux doivent être éteints (<= leur biais)
         const r0_vert = 0 * matrix[0][0] + 0 * matrix[1][0];
         const r0_orange = 0 * matrix[0][1] + 0 * matrix[1][1];
         const r0_rouge = 0 * matrix[0][2] + 0 * matrix[1][2];
         const satisfied0 = r0_vert <= seuils[0] && r0_orange <= seuils[1] && r0_rouge <= seuils[2];
         updateIndicator(0, satisfied0);
 
-        // Bouton 1 vert: b1=1, b0=0 -> SEUL vert > seuil[0], orange <= seuil[1], rouge <= seuil[2]
+        // Bouton 1 vert: x1=1, x2=0 -> SEUL vert > biais[0], orange <= biais[1], rouge <= biais[2]
         const r1_vert = 1 * matrix[0][0] + 0 * matrix[1][0];
         const r1_orange = 1 * matrix[0][1] + 0 * matrix[1][1];
         const r1_rouge = 1 * matrix[0][2] + 0 * matrix[1][2];
         const satisfied1 = r1_vert > seuils[0] && r1_orange <= seuils[1] && r1_rouge <= seuils[2];
         updateIndicator(1, satisfied1);
 
-        // Bouton 2 orange: b1=0, b0=1 -> SEUL orange > seuil[1], vert <= seuil[0], rouge <= seuil[2]
+        // Bouton 2 orange: x1=0, x2=1 -> SEUL orange > biais[1], vert <= biais[0], rouge <= biais[2]
         const r2_vert = 0 * matrix[0][0] + 1 * matrix[1][0];
         const r2_orange = 0 * matrix[0][1] + 1 * matrix[1][1];
         const r2_rouge = 0 * matrix[0][2] + 1 * matrix[1][2];
         const satisfied2 = r2_vert <= seuils[0] && r2_orange > seuils[1] && r2_rouge <= seuils[2];
         updateIndicator(2, satisfied2);
 
-        // Bouton 3 rouge: b1=1, b0=1 -> SEUL rouge > seuil[2], vert <= seuil[0], orange <= seuil[1]
+        // Bouton 3 rouge: x1=1, x2=1 -> SEUL rouge > biais[2], vert <= biais[0], orange <= biais[1]
         const r3_vert = 1 * matrix[0][0] + 1 * matrix[1][0];
         const r3_orange = 1 * matrix[0][1] + 1 * matrix[1][1];
         const r3_rouge = 1 * matrix[0][2] + 1 * matrix[1][2];
@@ -1258,21 +1257,21 @@
           // Générer un seuil aléatoire entre 0.1 et 2
           const randomSeuil = 0.1 + Math.random() * (2.0 - 0.1);
           
-          // w11 doit être > randomSeuil (pour que vert s'allume dans cas 1: b1=1,b0=0)
+          // w11 doit être > randomBiais (pour que vert s'allume dans cas 1: x1=1,x2=0)
           const w11 = randomSeuil + 0.1 + Math.random() * (2.0 - randomSeuil - 0.1);
           
           // w12 doit être négatif
           const w12 = -(0.1 + Math.random() * 0.8);
           
-          // w13 doit être <= randomSeuil (pour que rouge ne s'allume pas dans cas 1)
+          // w13 doit être <= randomBiais (pour que rouge ne s'allume pas dans cas 1)
           const w13 = 0.1 + Math.random() * (randomSeuil - 0.1);
           
-          // w21 doit être négatif et tel que w11 + w21 <= randomSeuil
+          // w21 doit être négatif et tel que w11 + w21 <= randomBiais
           const w21_positive = w11 - randomSeuil + 0.1 + Math.random() * 0.5;
           const w21 = -w21_positive;
           
-          // w22 doit être > randomSeuil (pour que orange s'allume dans cas 2)
-          // et w22 <= randomSeuil - w12 (pour que orange ne s'allume pas dans cas 3)
+          // w22 doit être > randomBiais (pour que orange s'allume dans cas 2)
+          // et w22 <= randomBiais - w12 (pour que orange ne s'allume pas dans cas 3)
           const w22_min = randomSeuil + 0.01;
           const w22_max = randomSeuil - w12;
           
@@ -1281,8 +1280,8 @@
           
           const w22 = w22_min + Math.random() * (w22_max - w22_min);
           
-          // w23 doit être <= randomSeuil (pour que rouge ne s'allume pas dans cas 2)
-          // et w23 > randomSeuil - w13 (pour que rouge s'allume dans cas 3)
+          // w23 doit être <= randomBiais (pour que rouge ne s'allume pas dans cas 2)
+          // et w23 > randomBiais - w13 (pour que rouge s'allume dans cas 3)
           const w23_min = randomSeuil - w13 + 0.01;
           const w23_max_val = randomSeuil;
           
@@ -1292,9 +1291,9 @@
           const w23 = w23_min + Math.random() * (w23_max_val - w23_min);
           
           // Tester toutes les contraintes avant d'accepter
-          // Cas 1: b1=1, b0=0 -> s1 > randomSeuil, s2 <= randomSeuil, s3 <= randomSeuil
-          // Cas 2: b1=0, b0=1 -> s1 <= randomSeuil, s2 > randomSeuil, s3 <= randomSeuil
-          // Cas 3: b1=1, b0=1 -> s1 <= randomSeuil, s2 <= randomSeuil, s3 > randomSeuil
+          // Cas 1: x1=1, x2=0 -> s1 > randomBiais, s2 <= randomBiais, s3 <= randomBiais
+          // Cas 2: x1=0, x2=1 -> s1 <= randomBiais, s2 > randomBiais, s3 <= randomBiais
+          // Cas 3: x1=1, x2=1 -> s1 <= randomBiais, s2 <= randomBiais, s3 > randomBiais
           
           // Pour simplifier, on utilise le même seuil pour les 3 neurones dans la génération aléatoire
           const s1_c1 = w11;
@@ -1500,7 +1499,7 @@
           // Correction par priorité - toutes les corrections ont la même priorité
           const errors = [];
           
-          // Cas 1: b1=1, b0=0 -> s1 > seuils[0], s2 <= seuils[1], s3 <= seuils[2]
+          // Cas 1: x1=1, x2=0 -> s1 > biais[0], s2 <= biais[1], s3 <= biais[2]
           if (scores.c1.s1 <= seuils[0]) {
             errors.push({ type: 'inc', row: 0, col: 0, priority: 1 });
             errors.push({ type: 'dec_seuil', seuilIndex: 0, priority: 1 });
@@ -1514,7 +1513,7 @@
             errors.push({ type: 'inc_seuil', seuilIndex: 2, priority: 1 });
           }
           
-          // Cas 2: b1=0, b0=1 -> s1 <= seuils[0], s2 > seuils[1], s3 <= seuils[2]
+          // Cas 2: x1=0, x2=1 -> s1 <= biais[0], s2 > biais[1], s3 <= biais[2]
           if (scores.c2.s2 <= seuils[1]) {
             errors.push({ type: 'inc', row: 1, col: 1, priority: 1 });
             errors.push({ type: 'dec_seuil', seuilIndex: 1, priority: 1 });
@@ -1528,7 +1527,7 @@
             errors.push({ type: 'inc_seuil', seuilIndex: 2, priority: 1 });
           }
           
-          // Cas 3: b1=1, b0=1 -> s1 <= seuils[0], s2 <= seuils[1], s3 > seuils[2]
+          // Cas 3: x1=1, x2=1 -> s1 <= biais[0], s2 <= biais[1], s3 > biais[2]
           if (scores.c3.s3 <= seuils[2]) {
             errors.push({ type: 'inc', row: 0, col: 2, priority: 1 });
             errors.push({ type: 'inc', row: 1, col: 2, priority: 1 });
@@ -1685,31 +1684,31 @@
         ctx.fillStyle = "#333";
         ctx.font = "12px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("b1", width - margin + 10, b0ToY(0) + 4);
+        ctx.fillText("x1", width - margin + 10, b0ToY(0) + 4);
         ctx.save();
         ctx.translate(b1ToX(0) - 20, height - margin - 10);
         ctx.rotate(-Math.PI / 2);
-        ctx.fillText("b0", 0, 0);
+        ctx.fillText("x2", 0, 0);
         ctx.restore();
         
         // Dessiner les graduations
-        for (let b1 = 0; b1 <= 1; b1 += 0.5) {
-          const x = b1ToX(b1);
+        for (let x1 = 0; x1 <= 1; x1 += 0.5) {
+          const x = b1ToX(x1);
           ctx.beginPath();
           ctx.moveTo(x, b0ToY(0) - 5);
           ctx.lineTo(x, b0ToY(0) + 5);
           ctx.stroke();
-          ctx.fillText(b1.toFixed(1), x, b0ToY(0) + 20);
+          ctx.fillText(x1.toFixed(1), x, b0ToY(0) + 20);
         }
         
-        for (let b0 = 0; b0 <= 1; b0 += 0.5) {
-          const y = b0ToY(b0);
+        for (let x2 = 0; x2 <= 1; x2 += 0.5) {
+          const y = b0ToY(x2);
           ctx.beginPath();
           ctx.moveTo(b1ToX(0) - 5, y);
           ctx.lineTo(b1ToX(0) + 5, y);
           ctx.stroke();
           ctx.textAlign = "right";
-          ctx.fillText(b0.toFixed(1), b1ToX(0) - 8, y + 4);
+          ctx.fillText(x2.toFixed(1), b1ToX(0) - 8, y + 4);
           ctx.textAlign = "center";
         }
         
@@ -1718,12 +1717,12 @@
         const cellSize = 0.05;
         const colors = ["#4caf50", "#ff9800", "#f44336"];
         
-        for (let b1_val = 0; b1_val <= 1; b1_val += cellSize) {
-          for (let b0_val = 0; b0_val <= 1; b0_val += cellSize) {
+        for (let x1_val = 0; x1_val <= 1; x1_val += cellSize) {
+          for (let x2_val = 0; x2_val <= 1; x2_val += cellSize) {
             // Calculer quels feux sont actifs à ce point
             let activeFeu = null;
             for (let j = 0; j < 3; j++) {
-              const score = b1_val * matrix[0][j] + b0_val * matrix[1][j];
+              const score = x1_val * matrix[0][j] + x2_val * matrix[1][j];
               if (score > seuils[j]) {
                 activeFeu = j;
                 break; // On prend le premier feu actif (par convention)
@@ -1732,10 +1731,10 @@
             
             // Colorier la cellule
             if (activeFeu !== null) {
-              const x = b1ToX(b1_val);
-              const y = b0ToY(b0_val + cellSize); // Inversé car y augmente vers le bas
-              const w = b1ToX(b1_val + cellSize) - x;
-              const h = b0ToY(b0_val) - y;
+              const x = b1ToX(x1_val);
+              const y = b0ToY(x2_val + cellSize); // Inversé car y augmente vers le bas
+              const w = b1ToX(x1_val + cellSize) - x;
+              const h = b0ToY(x2_val) - y;
               
               ctx.fillStyle = colors[activeFeu] + "40"; // 40 = 25% d'opacité
               ctx.fillRect(x, y, w, h);
@@ -1755,15 +1754,15 @@
         const pointLabels = ["(0,0) éteint", "(1,0) vert", "(0,1) orange", "(1,1) rouge"];
         
         for (let idx = 0; idx < 4; idx++) {
-          const b1_val = idx === 1 || idx === 3 ? 1 : 0;
-          const b0_val = idx === 2 || idx === 3 ? 1 : 0;
-          const x = b1ToX(b1_val);
-          const y = b0ToY(b0_val);
+          const x1_val = idx === 1 || idx === 3 ? 1 : 0;
+          const x2_val = idx === 2 || idx === 3 ? 1 : 0;
+          const x = b1ToX(x1_val);
+          const y = b0ToY(x2_val);
           
           // Calculer quel feu est actif à ce point
           let activeFeu = null;
           for (let j = 0; j < 3; j++) {
-            const score = b1_val * matrix[0][j] + b0_val * matrix[1][j];
+            const score = x1_val * matrix[0][j] + x2_val * matrix[1][j];
             if (score > seuils[j]) {
               activeFeu = j;
               break;
@@ -1801,7 +1800,7 @@
         for (let j = 0; j < 3; j++) {
           const w1 = matrix[0][j].toFixed(2);
           const w2 = matrix[1][j].toFixed(2);
-          labels.push(`${feuNames[j]}: ${w1}·b1 + ${w2}·b0 > ${seuils[j].toFixed(2)}`);
+          labels.push(`${feuNames[j]}: ${w1}·x1 + ${w2}·x2 > ${seuils[j].toFixed(2)}`);
         }
         
         for (let j = 0; j < 3; j++) {
