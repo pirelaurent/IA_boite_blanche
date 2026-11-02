@@ -145,7 +145,7 @@
     </head>
     <body>
         <div class="container">
-            <h1><i>Comprendre les réseaux de neurones</i></h1>
+            <h1><i>Comment marchent les neurones</i></h1>
 
             <h2>Le neurone biologique</h2>
             <p>
@@ -158,22 +158,29 @@
                 neurones. <br />Ces réseaux sont capables d'apprendre à partir
                 d'exemples, ce qui est la base de l'intelligence artificielle.
             </p>
-            <h2>Un neurone artificiel : un simple calcul</h2>
+            <h2>Le neurone artificiel : un calcul</h2>
 
             <p>
                 Un neurone artificiel reproduit la logique d'un neurone
                 biologique par des calculs simples.
-               </p>
-               <p>  
-                 Les valeurs des entrées sont multipliées par des <span class="keyword">Poids</span> 
-                 qui codent l'importance de chaque entrée dans la décision.
-                <br>Les résultats sont ensuite cumulées et on  ajoute 1 fois un  <span class="keyword">biais </span> (seuil) à cette somme.
-                <br> En deux dimensions, c'est l'équation d'une droite dans un plan, éventuellement décalée par rapport à l'origine par le biais.
-             
-                <br> Une <span class="keyword">fonction d'activation </span>décide si le neurone s'active ou non et  
-                transforme ce résultat pour produire une <span class="keyword">prédiction</span>.
-                <br> L'<span class="keyword">apprentissage</span> consiste à ajuster les poids et le biais 
-                itérativement pour réduire l'erreur entre les prédictions et les sorties attendues.
+            </p>
+            <p>
+                Les valeurs des entrées sont multipliées par des
+                <span class="keyword">Poids</span>
+                qui codent l'importance de chaque entrée dans la décision.
+                <br />Les résultats sont ensuite cumulées et on ajoute 1 fois un
+                <span class="keyword">biais </span> (seuil) à cette somme.
+                <br />
+                En deux dimensions, c'est l'équation d'une droite dans un plan,
+                éventuellement décalée par rapport à l'origine par le biais.
+
+                <br />
+                Une <span class="keyword">fonction d'activation </span>décide si
+                le neurone s'active ou non et transforme ce résultat pour
+                produire une <span class="keyword">prédiction</span>. <br />
+                L'<span class="keyword">apprentissage</span> consiste à ajuster
+                les poids (et/ou le biais) itérativement pour réduire l'erreur
+                entre les prédictions et les sorties attendues.
             </p>
 
             <div class="image-container">
@@ -185,115 +192,177 @@
                 <p><em>Schéma d'un neurone à deux entrées</em></p>
             </div>
 
-
-            <h3>Le neurone ancêtre : le perceptron</h3>
+            <h2>Le neurone ancêtre : le perceptron</h2>
             <p>
-                Un neurone avec <span class="keyword">fonction d'activation H</span>(du nom de son inventeur Oliver Heaviside) est un <b>perceptron</b>.
+                Un neurone avec
+                <span class="keyword">fonction d'activation H</span>(du nom de
+                son inventeur Oliver Heaviside) est un <b>perceptron</b>.
                 <br />
-                La fonction H est directe :  si le résultat du calcul est supérieur ou égal à 0, la prédiction est 1, sinon elle est 0. <br />
-                Le perceptron est le plus simple des neurones artificiels, mais il est suffisant pour illustrer le fonctionnement d'un réseau de neurones.
+                La fonction H est directe : si le résultat du calcul est
+                supérieur ou égal à 0, la prédiction est 1, sinon elle est 0.
+                <br />
+                Le perceptron est le plus simple des neurones artificiels, mais
+                il est suffisant pour illustrer le fonctionnement d'un réseau de
+                neurones.
             </p>
 
-            <h2>Illustration pratique</h2>
-            <h3>Faire avancer un feu tricolore avec un réseau de perceptron</h3>
+            <h2>Illustration pratique:
+             un feu tricolore piloté par un réseau de perceptrons</h2>
             <p>
-                On veut un modèle IA qui allume chaque
-                feu individuellement ( un contre tous = un classificateur) selon la valeur (binaire) d'un compteur :
+                On va entrainer un modèle qui allume chaque feu
+                individuellement ( un contre tous = un
+                <span class="keyword">classificateur</span>) selon la valeur
+                d'un compteur.
             </p>
+
+            <h3>Les données d'entraînement</h3>
+
             <div class="center">
                 <table class="weight-table">
                     <thead>
                         <tr>
-                            <th>compteur</th>
-                            <th>entrée binaire b1b0</th>
+                            <th>Compteur</th>
                             <th>sortie attendue</th>
+                            <th>résultat</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>0</td>
                             <td><span class="code">00</span></td>
-                            <td>aucun feu</td>
+                            <td>000</td>
+                            <td>
+                                <img
+                                    src="img/000.png"
+                                    alt="Feu éteint"
+                                    width="50"
+                                    style="
+                                        transform: rotate(-90deg);
+                                        transform-origin: center;
+                                        display: inline-block;
+                                    "
+                                />
+                            </td>
                         </tr>
                         <tr>
-                            <td>1</td>
                             <td><span class="code">01</span></td>
-                            <td>feu vert allumé seul</td>
+                            <td>100</td>
+                            <td>
+                                <img
+                                    src="img/100.png"
+                                    alt="Feu vert allumé"
+                                    width="50"
+                                    style="
+                                        transform: rotate(-90deg);
+                                        transform-origin: center;
+                                        display: inline-block;
+                                    "
+                                />
+                            </td>
                         </tr>
                         <tr>
-                            <td>2</td>
                             <td><span class="code">10</span></td>
-                            <td>feu orange allumé seul</td>
+                            <td>010</td>
+                            <td>
+                                <img
+                                    src="img/010.png"
+                                    alt="Feu orange allumé"
+                                    width="50"
+                                    style="
+                                        transform: rotate(-90deg);
+                                        transform-origin: center;
+                                        display: inline-block;
+                                    "
+                                />
+                            </td>
                         </tr>
                         <tr>
-                            <td>3</td>
                             <td><span class="code">11</span></td>
-                            <td>feu rouge allumé seul</td>
+                            <td>001</td>
+                            <td>
+                                <img
+                                    src="img/001.png"
+                                    alt="Feu rouge allumé"
+                                    width="50"
+                                    style="
+                                        transform: rotate(270deg);
+                                        transform-origin: center;
+                                        display: inline-block;
+                                    "
+                                />
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <span class="remark">
-                (Il y aurait beaucoup plus simple en logique programmée, mais on
-                veut expérimenter les neurones)
-            </span>
 
-            <h3>Pour les trois feux: un réseau monocouche avec trois neurones</h3>
+            <h3>Un réseau monocouche avec trois neurones</h3>
             <p>
-                Un neurone ne produit qu'une seule sortie, il en faut donc un pour
-                chaque feu et former un réseau de trois neurones.
-                <br />
-                Avec 2 entrées et 3 sorties, sa matrice de poids est de 2×3 et
-                le vecteur des seuils est de dimension 3.
-                <br />
-                C'est un réseau à 9 paramètres (6+3).
-                <br> Un écran de saisie expérimental permettra de modifier ces paramètres et de voir le résultat sur les feux.
-
+                Un neurone n'a qu'une sortie.Pour 3 sorties il faut un <span class="keyword">réseau </span> de 3 neurones.
+                 <br />Il a un <span class="keyword">vecteur </span>d'entrées de dimension 3 ( 2 pour le compteur +biais) et un vecteur de sorties de dimension 3 (les feux). <br />
+                 Sa
+                <span class="keyword">matrice de poids </span>est alors de dimension
+                3×3 : ce réseau a 9 <span class="keyword">paramètres.</span>
             </p>
             <div class="image-container">
                 <img
-                    width="500"
+                    width="400"
                     src="img/NeuronesUneCoucheVertical.png"
                     alt="Représentation matricielle du réseau"
                 />
                 <p>
                     <em
-                        >Représentation des 3 neurones du réseau feu
-                        tricolore.
-                        <br>Modèle « un contre tous » : un classificateur binaire indépendant par feu,
-                        <br> chacun lisant la valeur binaire du compteur et répondant 1 (allumé) ou 0 (éteint).
-                </em>
+                        >Représentation des 3 neurones perceptrons du réseau feu tricolore.
+                        <br />Modèle « un contre tous » : un classificateur
+                        binaire indépendant par feu,
+                    </em>
                 </p>
             </div>
-            <h3>Mots-clés</h3>
+
+            <h3>Le jeu d'entrainement est de 3 neurones x 4 cas = 12 tests</h3>
+<p>
+            Avec 3 neurones en sortie (un par feu), chaque neurone apprend à
+            prédire sa propre sortie (1 ou 0) pour chaque entrée.
+            <br />Les données d'entraînement sont donc de 4 exemples (00, 01, 10, 11), à répéter 3 fois (une fois par neurone) 
+            avec une sortie ciblée :
+            <ul>
+                <li>Neurone vert : (1 pour 01, 0 sinon)</li>
+                <li>Neurone orange : (1 pour 10, 0 sinon)</li>
+                <li>Neurone rouge : (1 pour 11, 0 sinon)</li>
+            </ul>
+</p
+            <h3>Mots-cl>és</h3>
             <ul class="keyword-list">
                 <li>
                     <span class="keyword">Réseau de neurones</span> :
                     association d'une ou plusieurs couches de neurones.<br />
-                    On distingue la couche d'entrée, la couche de sortie et,
-                    éventuellement, des couches intermédiaires dites
-                    <span class="keyword">cachées</span>.
-                <br />Un réseau monocouche come ici n'a qu'une seule couche de neurones, la
-                    couche de sortie.
+                    
                 </li>
                 <li>
                     <span class="keyword">Couche de neurones</span> : un
                     ensemble de neurones en parallèle, qui reçoivent tous les
                     mêmes entrées et dont les sorties alimentent la même couche
-                    suivante (ils ne sont pas connectés entre eux au sein d'une couche).
+                    suivante (ils ne sont pas connectés entre eux au sein d'une
+                    couche).
+                     </li><li>On distingue la <span class="keyword">couche d'entrée</span>, la <span class="keyword">couche de sortie</span> et,
+                    éventuellement, des couches intermédiaires dites
+                    <span class="keyword">couchescachées</span>. <br />Un réseau
+                    monocouche comme ici n'a qu'une seule couche de neurones, la
+                    couche de sortie.
                 </li>
                 <li>
                     <span class="keyword">Paramètres</span> : l'ensemble des
                     variables ajustables du réseau — les poids et les biais.
-                    <br />Par couche :<span class="keyword"> nombre de paramètres</span> = (nombre d'entrées
-                    + 1) × nombre de neurones (le +1 est le biais par neurone).
+                    <br />Par couche :<span class="keyword">
+                        nombre de paramètres</span
+                    >
+                    = (nombre d'entrées + 1(biais)) × nombre de neurones.
                 </li>
             </ul>
             <h4>Facteur d'échelle : de 10 à 10<sup>6</sup>, 10<sup>12</sup></h4>
             <p>
-                Notre réseau monocouche a une dizaine de paramètres et ne peut
-                pas gérer des situations plus complexes, mais il est suffisant
-                pour illustrer le fonctionnement d'un réseau de neurones.
+                Notre réseau monocouche a neuf paramètres et ne peut pas gérer
+                des situations plus complexes, mais il est suffisant pour
+                illustrer le fonctionnement d'un réseau de neurones.
 
                 <br />À titre de comparaison, les réseaux de neurones profonds
                 utilisés pour la reconnaissance d'images ont des millions
@@ -303,22 +372,30 @@
                 <span class="keyword">LLM (Large Language Model) </span>comme
                 ChatGPT ou Mistral ont des centaines de milliards
                 (10<sup>12</sup>) de paramètres et des centaines de couches.
-                <br>
+
+          <br />
                 Le fonctionnement de base reste le même, mais avec des
                 complexités de plus en plus grandes.
 
-                <br />On effectue des milliards d'opérations mathématiques en multipliant
-                une <span class="keyword">matrice</span> de poids par un
-                <span class="keyword">vecteur</span> d'entrées. <br />
+            <p>
+                <br />On effectue des milliards d'opérations mathématiques en
+                multipliant une <span class="keyword">matrice</span> de poids
+                par des <span class="keyword">vecteurs</span> d'entrées. <br />
                 C'est typiquement le domaine de calcul des
                 <span class="keyword">GPU(Graphic Process Unit) </span> d'où la
                 course à ces équipements.
             </p>
             <h2>Faire pour comprendre</h2>
-<p> On a créé une interface visuelle pour voir le réseau de neurones des feux tricolores en action.
-<br> Une représentation graphique des trois droites dans le plan montre la discrimination réalisée par le réseau.
+            <p>
+                On a créé une interface visuelle pour voir le réseau de neurones
+                des feux tricolores en action. <br />
+                Une représentation graphique des trois droites dans le plan
+                illustre la discrimination réalisée par le réseau.
 
-<br>Vous pouvez jouer le rôle de l'entraineur et ajuster vous-même les poids et seuils jusqu'à obtenir un succès.
+                <br />Vous pouvez jouer le rôle de l'entraineur et ajuster
+                vous-même les poids et seuils jusqu'à obtenir un succès.
+            </p>
+
             <h4>
                 <a href="./feu-modele-ia.html">
                     Paramétrez le réseau de neurones des feux tricolores</a

@@ -1404,7 +1404,7 @@
       function startAutoLearning() {
         if (learningInterval) return;
         
-        // Réinitialiser la matrice
+        // Réinitialiser la matrice mais GARDER les seuils actuels
         matrix = [
           [0.0, 0.0, 0.0],
           [0.0, 0.0, 0.0],
@@ -1452,9 +1452,9 @@
                   s3: matrix[0][2] + matrix[1][2] }  // (1,1)
           };
           
-          // Fonction pour ajuster et vérifier
+          // Fonction pour ajuster les poids et vérifier
           const wasSatisfiedCount = satisfied.filter(s => s).length;
-          const tryAdjust = (row, col, delta) => {
+          const tryAdjustWeight = (row, col, delta) => {
             const oldValue = matrix[row][col];
             matrix[row][col] = parseFloat((matrix[row][col] + delta).toFixed(2));
             if (matrix[row][col] < -5) matrix[row][col] = -5;
@@ -1464,9 +1464,33 @@
             const newSatisfied = getSatisfactionStatus();
             const newSatisfiedCount = newSatisfied.filter(s => s).length;
 
-            // Accepter si cela n'empire pas la situation (au lieu de <=, on utilise <)
+            // Accepter si cela n'empire pas la situation
             if (newSatisfiedCount < wasSatisfiedCount) {
                 matrix[row][col] = oldValue;
+                computeProducts();
+                return false;
+            }
+            return true;
+          };
+          
+          // Fonction pour ajuster les seuils et vérifier
+          const tryAdjustSeuil = (seuilIndex, delta) => {
+            const oldValue = seuils[seuilIndex];
+            seuils[seuilIndex] = parseFloat((seuils[seuilIndex] + delta).toFixed(2));
+            if (seuils[seuilIndex] < 0.1) seuils[seuilIndex] = 0.1;
+            if (seuils[seuilIndex] > 2.5) seuils[seuilIndex] = 2.5;
+
+            // Mettre à jour l'affichage du seuil
+            document.getElementById(`seuil-value-${seuilIndex}`).textContent = seuils[seuilIndex].toFixed(1);
+
+            computeProducts();
+            const newSatisfied = getSatisfactionStatus();
+            const newSatisfiedCount = newSatisfied.filter(s => s).length;
+
+            // Accepter si cela n'empire pas la situation
+            if (newSatisfiedCount < wasSatisfiedCount) {
+                seuils[seuilIndex] = oldValue;
+                document.getElementById(`seuil-value-${seuilIndex}`).textContent = oldValue.toFixed(1);
                 computeProducts();
                 return false;
             }
@@ -1479,37 +1503,46 @@
           // Cas 1: b1=1, b0=0 -> s1 > seuils[0], s2 <= seuils[1], s3 <= seuils[2]
           if (scores.c1.s1 <= seuils[0]) {
             errors.push({ type: 'inc', row: 0, col: 0, priority: 1 });
+            errors.push({ type: 'dec_seuil', seuilIndex: 0, priority: 1 });
           }
           if (scores.c1.s2 > seuils[1]) {
             errors.push({ type: 'dec', row: 0, col: 1, priority: 1 });
+            errors.push({ type: 'inc_seuil', seuilIndex: 1, priority: 1 });
           }
           if (scores.c1.s3 > seuils[2]) {
             errors.push({ type: 'dec', row: 0, col: 2, priority: 1 });
+            errors.push({ type: 'inc_seuil', seuilIndex: 2, priority: 1 });
           }
           
           // Cas 2: b1=0, b0=1 -> s1 <= seuils[0], s2 > seuils[1], s3 <= seuils[2]
           if (scores.c2.s2 <= seuils[1]) {
             errors.push({ type: 'inc', row: 1, col: 1, priority: 1 });
+            errors.push({ type: 'dec_seuil', seuilIndex: 1, priority: 1 });
           }
           if (scores.c2.s1 > seuils[0]) {
             errors.push({ type: 'dec', row: 1, col: 0, priority: 1 });
+            errors.push({ type: 'inc_seuil', seuilIndex: 0, priority: 1 });
           }
           if (scores.c2.s3 > seuils[2]) {
             errors.push({ type: 'dec', row: 1, col: 2, priority: 1 });
+            errors.push({ type: 'inc_seuil', seuilIndex: 2, priority: 1 });
           }
           
           // Cas 3: b1=1, b0=1 -> s1 <= seuils[0], s2 <= seuils[1], s3 > seuils[2]
           if (scores.c3.s3 <= seuils[2]) {
             errors.push({ type: 'inc', row: 0, col: 2, priority: 1 });
             errors.push({ type: 'inc', row: 1, col: 2, priority: 1 });
+            errors.push({ type: 'dec_seuil', seuilIndex: 2, priority: 1 });
           }
           if (scores.c3.s1 > seuils[0]) {
             errors.push({ type: 'dec', row: 0, col: 0, priority: 1 });
             errors.push({ type: 'dec', row: 1, col: 0, priority: 1 });
+            errors.push({ type: 'inc_seuil', seuilIndex: 0, priority: 1 });
           }
           if (scores.c3.s2 > seuils[1]) {
             errors.push({ type: 'dec', row: 0, col: 1, priority: 1 });
             errors.push({ type: 'dec', row: 1, col: 1, priority: 1 });
+            errors.push({ type: 'inc_seuil', seuilIndex: 1, priority: 1 });
           }
           
           // Trier par priorité (toutes ont la même priorité, donc l'ordre est aléatoire)
@@ -1518,20 +1551,34 @@
           // Essayer une correction à la fois
           let adjusted = false;
           for (const error of errors) {
-            const delta = error.type === 'inc' ? stepSize : -stepSize;
-            if (tryAdjust(error.row, error.col, delta)) {
-                adjusted = true;
-                break;
+            const delta = error.type === 'inc' || error.type === 'dec_seuil' ? stepSize : -stepSize;
+            
+            if (error.type === 'inc' || error.type === 'dec') {
+              if (tryAdjustWeight(error.row, error.col, delta)) {
+                  adjusted = true;
+                  break;
+              }
+            } else if (error.type === 'inc_seuil' || error.type === 'dec_seuil') {
+              if (tryAdjustSeuil(error.seuilIndex, delta)) {
+                  adjusted = true;
+                  break;
+              }
             }
           }
           
           // Si aucune correction n'a été acceptée, essayer des ajustements aléatoires
           // pour éviter de rester bloqué
           if (!adjusted) {
+            // Essayer d'abord un ajustement aléatoire sur les poids
             const row = Math.floor(Math.random() * 2);
             const col = Math.floor(Math.random() * 3);
             const delta = Math.random() < 0.5 ? stepSize : -stepSize;
-            tryAdjust(row, col, delta);
+            if (!tryAdjustWeight(row, col, delta)) {
+              // Si ça ne marche pas, essayer un ajustement aléatoire sur les seuils
+              const seuilIndex = Math.floor(Math.random() * 3);
+              const seuilDelta = Math.random() < 0.5 ? stepSize : -stepSize;
+              tryAdjustSeuil(seuilIndex, seuilDelta);
+            }
           }
           
           // Mise à jour visuelle
