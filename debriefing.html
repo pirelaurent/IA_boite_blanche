@@ -87,8 +87,25 @@
     </style>
 </head>
 <body>
-    <h1>Débriefing - Apprentissage des réseaux de neurones</h1>
-
+    <h1>Débriefing du réseau Perceptron</h1>
+<div class="section">
+        <h2>Algorithme d'apprentissage</h2>
+        <p>
+            L'algorithme utilisé est basé sur la <strong>règle du perceptron</strong> :
+        </p>
+        <ol>
+            <li><strong>Évaluer</strong> : calculer les scores pour tous les cas et tous les neurones</li>
+            <li><strong>Détecter les erreurs</strong> : identifier quels cas ne sont pas satisfaits</li>
+            <li><strong>Corriger</strong> : pour chaque erreur, ajuster un poids ou un seuil</li>
+            <li><strong>Vérifier</strong> : accepter la correction seulement si elle n'empire pas le nombre total de cas satisfaits</li>
+            <li><strong>Répéter</strong> jusqu'à ce que tous les cas soient satisfaits ou jusqu'à la limite d'itérations</li>
+        </ol>
+        <p>
+            À chaque itération, l'algorithme essaie une correction à la fois, en priorisant celles qui 
+            améliorent le nombre de cas satisfaits.
+        </p>
+    </div>
+    
     <div class="section">
         <h2>Principe général</h2>
         <p>
@@ -111,22 +128,6 @@
 
 
 
-    <div class="section">
-        <h2>Algorithme d'apprentissage</h2>
-        <p>
-            L'algorithme utilisé est basé sur la <strong>règle du perceptron</strong> :
-        </p>
-        <ol>
-            <li><strong>Évaluer</strong> : calculer les scores pour tous les cas et tous les neurones</li>
-            <li><strong>Détecter les erreurs</strong> : identifier quels cas ne sont pas satisfaits</li>
-            <li><strong>Corriger</strong> : pour chaque erreur, ajuster un poids ou un seuil</li>
-            <li><strong>Vérifier</strong> : accepter la correction seulement si elle n'empire pas le nombre total de cas satisfaits</li>
-            <li><strong>Répéter</strong> jusqu'à ce que tous les cas soient satisfaits ou jusqu'à la limite d'itérations</li>
-        </ol>
-        <p>
-            À chaque itération, l'algorithme essaie une correction à la fois, en priorisant celles qui 
-            améliorent le nombre de cas satisfaits.
-        </p>
-    </div>
+    
 </body>
 </html>

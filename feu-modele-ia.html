@@ -418,6 +418,77 @@
         width: 89px;
       }
 
+      /* Neurones horizontaux avec feux */
+      .neuron-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 2px solid #999;
+        border-radius: 8px;
+        background: #f9f9f9;
+      }
+
+      .neuron-params {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+      }
+
+      .param-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+      }
+
+      .param-cell .cell {
+        width: 89px;
+        height: 35px;
+      }
+
+      .neuron-output {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 15px;
+      }
+
+      .neuron-result {
+        width: 45px;
+        height: 30px;
+        border: 2px solid #3A8EBA;
+        border-radius: 4px;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .equal-symbol-horizontal {
+        font-size: 20px;
+        font-weight: bold;
+        color: #3A8EBA;
+        margin: 0 10px;
+      }
+
+      .neurons-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .neuron-label {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
       .feu {
         width: 45px;
         height: 45px;
@@ -814,8 +885,9 @@
       <h1>Paramétrez le réseau de neurones des feux tricolores</h1>
 
       <div class="info">
-        <h4>A la main : Ajustez les poids pour que les 4 cas fonctionnent. (Vous pouvez aussi faire varier les seuils)
-        <br> Apprentissage automatique : voir au ralenti les essais suivis des corrections d'erreur jusqu'au succès.
+        <h4>Appuyer sur chaque bouton pour présenter son cas à l'entrée et ajustez ses paramètres pour allumer son feu sans perturberles autres. 
+        <br> Essayer de jouer le jeu à la main. (Vous pouvez toujours cliquer sur "Solution" pour voir des matrices de paramètres qui fonctionnent).
+        <br> L'apprentissage automatique tourne au ralenti pour que vous puissiez voir les ajustements calculésdes paramètres. 
         
         </h4>
       </div>
@@ -874,162 +946,158 @@
           <div class="note">Votre matrice de poids satisfait <span id="satisfied-count">0</span> sur 4 cas !</div>
         </div>
 
-        <!-- Entrées -->
-        <div class="input-section">
-          <div class="section-label">Entrées</div>
-          <div class="bits-multiplier-section">
-            <div class="bits-section">
-              <div class="bit-row">
-                <div class="bit-label">x1</div>
-                <div class="bit-box" id="b1" onclick="toggleBit('b1')">0</div>
-              </div>
-              <div class="bit-row">
-                <div class="bit-label">x2</div>
-                <div class="bit-box" id="b0" onclick="toggleBit('b0')">0</div>
-              </div>
-            </div>
-            <div class="mult-column">
-              <div class="multiplier">×</div>
-              <div class="multiplier">×</div>
-            </div>
-          </div>
-        </div>
-
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
           <div class="model-header">
-            <div class="section-label">Ajuster les poids de la matrice pour réussir les tests </div>
+            <div class="section-label">Ajuster les poids de chaque neurone dans la matrice pour réussir les tests </div>
           </div>
           <div class="matrix-and-learning-row">
             <div class="matrix-section">
-            <div class="column-group">
-              <!-- Colonne Vert (s1) -->
-              <div class="column-frame" style="border-color: #4caf50;">
-                <div class="matrix-grid">
-                  <div class="cell-container">
-                    <div class="cell" id="cell-0-0">
-                      <div class="cell-value" id="cell-value-0-0">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(0, 0, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(0, 0, -0.1)">-</button>
-                    </div>
-                    <div class="coeff-label">w₁₁</div>
+              <!-- En-têtes des colonnes avec x1 et x2 -->
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 5px; padding: 0 10px;">
+                <div class="neuron-params" style="border: none; background: transparent;">
+                  <div class="param-cell" style="width: 89px; border: none; background: transparent;">
+                    <div class="bit-label" style="text-align: center; font-weight: bold; margin-bottom: 2px;">x₁</div>
+                    <div class="bit-box" id="b1" onclick="toggleBit('b1')" style="width: 89px; height: 35px; font-size: 14px; font-weight: bold;">0</div>
+                    <div style="text-align: center; font-size: 20px; font-weight: bold; color: #3A8EBA; margin-top: 2px;">×</div>
                   </div>
-                  <div class="plus-symbol">+</div>
-                  <div class="cell-container">
-                    <div class="cell" id="cell-1-0">
-                      <div class="cell-value" id="cell-value-1-0">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(1, 0, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(1, 0, -0.1)">-</button>
-                    </div>
-                    <div class="coeff-label">w₂₁</div>
+                  <div class="plus-symbol" style="visibility: hidden;">+</div>
+                  <div class="param-cell" style="width: 89px; border: none; background: transparent;">
+                    <div class="bit-label" style="text-align: center; font-weight: bold; margin-bottom: 2px;">x₂</div>
+                    <div class="bit-box" id="b0" onclick="toggleBit('b0')" style="width: 89px; height: 35px; font-size: 14px; font-weight: bold;">0</div>
+                    <div style="text-align: center; font-size: 20px; font-weight: bold; color: #3A8EBA; margin-top: 2px;">×</div>
                   </div>
-                  <div class="plus-symbol">-</div>
-                  <div class="cell-container">
-                    <div class="cell" id="seuil-cell-0">
-                      <div class="cell-value" id="seuil-value-0">0.8</div>
-                      <button class="cell-btn up" onclick="adjustSeuil(0, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustSeuil(0, -0.1)">-</button>
-                    </div>
-                    <div class="coeff-label">seuil</div>
+                  <div class="plus-symbol" style="visibility: hidden;">-</div>
+                  <div class="param-cell" style="width: 89px; border: none; background: transparent;">
+                    <div class="coeff-label" style="font-weight: bold; color: #333; font-size: 14px;">bⱼ</div>
                   </div>
-                </div>
-                <div class="equal-symbol">=</div>
-                <div class="result-col">
-                  <div class="result-cell" id="result-0">0.0</div>
-                  <div class="result-label">s₁</div>
-                </div>
-                <div class="feu-container">
-                  <div class="feu vert off" id="feu-0"></div>
-                  <div class="feu-label">Vert</div>
                 </div>
               </div>
+              
+              <!-- Neurones horizontaux -->
+              <div class="neurons-container">
+                <!-- Neurone Rouge (s3) -->
+                <div class="neuron-row" style="border-color: red;">
+                  <div class="neuron-params">
+                    <div class="param-cell">
+                      <div class="cell" id="cell-0-2">
+                        <div class="cell-value" id="cell-value-0-2">0.0</div>
+                        <button class="cell-btn up" onclick="adjustCell(0, 2, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustCell(0, 2, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">w₁₃</div>
+                    </div>
+                    <div class="plus-symbol">+</div>
+                    <div class="param-cell">
+                      <div class="cell" id="cell-1-2">
+                        <div class="cell-value" id="cell-value-1-2">0.0</div>
+                        <button class="cell-btn up" onclick="adjustCell(1, 2, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustCell(1, 2, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">w₂₃</div>
+                    </div>
+                    <div class="plus-symbol">-</div>
+                    <div class="param-cell">
+                      <div class="cell" id="seuil-cell-2">
+                        <div class="cell-value" id="seuil-value-2">0.8</div>
+                        <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">b₃</div>
+                    </div>
+                  </div>
+                  <div class="equal-symbol-horizontal">=</div>
+                  <div class="neuron-output">
+                    <div class="neuron-result" id="result-2">0.0</div>
+                    <div class="feu-container">
+                      <div class="feu rouge off" id="feu-2"></div>
+                    </div>
+                  </div>
+                </div>
 
-              <!-- Colonne Orange (s2) -->
-              <div class="column-frame" style="border-color: orange;">
-                <div class="matrix-grid">
-                  <div class="cell-container">
-                    <div class="cell" id="cell-0-1">
-                      <div class="cell-value" id="cell-value-0-1">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(0, 1, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(0, 1, -0.1)">-</button>
+                <!-- Neurone Orange (s2) -->
+                <div class="neuron-row" style="border-color: orange;">
+                  <div class="neuron-params">
+                    <div class="param-cell">
+                      <div class="cell" id="cell-0-1">
+                        <div class="cell-value" id="cell-value-0-1">0.0</div>
+                        <button class="cell-btn up" onclick="adjustCell(0, 1, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustCell(0, 1, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">w₁₂</div>
                     </div>
-                    <div class="coeff-label">w₁₂</div>
+                    <div class="plus-symbol">+</div>
+                    <div class="param-cell">
+                      <div class="cell" id="cell-1-1">
+                        <div class="cell-value" id="cell-value-1-1">0.0</div>
+                        <button class="cell-btn up" onclick="adjustCell(1, 1, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustCell(1, 1, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">w₂₂</div>
+                    </div>
+                    <div class="plus-symbol">-</div>
+                    <div class="param-cell">
+                      <div class="cell" id="seuil-cell-1">
+                        <div class="cell-value" id="seuil-value-1">0.8</div>
+                        <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">b₂</div>
+                    </div>
                   </div>
-                  <div class="plus-symbol">+</div>
-                  <div class="cell-container">
-                    <div class="cell" id="cell-1-1">
-                      <div class="cell-value" id="cell-value-1-1">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(1, 1, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(1, 1, -0.1)">-</button>
+                  <div class="equal-symbol-horizontal">=</div>
+                  <div class="neuron-output">
+                    <div class="neuron-result" id="result-1">0.0</div>
+                    <div class="feu-container">
+                      <div class="feu orange off" id="feu-1"></div>
                     </div>
-                    <div class="coeff-label">w₂₂</div>
-                  </div>
-                  <div class="plus-symbol">-</div>
-                  <div class="cell-container">
-                    <div class="cell" id="seuil-cell-1">
-                      <div class="cell-value" id="seuil-value-1">0.8</div>
-                      <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
-                    </div>
-                    <div class="coeff-label">seuil</div>
                   </div>
                 </div>
-                <div class="equal-symbol">=</div>
-                <div class="result-col">
-                  <div class="result-cell" id="result-1">0.0</div>
-                  <div class="result-label">s₂</div>
-                </div>
-                <div class="feu-container">
-                  <div class="feu orange off" id="feu-1"></div>
-                  <div class="feu-label">Orange</div>
-                </div>
-              </div>
 
-              <!-- Colonne Rouge (s3) -->
-              <div class="column-frame" style="border-color: red;">
-                <div class="matrix-grid">
-                  <div class="cell-container">
-                    <div class="cell" id="cell-0-2">
-                      <div class="cell-value" id="cell-value-0-2">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(0, 2, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(0, 2, -0.1)">-</button>
+                <!-- Neurone Vert (s1) -->
+                <div class="neuron-row" style="border-color: #4caf50;">
+                  <div class="neuron-params">
+                    <div class="param-cell">
+                      <div class="cell" id="cell-0-0">
+                        <div class="cell-value" id="cell-value-0-0">0.0</div>
+                        <button class="cell-btn up" onclick="adjustCell(0, 0, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustCell(0, 0, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">w₁₁</div>
                     </div>
-                    <div class="coeff-label">w₁₃</div>
-                  </div>
-                  <div class="plus-symbol">+</div>
-                  <div class="cell-container">
-                    <div class="cell" id="cell-1-2">
-                      <div class="cell-value" id="cell-value-1-2">0.0</div>
-                      <button class="cell-btn up" onclick="adjustCell(1, 2, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustCell(1, 2, -0.1)">-</button>
+                    <div class="plus-symbol">+</div>
+                    <div class="param-cell">
+                      <div class="cell" id="cell-1-0">
+                        <div class="cell-value" id="cell-value-1-0">0.0</div>
+                        <button class="cell-btn up" onclick="adjustCell(1, 0, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustCell(1, 0, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">w₂₁</div>
                     </div>
-                    <div class="coeff-label">w₂₃</div>
-                  </div>
-                  <div class="plus-symbol">-</div>
-                  <div class="cell-container">
-                    <div class="cell" id="seuil-cell-2">
-                      <div class="cell-value" id="seuil-value-2">0.8</div>
-                      <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
-                      <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
+                    <div class="plus-symbol">-</div>
+                    <div class="param-cell">
+                      <div class="cell" id="seuil-cell-0">
+                        <div class="cell-value" id="seuil-value-0">0.8</div>
+                        <button class="cell-btn up" onclick="adjustSeuil(0, 0.1)">+</button>
+                        <button class="cell-btn down" onclick="adjustSeuil(0, -0.1)">-</button>
+                      </div>
+                      <div class="coeff-label">b₁</div>
                     </div>
-                    <div class="coeff-label">seuil</div>
                   </div>
-                </div>
-                <div class="equal-symbol">=</div>
-                <div class="result-col">
-                  <div class="result-cell" id="result-2">0.0</div>
-                  <div class="result-label">s₃</div>
-                </div>
-                <div class="feu-container">
-                  <div class="feu rouge off" id="feu-2"></div>
-                  <div class="feu-label">Rouge</div>
+                  <div class="equal-symbol-horizontal">=</div>
+                  <div class="neuron-output">
+                    <div class="neuron-result" id="result-0">0.0</div>
+                    <div class="feu-container">
+                      <div class="feu vert off" id="feu-0"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+              
             <!-- Info sur le fonctionnement -->
             <div class="seuil-control">
               <div class="formula">
-               Allumé si w₀ⱼ + (x1 × w₁ⱼ) + (x2 × w₂ⱼ) &gt; 0
+               Allumé si w₁ⱼ×x₁ + w₂ⱼ×x₂ - bⱼ &gt; 0
               </div>
             </div>
           </div>
@@ -1069,7 +1137,7 @@
       ];
       let x1 = 0;
       let x2 = 0;
-      let seuils = [0.8, 0.8, 0.8]; // Un biais par neurone (vert, orange, rouge)
+      let seuils = [0.8, 0.8, 0.8]; // Un biais par neurone (index 0=vert/s1, 1=orange/s2, 2=rouge/s3)
       let activeButton = null;
       let learningInterval = null;
       let learningStepCount = 0;
@@ -1878,6 +1946,7 @@
       });
     </script>
     <div style="margin-top: 20px; text-align: center;">
-      <a href="debriefing.html" class="more-info-link">En savoir plus sur l'apprentissage
+      <a href="debriefing.html" class="more-info-link">
+        <button class="more-info-button">Débriefing</button>
   </body>
 </html>

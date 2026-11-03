@@ -292,3 +292,74 @@ C'est exactement là que les défauts cités précédemment se concrétisent :
 - **ReLU** : dérivée = 1 côté positif → le signal de descente traverse toutes les couches sans s'affaiblir.
 
 En résumé : la dérivée est une **boussole**, pas un GPS. Elle indique le sens de la descente à chaque point ; en l'itérant on converge — au moins vers un minimum local, la convexité étant rare en deep learning.
+
+
+
+<h3>Mots-clés</h3>
+            <ul class="keyword-list">
+                <li>
+                    <span class="keyword">Réseau de neurones</span> :
+                    association d'une ou plusieurs couches de neurones.<br />
+                </li>
+                <li>
+                    <span class="keyword">Couche de neurones</span> : un
+                    ensemble de neurones en parallèle, qui reçoivent tous les
+                    mêmes entrées et dont les sorties alimentent la même couche
+                    suivante (ils ne sont pas connectés entre eux au sein d'une
+                    couche).
+                </li>
+                <li>
+                    On distingue la
+                    <span class="keyword">couche d'entrée</span>, la
+                    <span class="keyword">couche de sortie</span> et,
+                    éventuellement, des couches intermédiaires dites
+                    <span class="keyword">couchescachées</span>. <br />Un réseau
+                    monocouche comme ici n'a qu'une seule couche de neurones, la
+                    couche de sortie.
+                </li>
+                <li>
+                    <span class="keyword">Paramètres</span> : l'ensemble des
+                    variables ajustables du réseau — les poids et les biais.
+                    <br />Par couche :<span class="keyword">
+                        nombre de paramètres</span
+                    >
+                    = (nombre d'entrées + 1(biais)) × nombre de neurones.
+                </li>
+            </ul>
+
+            -----
+
+            C'est une confusion fréquente, mais elle repose sur une idée reçue : **la rétropropagation du gradient fonctionne avec n'importe quelle fonction dérivable (ou presque), pas seulement la sigmoïde.**
+
+**D'où vient cette idée :**
+
+Historiquement, la sigmoïde était effectivement la fonction phare, et pour de bonnes raisons :
+- Elle est dérivable partout, avec une formule très simple : σ'(z) = σ(z)·(1 − σ(z))
+- Sa dérivée se calcule directement à partir de la sortie déjà calculée — pas besoin de refaire le calcul
+- Elle "écrase" les valeurs dans [0, 1], pratique pour interpréter des probabilités
+
+Donc oui, on peut déterminer la direction et l'importance de la correction avec la sigmoïde... mais aussi avec ReLU, tanh, GELU, etc. Le mécanisme de descente de gradient n'exige qu'une chose : connaître la dérivée de la fonction d'activation pour remonter l'erreur de couche en couche.
+
+**Pourquoi la sigmoïde sur toutes les couches pose problème :**
+
+C'est le fameux **gradient qui s'évanouit** (*vanishing gradient*). La dérivée de la sigmoïde vaut au maximum **0,25** (quand z = 0) :
+
+```mermaid
+xychart-beta
+    title "Dérivée de la sigmoïde σ'(z)"
+    x-axis [-6, -4, -2, 0, 2, 4, 6]
+    y-axis "σ'(z)" 0 --> 0.30
+    line [0.002, 0.018, 0.105, 0.25, 0.105, 0.018, 0.002]
+```
+
+Lors de la rétropropagation, les dérivées des couches successives se **multiplient** entre elles. Avec un facteur ≤ 0,25 par couche, après quelques couches le gradient devient exponentiellement petit : 0,25⁵ ≈ 0,001. Les premières couches du réseau reçoivent alors un signal d'apprentissage quasi nul — elles n'apprennent presque plus.
+
+**Ce que ReLU apporte :**
+
+ReLU(z) = max(0, z) a une dérivée encore plus simple :
+- 0 si z < 0
+- **1 si z > 0**
+
+Le gradient traverse les couches actives **sans être multiplié par un facteur < 1** — il conserve son amplitude sur de nombreux couches, ce qui a justement permis l'essor des réseaux profonds moderns. (Sa dérivée discontinue en z = 0 ne pose pas de problème en pratique : on attribue arbitrairement 0 ou 1 en ce point exact, un événement de probabilité quasi nulle avec des valeurs réelles.)
+
+**En résumé :** la sigmoïde était populaire parce que sa dérivée est simple et jolie, mais ce n'est pas un prérequis du gradient. Elle a été remplacée dans les couches cachées précisément parce que sa dérivée, trop petite, étouffe l'apprentissage en profondeur. Elle reste pertinente en sortie pour la classification binaire, là où son interprétation probabiliste a du sens.
