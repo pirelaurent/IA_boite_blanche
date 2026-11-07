@@ -7,7 +7,7 @@ Il ne s'agit pas d'utiliser ni de juger l'IA, mais d'**armer l'esprit critique**
 
 Quand on regarde une IA de l'extérieur comme une _boîte noire_, on utilise des termes empruntés au lexique de la biologie et de l'esprit qui masquent les mécanismes intérieurs :     
 - « neurone »  recouvre une somme pondérée, faite de simples additions et multiplications; 
-- « il a appris » recouvre une descente de gradient ( une pente ); 
+- « il a appris » recouvre une descente de gradient ( suivre une pente ); 
 - « il a compris » recouvre un calcul de probabilités. 
 - etc.  
    
@@ -34,13 +34,14 @@ Le parcours _boîte blanche_ avance par **changements de question** et, avec cha
 
 **Objectif pédagogique :** ramener le « neurone » à ce qu'il est réellement — une somme pondérée suivie d'une fonction d'activation — couper court à toute métaphore biologique.
 -  La somme pondérée et le biais
--  La fonction d'activation : pourquoi la non-linéarité change tout
+-  La fonction d'activation par échelon: pourquoi ses limites ont provoqué un <i>hiver</i> de l'IA 
 
 ## Chapitre 2 — Le réseau : composer des transformations simples
 
 **Changement de question :** « que fait un neurone ? » cède la place à « que fait un réseau de neurones? »
 
 **Objectif pédagogique :** montrer que le réseau ne « contient » rien d'autre qu'une chaîne de multiplications matricielles et de non-linéarités ; la propagation avant est une simple composition de fonctions.
+- Pourquoi la non-linéarité change tout
 - La propagation avant, étape par étape
 - Couches et profondeur : que gagne-t-on à empiler ?
 

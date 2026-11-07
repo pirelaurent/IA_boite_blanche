@@ -189,8 +189,11 @@
 
                 Les <span class="keyword">poids w1 w2</span>
                 codent l'importance de chaque entrée dans la décision commune.
-                <br />Le <span class="keyword">biais b</span> décale le résultat
-                de l'origine (0,0) <br />
+                <br />
+                Dans un plan x1,x2, le calcul définit une droite (de pente
+                -w1/w2) qui sépare les résultats positifs des négatifs <br />Le
+                <span class="keyword">biais b</span> décale la droite de
+                l'origine (0,0) (de -w2/b) <br />
                 La
                 <span class="keyword">fonction d'activation <b>f</b> </span
                 >transforme le <span class="keyword">score brut</span> (le cumul
@@ -199,12 +202,12 @@
             </p>
 
             <h3>
-                Représentation géométrique de l'équation d'un neurone artificiel
+                Représentation géométrique des calculs d'un neurone artificiel
             </h3>
 
             <p>
-                Un neurone découpe des régions dans l'espace des nombres. Avec
-                deux dimensions x1,x2 , il découpe un plan.
+                Un neurone découpe des régions dans l'espace des nombres réels.
+                En deux dimensions , c'est une droite frontière.
             </p>
             <div class="image-container">
                 <img
@@ -214,18 +217,19 @@
                 />
                 <br />
                 <em>
-                    Les poids w1,w2 conditionne la pente d'une droite,
-                    éventuellement décalée de l'origine par le biais.
+                    Les poids w1,w2 conditionne la pente d'une droite, décalée
+                    de l'origine par le biais.
+                    <br />
+                    ( on a affiché quelques valeurs de score brut )
                 </em>
             </div>
             <p>
                 Le plan est découpé en deux parties: une où les scores bruts
                 sont positifs et l'autre où les scores bruts sont négatifs.
                 <br />
-                La valeur du score brut montre la distance du point à la
-                frontière de décision . <br />
-                Une légère variation des poids changera la droite et impactera
-                plus facilement un point proche qui pourrait basculer qu'un
+                La valeur du score brut montre la distance positive ou négative
+                du point à la frontière de décision . <br />
+                Une légère variation des poids changera la droite et un point proche pourra plus facilement basculer qu'un
                 point éloigné.
             </p>
 
@@ -250,19 +254,9 @@
                     </li>
                 </ul></em
             >
-            
-            <h4>Couches de neurones artificiels</h4>
-
-            <p>
-                En combinant des couches de neurones, on pourra superposer et combiner 
-                ces découpages.<br />Chaque couche intermédiaire ( dite
-                <span class="keyword">couche cachée</span>) découpe l'espace en
-                régions de plus en plus fines. <br />Le découpage final épouse
-                ainsi les zones voulues quel que soit leur contour.
-            </p>
 
             <h2>
-                Le neurone ancêtre, le perceptron, est un classifieur binaire
+                Le neurone ancêtre, un perceptron, est un classifieur binaire
             </h2>
             <p>
                 Le <b>perceptron</b> est le premier et le plus simple des
@@ -277,8 +271,6 @@
                 - Si le <b>score brut</b> est supérieur ou égal à 0, son
                 <b>score final</b> est ramené à 1, sinon il est réduit à 0.
                 <br />
-
-                <br />
             </p>
 
             <div class="image-container">
@@ -289,87 +281,37 @@
                 />
                 <br />
                 <em>
-                    Le perceptron est un classifieur binaire, son résultat est 0
-                    ou 1.
+                    Le perceptron est un classifieur binaire.
+                    <br />
+                    On sait si une entrée x1,x2 se situe dans la catégorie visée, mais on ne sait plus à quelle profondeur.
                 </em>
             </div>
 
-            <h3>Combinaison de Perceptrons avec couche cachée</h3>
-            En combinant plusieurs droites dans une couche intermédiaires et en
-            les recombinant dans la couche de sortie, on peut découper des
-            fragments de plan :
-
-            <div class="image-container">
-                <img
-                    src="img/perceptron2couches.png"
-                    alt="couche cachée de trois neurones"
-                    width="600"
-                />
-                <br />
-            </div>
-<p> En combinant les résultats des trois droites A,B,C on peut délimiter des zones plus précises comme ici un triangle.
-<br> Seuls les (x1,x2) de cette zone seront reconnus comme étant de cette catégorie. 
-      <div class="image-container">
-                <img
-                    src="img/perceptron2couchesTriangle.png"
-                    alt="couche cachée de trois neurones"
-                    width="300"
-                />
-                <br />
-            </div>
-
-
-
-
-            <h3>Les limites du perceptron H et <i>l'hiver de l'IA</i></h3>
-Même avec un nombre quelconque de couches cachées, les limites du perceptron à seuil (H) sont les suivantes: 
-<ul><li>Toutes les zones resteront des pôlygones : on ne pourra jamais délimiter des zones comme 
-
-            <p>
-                La fonction d'activation à seuil (H) ne dit plus si un point est
-                proche ou loin de la frontière de décision.
-                <br />Faute de distance mesurable, on ne sait pas de combien
-                ajuster les poids, ce qui limite l'apprentissage. <br />
-
-                Le perceptron (1957 et suivant) ne sait résoudre que des
-                problèmes linéairement séparables : toute frontière non droite
-                lui échappe.
-                <br />Le constat de ces limites a asséché les financements :
-                c'est le début du premier <i>hiver de l'IA</i>. <br />
-                Du perceptron d'origine, seul le nom a survécu : il désigne
-                aujourd'hui le réseau multicouche, et non plus le neurone
-                d'origine.
-            </p>
-
-            <h4>MLP - Multi Layer Perceptron</h4>
-            <p>
-                Le neurone de base, lui, a changé d'activation : les fonctions
-                continues (sigmoïde et autres...) indiquent à quel point le
-                point est proche ou loin de la frontière, et rendent l'erreur
-                différentiable. <br />
-                Grâce à cette continuité, l'algorithme de
-                <b>rétropropagation</b> (popularisé en 1986) sait enfin
-                entraîner les couches cachées : le réseau découpe l'espace avec
-                des frontières quelconques, et non plus un simple hyperplan.
-            </p>
-
             <hr />
 
-            <h2>🟡 Illustration pratique</h2>
-            <h2>Piloter un feu tricolore avec une IA Perceptron</h2>
+            <h2>🟡 Apprendre à piloter un feu tricolore avec un perceptron</h2>
             <p>
                 On pourrait entrainer un réseau de neurones pour que les feux
-                tricolores réagissent à la circulation, mais c'est un problème
-                complexe. <br />
-                On va se contenter d'un problème simple : On a trois prises pour
-                allumer les feux vert, orange, rouge, mais on n'a que deux
-                interrupteurs x1 et x2. Un interrupteur fermé sera valorisé à
-                1.00 et un interrupteur ouvert à 0.00 <br />
+                tricolores réagissent par exemple à la circulation et à la
+                météo, mais c'est un problème trop complexe à ce stade. <br />
+                On va traiter un problème plus simple : <b>Trois prises</b> (les sorties) 
+                alimentent les 3 feux, mais on n'a que <b>deux</b>
+                interrupteurs (les entrées).
+                <br />
                 L'ambition est d'utiliser un réseau de neurones pour s'en
                 sortir.<br />
             </p>
+            <h4>Utiliser des nombres</h4>
+            <p>
+                Un neurone fait des calculs sur des nombres réels: il faut encoder notre problème.
+                <br />
+                On prend comme convention qu'un interrupteur fermé a la valeur
+                1.00 et ouvert la valeur 0.00 <br />
+                De même on considère qu'une prise est alimentée si sa valeur est
+                1.00 et hors tension si elle vaut 0.00
+            </p>
 
-            <h3>But à atteindre et données d'entraînement</h3>
+            <h3>But à atteindre</h3>
 
             <div class="center">
                 <table class="weight-table">
@@ -451,18 +393,11 @@ Même avec un nombre quelconque de couches cachées, les limites du perceptron �
                 </table>
             </div>
 
-            <h2>Un réseau de trois neurones</h2>
+            <h2>Un réseau de trois neurones, un par feu</h2>
             <p>
                 Un neurone n'a qu'une sortie. Il faut donc un
                 <span class="keyword">réseau</span> de 3 neurones distincts, un
-                pour chaque prise. <br />Ce réseau a un
-                <span class="keyword">vecteur </span>d'entrée de dimension 3 ( 2
-                entrées + un biais) et un vecteur de sortie de dimension 3 (les
-                feux). <br />
-                Ce réseau a <b>6</b> poids w et <b>3</b> biais b , sa
-                <span class="keyword">matrice </span>est de dimension 3×3 ,
-                c'est un réseau à <b>9</b>
-                <span class="keyword">paramètres.</span>
+                pour chaque prise.
             </p>
             <div class="image-container">
                 <img
@@ -476,73 +411,53 @@ Même avec un nombre quelconque de couches cachées, les limites du perceptron �
                         individuels. <br />
                         La couche de sortie doit allumer un seul feu à la fois
                         selon l'état des interrupteurs. <br />Le jeu
-                        d'entraînement minimum est de 4 cas (compteur) par 3
-                        neurones= 12 tests.
+                        d'entraînement minimum est de 4 cas (00 01 10 11) par
+                        neurone, soit 12 tests au total.
                     </em>
                 </p>
             </div>
-
+<hr>
             <h4>
-                L'échelle des paramètres : de dix à mille milliards 10<sup
-                    >12</sup
-                >
+                La taille d'un modèle IA
             </h4>
             <p>
-                Notre réseau a une seule couche et moins de dix paramètres. Il
-                ne peut pas gérer des situations plus complexes, mais il est
-                suffisant pour illustrer le fonctionnement d'un réseau de
-                neurones.
+            Un <span class="keyword">modèle</span> est le tableau numérique des paramètres une fois le réseau entrainé. 
+            Sa taille est son nombre de paramètres.
 
-                <br />Les réseaux de neurones profonds pour la reconnaissance
-                d'images ont
-                <b>des millions (10<sup>6</sup>) de paramètres</b> et des
+
+               <br> 
+                <ul>
+                <li>
+                Notre réseau  a une
+                <span class="keyword">matrice</span> faite
+                de <b>6</b> poids et <b>3</b> biais , c'est un <span class="keyword">modèle</span> à <b>9</b>
+                <span class="keyword">paramètres.</span>
+    </li>
+                <li>
+                les réseaux de neurones pour la
+                reconnaissance d'images ont <b>des millions (10<sup>6</sup>) </b> de paramètres et des
                 dizaines de couches.
-                <br />
+                </li>
+                <li>
                 Les grands
-                <span class="keyword">LLM (Large Language Model)</span> ont
-                aujourd'hui des
-                <b>milliers de milliards (10<sup>12</sup>)</b> de paramètres et
-                des centaines de couches.
-
+                <span class="keyword">LLM (Large Language Model)</span> en ont
+                des <b>milliers de milliards (10<sup>12</sup>)</b> et des
+                centaines de couches.
+</li></ul>
                 <br />
-                Le fonctionnement de base reste le même que pour notre feu
-                tricolore, mais avec des calculs plus nombreux et plus
-                complexes.
+                <b>Le fonctionnement de base reste le même </b>que ce soit pour
+                10 ou 10<sup>12 </sup>paramètres.
             </p>
-            <h4>Le calcul matriciel et les GPU</h4>
-            <p>
-                Les calculs d'un réseau représentent un défi computationnel
-                majeur.
-                <br />On effectue des milliards d'opérations mathématiques en
-                multipliant une <span class="keyword">matrice</span> de poids
-                par des <span class="keyword">vecteurs</span> d'entrées (des
-                séries de multiplications et d'additions). <br />
-                C'est typiquement le domaine de calcul des
-                <span class="keyword">GPU(Graphic Process Unit) </span> d'où la
-                course à ces équipements et le gigantisme des centres de calcul
-                pour l'entrainement des réseaux de neurones profonds.
-            </p>
+
             <hr />
-            <h2>Expérimentez ce réseau</h2>
-            <p>
-                Une interface visuelle va vous permettre de changer les
-                paramètres de ce réseau afin de l'entrainer manuellement.
-            </p>
 
-            <h4>
+            <h2>
                 <a href="./feu-modele-ia.html">
-                    Entrainez le réseau de neurones des feux tricolores</a
+                    Voir et expérimenter le réseau des feux tricolores</a
                 >
-            </h4>
+            </h2>
 
-            Note: L'activation <b>H</b> d'un Perceptron est:
-            <b><i>(somme pondérée &gt;= seuil)</i></b> ou encore
-            <b><i>(somme pondérée - seuil &gt;= 0)</i></b>
-
-            <br />
-            D'où
-            <b><i>biais = -seuil</i></b> dans l'interface pour revenir à la
-            forme standard.
+            
         </div>
     </body>
 </html>

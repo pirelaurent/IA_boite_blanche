@@ -419,3 +419,13 @@ Le gradient traverse les couches actives **sans être multiplié par un facteur 
                 L'ensemble des paramètres d'un réseau de neurones est ce qu'on
                 appelle le <span class="keyword">modèle</span> du réseau.
             </p>
+
+
+Note: L'activation <b>H</b> d'un Perceptron est:
+            <b><i>(somme pondérée &gt;= seuil)</i></b> ou encore
+            <b><i>(somme pondérée - seuil &gt;= 0)</i></b>
+
+            <br />
+            D'où
+            <b><i>biais = -seuil</i></b> dans l'interface pour revenir à la
+            forme standard.
