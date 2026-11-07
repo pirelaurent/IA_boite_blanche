@@ -882,13 +882,12 @@
   </head>
   <body>
     <div class="container">
-      <h1>Paramétrez le réseau de neurones des feux tricolores</h1>
+      <h1>Entrainez le réseau de neurones des feux tricolores</h1>
 
       <div class="info">
-        <h4>Appuyer sur chaque bouton pour présenter son cas à l'entrée et ajustez ses paramètres pour allumer son feu sans perturberles autres. 
-        <br> Essayer de jouer le jeu à la main. (Vous pouvez toujours cliquer sur "Solution" pour voir des matrices de paramètres qui fonctionnent).
-        <br> L'apprentissage automatique tourne au ralenti pour que vous puissiez voir les ajustements calculésdes paramètres. 
-        
+        <h4>Appuyer sur chaque bouton pour présenter son cas à l'entrée et ajustez ses paramètres pour allumer son feu sans perturber les autres. 
+        <br> Si vous n'y arrivez pas ,vous pouvez toujours cliquer sur "Solution" pour voir des jeux de paramètres qui fonctionnent.
+        <br> L'apprentissage automatique est ralenti volontairement pour que vous puissiez voir la boucle d'apprentissage en action.
         </h4>
       </div>
 
@@ -943,13 +942,13 @@
         <!-- Message de succès -->
         <div class="success-message" id="success-message">
           <div class="success-title" id="success-title">Succès à <span id="success-percentage">0%</span></div>
-          <div class="note">Votre matrice de poids satisfait <span id="satisfied-count">0</span> sur 4 cas !</div>
+          <div class="note">Votre matrice de poids satisfait <span id="satisfied-count">0</span> cas sur 4  !</div>
         </div>
 
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
           <div class="model-header">
-            <div class="section-label">Ajuster les poids de chaque neurone dans la matrice pour réussir les tests </div>
+            <div class="section-label">Ajuster les trois paramètres de chaque neurone dans la matrice pour réussir les quatres cas de test </div>
           </div>
           <div class="matrix-and-learning-row">
             <div class="matrix-section">
@@ -1097,7 +1096,7 @@
             <!-- Info sur le fonctionnement -->
             <div class="seuil-control">
               <div class="formula">
-               Allumé si w₁ⱼ×x₁ + w₂ⱼ×x₂ - bⱼ &gt; 0
+               feu allumé si w₁ⱼ×x₁ + w₂ⱼ×x₂ - bⱼ &gt;= 0
               </div>
             </div>
           </div>
@@ -1305,7 +1304,15 @@
           if (titleEl) titleEl.classList.remove('full');
         }
 
+        updateBravoMessage(displayPercentage === 100);
         return satisfiedCount === 4;
+      }
+
+      function updateBravoMessage(show) {
+        const bravoEl = document.getElementById('bravo-message');
+        if (bravoEl) {
+          bravoEl.style.display = show ? 'block' : 'none';
+        }
       }
 
       function updateIndicator(btnNum, satisfied) {
@@ -1503,6 +1510,7 @@
             learningStatus.textContent = `✓ Solution trouvée en ${learningStepCount} étapes !`;
             learningStatus.classList.remove("learning-active");
             stopAutoLearning();
+            updateBravoMessage(true);
             return;
           }
           
@@ -1946,6 +1954,7 @@
       });
     </script>
     <div style="margin-top: 20px; text-align: center;">
+    <h4 id="bravo-message" style="display: none;"> Bravo ! Vous avez entrainé un réseau de neurones et obtenu    un modèle à 9 paramètres. </h4>
       <a href="debriefing.html" class="more-info-link">
         <button class="more-info-button">Débriefing</button>
   </body>

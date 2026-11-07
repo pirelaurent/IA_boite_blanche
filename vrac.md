@@ -363,3 +363,59 @@ ReLU(z) = max(0, z) a une dérivée encore plus simple :
 Le gradient traverse les couches actives **sans être multiplié par un facteur < 1** — il conserve son amplitude sur de nombreux couches, ce qui a justement permis l'essor des réseaux profonds moderns. (Sa dérivée discontinue en z = 0 ne pose pas de problème en pratique : on attribue arbitrairement 0 ou 1 en ce point exact, un événement de probabilité quasi nulle avec des valeurs réelles.)
 
 **En résumé :** la sigmoïde était populaire parce que sa dérivée est simple et jolie, mais ce n'est pas un prérequis du gradient. Elle a été remplacée dans les couches cachées précisément parce que sa dérivée, trop petite, étouffe l'apprentissage en profondeur. Elle reste pertinente en sortie pour la classification binaire, là où son interprétation probabiliste a du sens.
+
+
+
+
+
+
+
+ <div class="section">
+        <h2>Principe général</h2>
+        <p>
+            Chaque <strong>neurone</strong> (correspondant à un feu : vert, orange, rouge) doit apprendre à 
+            <strong>s'allumer uniquement pour son cas spécifique</strong> et rester éteint pour les autres.
+            C'est un <strong>problème de classification</strong> : le réseau doit discriminer les 4 configurations d'entrée.
+        </p>
+        <p> Le réseau du feu tricolore est un exemple simple de réseau de neurones à une seule couche (perceptron multi-sorties). 
+         il teste 2 entrées soit  4 cas fois 3 neurones, soit 12 calculs par itération. </p>
+<h3>Réseau de neurones classifieur d'images</h3>
+        <p>
+            Un réseaux de neurones classifieur d'images prend en entrée une image sous forme de tableau de pixels et doit déterminer à quelle catégorie elle appartient (chien, chat, voiture, etc.).
+            Chaque neurone de sortie correspond à une catégorie et doit s'activer uniquement pour les images de cette catégorie.
+        </p>
+        <p>
+            Dans notre exemple, les entrées sont les 4 configurations possibles des feux (vert, orange, rouge, éteint) et les sorties sont les 3 neurones correspondant aux feux.
+        </p>
+    </div>
+
+
+
+
+            <h3>Entraînement d'un neurone artificiel</h3>
+
+            <div class="image-container">
+                <img
+                    src="img/apprentissage.png"
+                    alt="Schéma d'un apprentissage"
+                    width="650"
+                />
+            </div>
+
+            <p>
+                On présente au neurone
+                <span class="keyword">jeu d'exemples</span> dont on connaît la
+                sortie attendue. <br />
+                Le neurone effectue ses calculs et on compare sa prédiction à la
+                sortie attendue pour mesurer l'erreur. <br />
+                La<span class="keyword">boucle d'apprentissage</span> consiste à
+                ajuster les poids (et/ou le biais) itérativement pour réduire au
+                mieux l'erreur pour tous les échantillons d'entraînement.
+                <br />
+
+                L'ensemble des poids et des biais constitue les
+                <span class="keyword">paramètres</span> du neurone artificiel.
+                <br />
+                L'ensemble des paramètres d'un réseau de neurones est ce qu'on
+                appelle le <span class="keyword">modèle</span> du réseau.
+            </p>
