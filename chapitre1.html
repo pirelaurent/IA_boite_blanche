@@ -207,7 +207,7 @@
 
             <p>
                 Un neurone découpe des régions dans l'espace des nombres réels.
-                En deux dimensions , c'est une droite frontière.
+                En deux dimensions, c'est une droite frontière.
             </p>
             <div class="image-container">
                 <img
@@ -227,10 +227,10 @@
                 Le plan est découpé en deux parties: une où les scores bruts
                 sont positifs et l'autre où les scores bruts sont négatifs.
                 <br />
-                La valeur du score brut montre la distance positive ou négative
+                La valeur du score brut montre la distance, positive ou négative, 
                 du point à la frontière de décision . <br />
-                Une légère variation des poids changera la droite et un point proche pourra plus facilement basculer qu'un
-                point éloigné.
+                Une légère variation des poids modifiera la droite et un point
+                proche pourra plus facilement basculer qu'un point éloigné.
             </p>
 
             <h4>
@@ -256,7 +256,7 @@
             >
 
             <h2>
-                Le neurone ancêtre, un perceptron, est un classifieur binaire
+                Le neurone ancêtre, le perceptron, est un classifieur binaire
             </h2>
             <p>
                 Le <b>perceptron</b> est le premier et le plus simple des
@@ -282,33 +282,46 @@
                 <br />
                 <em>
                     Le perceptron est un classifieur binaire.
-                    <br />
-                    On sait si une entrée x1,x2 se situe dans la catégorie visée, mais on ne sait plus à quelle profondeur.
+                
                 </em>
             </div>
 
+Quelques exemples de classification binaire : 
+
+
+<ul>
+<li><b>Filtrage de spam</b> (un message est-il spam ou non)</li>
+<li><b>Détection de fraude</b> bancaire (transaction frauduleuse ou légitime)</li>
+<li><b>Diagnostic médical</b> (présence ou absence d'un marqueur de maladie)</li>
+<li><b>Analyse de sentiment</b> (avis positif ou négatif)</li>
+<li>etc.</li>
+</ul>
+
+
+
+<p> Si on a plusieurs catégories on entraîne N classifieurs, un par classe. 
+<br> Si les catégories sont exclusives <i>One-vs-all (OvA)</i>  il faut que une seule
+sortie soit positive.
+
+</p>
+
+
             <hr />
 
-            <h2>🟡 Apprendre à piloter un feu tricolore avec un perceptron</h2>
+            <h2>🟡 Pour expérimenter: piloter un feu tricolore avec deux interrupteurs</h2>
             <p>
-                On pourrait entrainer un réseau de neurones pour que les feux
-                tricolores réagissent par exemple à la circulation et à la
-                météo, mais c'est un problème trop complexe à ce stade. <br />
-                On va traiter un problème plus simple : <b>Trois prises</b> (les sorties) 
-                alimentent les 3 feux, mais on n'a que <b>deux</b>
-                interrupteurs (les entrées).
+
+  On veut que selon la position des interrupteurs un seul feu s'allume. 
+                L'ambition est d'utiliser des perceptrons pour s'en
+                sortir.<br /><br />
+
+                Un neurone fait des calculs : il faut
+                transformer notre problème  en nombres.
                 <br />
-                L'ambition est d'utiliser un réseau de neurones pour s'en
-                sortir.<br />
-            </p>
-            <h4>Utiliser des nombres</h4>
-            <p>
-                Un neurone fait des calculs sur des nombres réels: il faut encoder notre problème.
-                <br />
-                On prend comme convention qu'un interrupteur fermé a la valeur
-                1.00 et ouvert la valeur 0.00 <br />
+                On prend arbitrairement comme convention qu'un interrupteur
+                fermé a la valeur 1.00 et ouvert la valeur 0.00 <br />
                 De même on considère qu'une prise est alimentée si sa valeur est
-                1.00 et hors tension si elle vaut 0.00
+                1 et hors tension si elle vaut 0 .
             </p>
 
             <h3>But à atteindre</h3>
@@ -319,7 +332,7 @@
                         <tr>
                             <th>Interrupteurs x1 x2</th>
                             <th>sortie attendue</th>
-                            <th>prises actives</th>
+                            <th>prise à activer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -332,14 +345,14 @@
                                 <img
                                     src="img/000.png"
                                     alt="Feu éteint"
-                                    width="50"
+                                    width="70"
                                     style="
                                         transform-origin: center;
                                         display: inline-block;
                                     "
                                 />
                             </td>
-                            <td>000</td>
+                            <td>0 0 0</td>
                         </tr>
                         <tr>
                             <td><span class="code">ouvert fermé: 0 1</span></td>
@@ -348,14 +361,14 @@
                                 <img
                                     src="img/100.png"
                                     alt="Feu vert allumé"
-                                    width="50"
+                                    width="70"
                                     style="
                                         transform-origin: center;
                                         display: inline-block;
                                     "
                                 />
                             </td>
-                            <td>100</td>
+                            <td>1 0 0</td>
                         </tr>
                         <tr>
                             <td><span class="code">fermé ouvert: 1 0</span></td>
@@ -364,14 +377,14 @@
                                 <img
                                     src="img/010.png"
                                     alt="Feu orange allumé"
-                                    width="50"
+                                    width="70"
                                     style="
                                         transform-origin: center;
                                         display: inline-block;
                                     "
                                 />
                             </td>
-                            <td>010</td>
+                            <td>0 1 0</td>
                         </tr>
                         <tr>
                             <td><span class="code">fermé fermé: 1 1</span></td>
@@ -380,20 +393,20 @@
                                 <img
                                     src="img/001.png"
                                     alt="Feu rouge allumé"
-                                    width="50"
+                                    width="70"
                                     style="
                                         transform-origin: center;
                                         display: inline-block;
                                     "
                                 />
                             </td>
-                            <td>001</td>
+                            <td>0 0 1</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <h2>Un réseau de trois neurones, un par feu</h2>
+            <h2>Un neurone pour chaque feu</h2>
             <p>
                 Un neurone n'a qu'une sortie. Il faut donc un
                 <span class="keyword">réseau</span> de 3 neurones distincts, un
@@ -409,55 +422,54 @@
                     <em
                         >Réseau des 3 neurones perceptrons avec leurs paramètres
                         individuels. <br />
+                        Chacun multiplie x1 et x2 par ses propres poids.<br>
                         La couche de sortie doit allumer un seul feu à la fois
-                        selon l'état des interrupteurs. <br />Le jeu
-                        d'entraînement minimum est de 4 cas (00 01 10 11) par
-                        neurone, soit 12 tests au total.
+                        selon l'état des interrupteurs. 
                     </em>
                 </p>
             </div>
-<hr>
-            <h4>
-                La taille d'un modèle IA
-            </h4>
+            <hr />
+            <h4>La taille d'un modèle IA</h4>
             <p>
-            Un <span class="keyword">modèle</span> est le tableau numérique des paramètres une fois le réseau entrainé. 
-            Sa taille est son nombre de paramètres.
+                Un <span class="keyword">modèle</span> est le tableau numérique
+                des paramètres une fois le réseau entrainé. Sa taille est son
+                nombre de paramètres.
 
+                <br />
+            </p>
 
-               <br> 
-                <ul>
+            <ul>
                 <li>
-                Notre réseau  a une
-                <span class="keyword">matrice</span> faite
-                de <b>6</b> poids et <b>3</b> biais , c'est un <span class="keyword">modèle</span> à <b>9</b>
-                <span class="keyword">paramètres.</span>
-    </li>
-                <li>
-                les réseaux de neurones pour la
-                reconnaissance d'images ont <b>des millions (10<sup>6</sup>) </b> de paramètres et des
-                dizaines de couches.
+                    Notre réseau a une
+                    <span class="keyword">matrice</span> faite de <b>6</b> poids
+                    et <b>3</b> biais , ce 
+                    <span class="keyword">modèle a <b>9</b>
+                   paramètres</span>et une seule 
+                    couche, sa sortie.
                 </li>
                 <li>
-                Les grands
-                <span class="keyword">LLM (Large Language Model)</span> en ont
-                des <b>milliers de milliards (10<sup>12</sup>)</b> et des
-                centaines de couches.
-</li></ul>
-                <br />
-                <b>Le fonctionnement de base reste le même </b>que ce soit pour
-                10 ou 10<sup>12 </sup>paramètres.
-            </p>
+                    Les réseaux de neurones pour la reconnaissance d'images ont
+                    <b>des millions (10<sup>6</sup>) </b> de paramètres et des
+                    dizaines de couches.
+                </li>
+                <li>
+                    Les grands
+                    <span class="keyword">LLM (Large Language Model)</span> en
+                    ont des <b>milliers de milliards (10<sup>12</sup>)</b> et
+                    des centaines de couches.
+                </li>
+            </ul>
+
+            <b>Le fonctionnement de base reste le même </b>que ce soit pour 10 ,
+            10<sup>6</sup> ou 10<sup>12 </sup>paramètres, mais la puissance de calcul à mobiliser est exponentielle.
 
             <hr />
 
             <h2>
-                <a href="./feu-modele-ia.html">
+                <a href="./chapitre1-1.html">
                     Voir et expérimenter le réseau des feux tricolores</a
                 >
             </h2>
-
-            
         </div>
     </body>
 </html>

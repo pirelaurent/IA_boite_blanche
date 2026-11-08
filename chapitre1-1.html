@@ -620,7 +620,7 @@
       }
 
       .info p {
-        font-size: 12px;
+        font-size: 13px;
       }
       
       /* Message de bravo */
@@ -885,11 +885,22 @@
       <h1>Entrainez le réseau de neurones des feux tricolores</h1>
 
       <div class="info">
-        <h4>Appuyer sur chaque bouton pour présenter son cas à l'entrée et ajustez ses paramètres pour allumer son feu sans perturber les autres. 
-        <br> Si vous n'y arrivez pas ,vous pouvez toujours cliquer sur "Solution" pour voir des jeux de paramètres qui fonctionnent.
-        <br> L'apprentissage automatique est ralenti volontairement pour que vous puissiez voir la boucle d'apprentissage en action.
-        </h4>
-      </div>
+        <h4>
+         <p>
+<b>Objectif :</b> chaque feu possède un neurone dont les paramètres définissent
+une droite de séparation (position et pente). 
+<br>Ajustez ces paramètres pour
+placer chaque droite du bon côté de son feu. En s'en rapprochant, la droite apparaitra dans la fenêtre de visualisation.
+</p>
+<p>
+<b>Test :</b> appuyez sur le bouton d'un feu : il doit s'allumer seul.
+Si plusieurs feux s'allument, ou aucun, continuez à ajuster les droites.
+<br>Bloqué ? Cliquez sur « Solution aléatoire » pour voir des paramètres corrects.
+</p>
+<p>
+L'apprentissage est volontairement ralenti pour rendre les approches itératives
+observables : modifiez les seuils (bj) pour voir différents cas d'apprentissage.
+</p>    </div>
 
 
     <br>
@@ -948,7 +959,7 @@
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
           <div class="model-header">
-            <div class="section-label">Ajuster les trois paramètres de chaque neurone dans la matrice pour réussir les quatres cas de test </div>
+            <div class="section-label">Ajuster les paramètres de chaque neurone pour isoler les feux et passer les quatres cas de test </div>
           </div>
           <div class="matrix-and-learning-row">
             <div class="matrix-section">
@@ -1058,7 +1069,7 @@
                   <div class="neuron-params">
                     <div class="param-cell">
                       <div class="cell" id="cell-0-0">
-                        <div class="cell-value" id="cell-value-0-0">0.0</div>
+                        <div class="cell-value" id="cell-value-0-0">0</div>
                         <button class="cell-btn up" onclick="adjustCell(0, 0, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustCell(0, 0, -0.1)">-</button>
                       </div>
@@ -1170,8 +1181,8 @@
 
       function adjustSeuil(index, delta) {
         seuils[index] = parseFloat((seuils[index] + delta).toFixed(2));
-        if (seuils[index] < 0.5) seuils[index] = 0.5;
-        if (seuils[index] > 2) seuils[index] = 2;
+        if (seuils[index] < 0.0) seuils[index] = 0.0;
+        if (seuils[index] > 5) seuils[index] = 5;
         
         document.getElementById(`seuil-value-${index}`).textContent = seuils[index].toFixed(1);
         computeProducts();
@@ -1954,8 +1965,9 @@
       });
     </script>
     <div style="margin-top: 20px; text-align: center;">
-    <h4 id="bravo-message" style="display: none;"> Bravo ! Vous avez entrainé un réseau de neurones et obtenu un modèle réutilisable. </h4>
-      <a href="debriefing.html" class="more-info-link">
-        <button class="more-info-button">Débriefing</button>
+    <h4 id="bravo-message" style="display: none;"> Bravo ! Vous avez entrainé un réseau de neurones perceptron et obtenu un modèle réutilisable. </h4>
+      <a href="chapitre2.html" class="more-info-link">
+        <button class="more-info-button">Chapitre 2 - Réseaux de neurones</button></a>
+        </div>
   </body>
 </html>

@@ -24,7 +24,7 @@ Le parcours _boîte blanche_ avance par **changements de question** et, avec cha
 - **Comment saisit-il le langage ?** (Chapitre 5) : par une architecture qui pondère ce qui précède pour prédire ce qui suit.
 - **Que produit-il exactement ?** (Chapitre 6) : une distribution de candidats conditionnée par un corpus.
 - **Que fait-il paraître ?** (Chapitres 7–8) : un effet de compréhension, un plan de réponse, un raisonnement déroulé — produits du conditionnement et de la génération.
-- **Que révèle cette mécanique des limites de l'IA ?** (Chapitre 9) On referme la boîte blanche avec cette question critique. 
+- **Que révèle cette mécanique des limites de l'IA ?** (Chapitre 9) On referme la boîte avec cette question critique. 
 
 ---
 
@@ -33,24 +33,27 @@ Le parcours _boîte blanche_ avance par **changements de question** et, avec cha
 **Changement de question :** on abandonne « est-il intelligent ? » pour « que calcule-t-il ? »
 
 **Objectif pédagogique :** ramener le « neurone » à ce qu'il est réellement — une somme pondérée suivie d'une fonction d'activation — couper court à toute métaphore biologique.
--  La somme pondérée et le biais
--  La fonction d'activation par échelon: pourquoi ses limites ont provoqué un <i>hiver</i> de l'IA 
+-  La somme pondérée et le biais, un fonctionnement universel
+-  A l'origine, la fonction d'activation par dépassement de seuil (échelon).
 
 ## Chapitre 2 — Le réseau : composer des transformations simples
 
 **Changement de question :** « que fait un neurone ? » cède la place à « que fait un réseau de neurones? »
 
 **Objectif pédagogique :** montrer que le réseau ne « contient » rien d'autre qu'une chaîne de multiplications matricielles et de non-linéarités ; la propagation avant est une simple composition de fonctions.
-- Pourquoi la non-linéarité change tout
-- La propagation avant, étape par étape
+
+
 - Couches et profondeur : que gagne-t-on à empiler ?
+- La propagation avant 
+- L'hiver de l'IA 
+- Pourquoi la non-linéarité a tout changé 
 
 
 ## Chapitre 3 — L'apprentissage : comment les poids se fixent
 
 Changement de question : on ne demande plus ce que fait le réseau, mais comment il s'est formé.
 
-**Objectif pédagogique :** faire comprendre qu'aucune règle n'est programmée ; les poids résultent d'une minimisation d'erreur (descente de gradient, rétropropagation). La « connaissance » n'est rien d'autre que l'état des poids après convergence.
+**Objectif pédagogique :** faire comprendre qu'aucune règle n'est programmée ; les poids résultent d'une minimisation d'erreur (descente de gradient, rétropropagation). La « connaissance » d'un modèle n'est rien d'autre que l'état des poids après convergence.
 - La fonction de perte : mesurer l'erreur
 - Descente de gradient et rétropropagation
 - Généralisation vs mémorisation (surapprentissage)
