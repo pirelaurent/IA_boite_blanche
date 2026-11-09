@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            Feux tricolores - Accueil
+        </title>
+        <style>
+            * { box-sizing: border-box; }
+            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+            .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            h1 { text-align: center; color: #333; margin-bottom: 30px; }
+            h2 { color: #444; margin: 25px 0 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+            p { line-height: 1.7; color: #333; margin-bottom: 15px; }
+            .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0; }
+            .card { background: #f8f9fa; padding: 25px; border-radius: 8px; border: 1px solid #ddd; transition: transform 0.2s, box-shadow 0.2s; }
+            .card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+            .card h3 { color: #444; margin-top: 0; }
+            .card p { margin-bottom: 15px; }
+            .card a { display: inline-block; background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 10px; }
+            .card a:hover { background: #45a049; }
+            .code { font-family: monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+            .keyword { font-weight: bold; color: #2c3e50; background-color: #e8f5e9; padding: 2px 6px; border-radius: 3px; font-family: "Courier New", monospace; }
+            hr { margin: 40px 0; border: none; border-top: 1px solid #ddd; }
+            .note { font-style: italic; color: #666; font-size: 0.95em; margin: 15px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Projet Feux Tricolores</h1>
+            
+            <p class="note">
+                Exemple concret d'application d'un réseau de neurones MLP pour la classification 
+                de points sur une tablette tactile avec 4 cercles tactiles (noir, vert, orange, rouge).
+            </p>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>📋 Description</h3>
+                    <p>
+                        Description détaillée du problème, de l'architecture du réseau,
+                        de la constitution du dataset et des paramètres d'entraînement.
+                    </p>
+                    <p>
+                        <strong>Contenu :</strong>
+                    </p>
+                    <ul>
+                        <li>Configuration de la tablette tactile 200×400</li>
+                        <li>Positionnement des 4 cercles (rayon 30, espacés de 15px)</li>
+                        <li>Architecture MLP 2-12-4</li>
+                        <li>Stratégie de constitution du dataset</li>
+                        <li>Paramètres d'entraînement</li>
+                        <li>Figures explicatives SVG</li>
+                    </ul>
+                    <a href="description.html">Voir la description</a>
+                </div>
+                
+                <div class="card">
+                    <h3>🧠 Entraînement</h3>
+                    <p>
+                        Implémentation interactive du réseau de neurones avec entraînement 
+                        en JavaScript pur (sans framework).
+                    </p>
+                    <p>
+                        <strong>Fonctionnalités :</strong>
+                    </p>
+                    <ul>
+                        <li>Génération du dataset (1 800 échantillons)</li>
+                        <li>Entraînement avec Adam et Binary Cross-Entropy</li>
+                        <li>Visualisation des frontières de décision</li>
+                        <li>Matrice de confusion</li>
+                        <li>Test de points spécifiques</li>
+                        <li>Export/Import du modèle</li>
+                    </ul>
+                    <a href="entrainement.html">Lancer l'entraînement</a>
+                </div>
+            </div>
+            
+            <hr/>
+            
+            <div class="section">
+                <h2>Résumé technique</h2>
+                <p>
+                    Ce projet illustre un <span class="keyword">réseau de neurones MLP</span> pour classer les appuis 
+                    sur une tablette tactile en 5 catégories :
+                </p>
+                <table>
+                    <tr><th>Aspect</th><th>Valeur</th></tr>
+                    <tr><td>Tablette</td><td>200×400 pixels</td></tr>
+                    <tr><td>Cercles</td><td>4 × rayon 30px, espacés de 15px</td></tr>
+                    <tr><td>Réseau</td><td>MLP 2-12-4</td></tr>
+                    <tr><td>Activations</td><td>ReLU (cachée), Sigmoïde (sortie)</td></tr>
+                    <tr><td>Dataset</td><td>1 500 entraînement + 300 validation</td></tr>
+                    <tr><td>Optimiseur</td><td>Adam</td></tr>
+                    <tr><td>Fonction coût</td><td>Binary Cross-Entropy</td></tr>
+                </table>
+            </div>
+            
+            <hr/>
+            
+            <div class="section">
+                <h2>Comment utiliser</h2>
+                <ol>
+                    <li><strong>Lire la description</strong> : Comprendre le problème et la méthode proposée</li>
+                    <li><strong>Générer le dataset</strong> : Cliquer sur le bouton pour créer les échantillons</li>
+                    <li><strong>Visualiser le dataset</strong> : Vérifier la distribution des points</li>
+                    <li><strong>Entraîner le réseau</strong> : Configurer les paramètres et lancer l'entraînement</li>
+                    <li><strong>Analyser les résultats</strong> : Visualiser les prédictions et la matrice de confusion</li>
+                    <li><strong>Tester manuellement</strong> : Entrer des coordonnées pour vérifier le comportement</li>
+                </ol>
+                <p class="note">
+                    <strong>Note</strong> : L'entraînement s'exécute dans le navigateur et peut prendre 
+                    quelques minutes selon la configuration. Utilisez Chrome ou Firefox pour de meilleures performances.
+                </p>
+            </div>
+            
+            <hr/>
+            
+            <div class="section">
+                <h2>Fichiers du projet</h2>
+                <ul>
+                    <li><code>index.html</code> - Cette page</li>
+                    <li><code>description.html</code> - Description détaillée avec figures SVG</li>
+                    <li><code>entrainement.html</code> - Interface interactive d'entraînement</li>
+                    <li><code>network.js</code> - Implémentation du réseau de neurones</li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

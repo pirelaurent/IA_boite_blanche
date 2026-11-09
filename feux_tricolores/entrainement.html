@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            Feux tricolores - Entraînement du réseau de neurones
+        </title>
+        <style>
+            * { box-sizing: border-box; }
+            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+            .container { max-width: 1400px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            h1 { text-align: center; color: #333; margin-bottom: 30px; }
+            h2 { color: #444; margin: 30px 0 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+            h3 { color: #555; margin: 20px 0 10px; }
+            p { line-height: 1.7; color: #333; margin-bottom: 15px; }
+            .figure-container { text-align: center; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee; }
+            .figure-container canvas { max-width: 100%; height: auto; display: block; margin: 0 auto; border: 1px solid #ddd; border-radius: 5px; }
+            .figure-caption { font-style: italic; color: #666; margin-top: 15px; font-size: 0.95em; }
+            .code-block { background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #4CAF50; margin: 20px 0; font-family: 'Courier New', monospace; font-size: 0.9em; overflow-x: auto; white-space: pre-wrap; }
+            .controls { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #ddd; }
+            .control-group { margin-bottom: 15px; }
+            label { display: inline-block; width: 180px; font-weight: bold; margin-right: 10px; }
+            button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; margin-right: 10px; }
+            button:hover { background: #45a049; }
+            button:disabled { background: #cccccc; cursor: not-allowed; }
+            button.secondary { background: #2196F3; }
+            button.secondary:hover { background: #0b7dda; }
+            .status { margin-top: 20px; padding: 15px; border-radius: 5px; background: #fff3cd; border-left: 4px solid #ffc107; display: none; }
+            .status.success { background: #d4edda; border-left-color: #28a745; }
+            .status.error { background: #f8d7da; border-left-color: #dc3545; }
+            .progress-bar { width: 100%; height: 20px; background: #e9ecef; border-radius: 10px; margin: 10px 0; overflow: hidden; }
+            .progress-fill { height: 100%; background: #4CAF50; width: 0%; transition: width 0.1s; }
+            .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0; }
+            .metric-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-align: center; }
+            .metric-value { font-size: 22px; font-weight: bold; color: #4CAF50; margin: 10px 0; }
+            .metric-label { font-size: 11px; color: #666; }
+            .two-columns { display: flex; gap: 30px; margin: 20px 0; }
+            .column { flex: 1; }
+            .important-box { background: #e3f2fd; padding: 15px; border-left: 4px solid #2196f3; margin: 20px 0; border-radius: 4px; }
+            .note { font-style: italic; color: #666; font-size: 0.95em; margin: 15px 0; }
+            hr { margin: 40px 0; border: none; border-top: 1px solid #ddd; }
+            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            table th, table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+            table th { background: #f0f0f0; font-weight: bold; }
+            table tr:nth-child(even) { background: #f9f9f9; }
+            .chart-container { height: 300px; margin: 20px 0; }
+            .hidden { display: none; }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Feux tricolores - Entraînement du réseau de neurones</h1>
+
+            <div class="section">
+                <h2>1. Génération du dataset</h2>
+                <p>Génération de 1 800 échantillons (1 500 entraînement + 300 validation) avec 300 points par classe.</p>
+                <div class="controls">
+                    <button onclick="generateDataset()" id="generateBtn">Générer le dataset</button>
+                    <button onclick="showDatasetPreview()" id="previewBtn" disabled>Voir un extrait</button>
+                    <button onclick="visualizeDataset()" id="visualizeBtn" disabled>Visualiser</button>
+                    <div class="status" id="datasetStatus"></div>
+                </div>
+                <div id="datasetPreview" class="hidden">
+                    <h3>Extrait du dataset</h3>
+                    <div class="code-block" id="datasetPreviewContent"></div>
+                </div>
+                <div id="datasetVisualization" class="hidden">
+                    <h3>Visualisation du dataset</h3>
+                    <div class="figure-container">
+                        <canvas id="datasetCanvas" width="220" height="450"></canvas>
+                        <div class="figure-caption">Points du dataset par classe</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="section">
+                <h2>2. Architecture du réseau MLP 2-12-4</h2>
+                <p>2 entrées (x,y) → 12 neurones cachés (ReLU) → 4 neurones de sortie (Sigmoïde)</p>
+                <div class="code-block" id="networkCode">Réseau en cours d'implémentation...</div>
+                <button class="secondary" onclick="showFullNetworkCode()">Voir le code complet</button>
+                <div id="fullNetworkCode" class="hidden"></div>
+            </div>
+
+            <hr/>
+
+            <div class="section">
+                <h2>3. Entraînement du réseau</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="epochs">Épochs:</label>
+                        <input type="number" id="epochs" value="500" min="10" max="2000" step="10">
+                    </div>
+                    <div class="control-group">
+                        <label for="batchSize">Batch:</label>
+                        <input type="number" id="batchSize" value="32" min="8" max="100" step="8">
+                    </div>
+                    <div class="control-group">
+                        <label for="learningRate">Taux apprentissage:</label>
+                        <input type="number" id="learningRate" value="0.01" min="0.0001" max="0.1" step="0.001">
+                    </div>
+                    <div class="control-group">
+                        <label></label>
+                        <button onclick="trainNetwork()" id="trainBtn" disabled>Entraîner</button>
+                        <button onclick="stopTraining()" id="stopBtn" disabled>Arrêter</button>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="trainingProgress" style="width: 0%"></div></div>
+                    <div class="status" id="trainingStatus"></div>
+                </div>
+                <div class="metrics" id="metricsContainer" class="hidden">
+                    <div class="metric-card">
+                        <div class="metric-label">Accuracy (Train)</div>
+                        <div class="metric-value" id="trainAccuracy">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Accuracy (Val)</div>
+                        <div class="metric-value" id="valAccuracy">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Perte (Train)</div>
+                        <div class="metric-value" id="trainLoss">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Perte (Val)</div>
+                        <div class="metric-value" id="valLoss">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Épochs</div>
+                        <div class="metric-value" id="currentEpoch">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Temps</div>
+                        <div class="metric-value" id="elapsedTime">-</div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="trainingChart"></canvas></div>
+            </div>
+
+            <hr/>
+
+            <div class="section">
+                <h2>4. Visualisation des résultats</h2>
+                <div class="controls">
+                    <button onclick="visualizePredictions()" id="predictBtn" disabled>Visualiser prédictions</button>
+                    <button onclick="testSpecificPoint()" id="testBtn" disabled>Tester un point</button>
+                </div>
+                <div id="predictionsVisualization" class="hidden">
+                    <h3>Frontières de décision</h3>
+                    <div class="figure-container">
+                        <canvas id="predictionsCanvas" width="220" height="450"></canvas>
+                        <div class="figure-caption">Prédictions du réseau (cercles réels en pointillés)</div>
+                    </div>
+                </div>
+                <div id="specificPointTest" class="hidden">
+                    <h3>Test d'un point</h3>
+                    <div class="controls">
+                        <div class="control-group"><label for="testX">X:</label><input type="number" id="testX" value="100" min="0" max="199"></div>
+                        <div class="control-group"><label for="testY">Y:</label><input type="number" id="testY" value="50" min="0" max="399"></div>
+                        <button onclick="runSpecificPointTest()">Tester</button>
+                    </div>
+                    <div id="testResult" style="margin-top: 20px;"></div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="section">
+                <h2>5. Matrice de confusion</h2>
+                <div class="controls"><button onclick="computeConfusionMatrix()" id="confusionBtn" disabled>Calculer</button></div>
+                <div id="confusionMatrixContainer" class="hidden"></div>
+            </div>
+
+            <hr/>
+
+            <div class="section">
+                <h2>6. Export/Import</h2>
+                <div class="controls">
+                    <button onclick="exportModel()">Exporter</button>
+                    <button onclick="importModel()">Importer</button>
+                    <input type="file" id="modelFileInput" accept=".json" style="display: none;" onchange="loadModelFile(event)">
+                </div>
+                <div id="modelExport" class="hidden"><h3>Modèle (JSON)</h3><textarea id="modelJson" rows="10" style="width:100%;font-family:monospace;" readonly></textarea><br><button onclick="copyModelToClipboard()">Copier</button></div>
+            </div>
+
+            <hr/>
+
+            <div class="section">
+                <h2>Instructions</h2>
+                <ol>
+                    <li>Générer le dataset</li>
+                    <li>Vérifier la distribution</li>
+                    <li>Configurer et lancer l'entraînement</li>
+                    <li>Visualiser les prédictions et la matrice de confusion</li>
+                    <li>Tester des points spécifiques</li>
+                </ol>
+            </div>
+        </div>
+
+        <script src="network.js"></script>
+    </body>
+</html>

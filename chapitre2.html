@@ -3,9 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            Chapitre 2 — Le réseau : composer des transformations simples
-        </title>
+        <title>2 — Le réseau : composer des transformations simples</title>
         <style>
             * {
                 box-sizing: border-box;
@@ -22,6 +20,7 @@
                 font-family: Arial, sans-serif;
                 line-height: 1.3;
             }
+
             .container {
                 max-width: 1000px;
                 margin: 0 auto;
@@ -59,6 +58,13 @@
                 line-height: 1.6;
                 color: #333;
                 margin-bottom: 15px;
+            }
+
+            .note {
+                font-style: italic;
+                color: #666;
+                font-size: 0.8em;
+                margin: 15px 0;
             }
 
             .image-container {
@@ -134,10 +140,6 @@
                 font-family: "Courier New", monospace;
             }
 
-            .remark {
-                font-size: 12px;
-            }
-
             .keyword-definition {
                 margin: 8px 0;
                 padding-left: 15px;
@@ -183,148 +185,247 @@
                 border-top: 1px solid #ddd;
             }
 
-            .note {
-                font-style: italic;
-                color: #666;
-                font-size: 0.95em;
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+
+            table th,
+            table td {
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: center;
+            }
+
+            table th {
+                background: #f0f0f0;
+                font-weight: bold;
+            }
+
+            table tr:nth-child(even) {
+                background: #f9f9f9;
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>
-                Chapitre 2 — Le réseau : composer des transformations simples
-            </h1>
+            <h1>2 — Le réseau : composer des transformations simples</h1>
 
             <div class="section">
                 <h2>Combiner des neurones</h2>
 
                 <p>
-                    Un neurone coupe l'espace en deux parties. Chaque neurone
-                    définit une frontière linéaire qui sépare son espace
-                    d'activation de son espace d'inhibition.
+                    Tout neurone coupe l'espace en deux parties avec une
+                    frontière linéaire qui sépare sa zone d'activation de sa
+                    zone d'inhibition.
                 </p>
 
                 <p>
                     Supposons que le système veuille cibler une région
-                    circulaire avec des neurones. On peut approximer sa
-                    géométrie par une série de 12 droites, créées par 12
-                    neurones :
+                    circulaire qui identifie une catégorie donnée. On peut
+                    approximer sa géométrie par une série de 12 droites issues
+                    de 12 neurones.
                 </p>
 
                 <div class="image-container">
                     <img
-                        width="200"
+                        width="240"
                         src="img/cercleA12droites.png"
                         alt="Approximation d'un cercle par 12 droites (12 neurones)"
                     />
                 </div>
 
                 <p>
-                    Une couche cachée porte cette préparation : chacun de ses 12
-                    neurones définit une droite qui délimite une portion de
-                    l'espace. La couche de sortie effectue ensuite un ET logique
-                    de ces sorties : elle ne s'active que si tous les neurones
-                    de la couche cachée sont activés simultanément.
+                    Une <span class="keyword">couche cachée</span> porte cette
+                    préparation et la
+                    <span class="keyword">couche de sortie</span> effectue
+                    ensuite un ET logique de ces sorties.
                 </p>
 
                 <div class="image-container">
                     <img
-                        width="600"
+                        width="500"
                         src="img/réseauA12.png"
-                        alt="Réseau à 12 neurones dans la couche cachée pour approximer un cercle"
+                        alt="Approximation d'un cercle par un réseau de 12 neurones"
+                    />
+                    <p>
+                        <em
+                            >Si un point (x1,x2) satisfait à toutes les zones
+                            actives des 12 neurones, il tombe dans cette
+                            catégorie.</em
+                        >
+                    </p>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="section">
+                <h2>Expérimenter par un exemple</h2>
+
+                <h3>Pilotage des feux tricolores avec une tablette tactile</h3>
+
+                <p>
+                    Soit une tablette tactile de 200 x 400 pixels sur laquelle
+                    on présente des zones à cliquer pour allumer les feux.
+                </p>
+
+                <div style="display: flex; gap: 30px; align-items: flex-start; margin: 20px 0;">
+                    <div>
+                        <img
+                            width="120"
+                            src="img/tablette200x400.png"
+                            alt="Tablette tactile"
+                        />
+                    </div>
+                    <div style="flex: 1;">
+                        <h3>Comportement attendu</h3>
+                        <p>
+                            Un doigt sur la tablette va pointer une coordonnée (x,y) et de
+                            sa position dépendra une action.
+                        </p>
+                        <table style="width: 100%; max-width: 500px;">
+                            <tr>
+                                <th>Le clic (x,y) a lieu</th>
+                                <th>Action</th>
+                                <th>Sortie</th>
+                            </tr>
+                            <tr>
+                                <td>dans le cercle Rouge</td>
+                        <td>
+                            <img
+                                src="img/001.png"
+                                alt="Feu rouge allumé"
+                                width="70"
+                                style="
+                                    transform-origin: center;
+                                    display: inline-block;
+                                "
+                            />
+                        </td>
+                        <td>[0,0,1]</td>
+                    </tr>
+
+                    <tr>
+                        <td>dans le cercle Orange</td>
+                        <td>
+                            <img
+                                src="img/010.png"
+                                alt="Feu orange allumé"
+                                width="70"
+                                style="
+                                    transform-origin: center;
+                                    display: inline-block;
+                                "
+                            />
+                        </td>
+                        <td>[0,1,0]</td>
+                    </tr>
+                    <tr>
+                        <td>dans le cercle Vert</td>
+                        <td>
+                            <img
+                                src="img/100.png"
+                                alt="Feu vert allumé"
+                                width="70"
+                                style="
+                                    transform-origin: center;
+                                    display: inline-block;
+                                "
+                            />
+                        </td>
+                        <td>[1,0,0]</td>
+                    </tr>
+                    <tr>
+                        <td>Ailleurs</td>
+                        <td>
+                            <strong>
+                                <img
+                                    src="img/000.png"
+                                    alt="Feu éteint"
+                                    width="70"
+                                    style="
+                                        transform-origin: center;
+                                        display: inline-block;
+                                    "
+                                />
+                            </strong>
+                        </td>
+                        <td>[0,0,0]</td>
+                    </tr>
+                </table>
+
+                <h3>La nouvelle problématique</h3>
+                <p>
+                    Au lieu des 4 cas x1,x2 du chapitre 1 avec deux
+                    interrupteurs, on a ici 200x400 = <b>80 000 cas possibles</b>.
+                    <br>Il
+                    n'est plus possible de traiter tous les cas: Il faut que le réseau apprenne seul
+                    sur des échantillons suffisants.
+                </p>
+
+                <h4>
+                    Un apprentissage en volume impossible avec le perceptron H
+                </h4>
+                <p>
+                    Pour apprendre, un algorithme cherche à réduire l'erreur,
+                    c'est-à-dire la distance entre la prédiction (le score de
+                    sortie) et la valeur attendue, pour chacun des points des
+                    données d'entraînement. <br>Avec le perceptron, entre la zone «
+                    oui » et la zone « non », il y a un front vertical.
+                </p>
+
+                <div class="center">
+                    <img
+                        src="./img/relief01.png"
+                        width="200px"
+                        alt="Front vertical du perceptron"
                     />
                 </div>
 
                 <p>
-                    Quand une entrée (x₁, x₂) tombe dans le cercle, toutes les
-                    conditions sont satisfaites et la catégorie de sortie S est
-                    « allumée ». Un tel réseau de neurones peut être construit
-                    avec des perceptrons limités à des entrées binaires (0-1).
+                    En termes mathématiques, la fonction est
+                    <i>non dérivable</i> : sa pente est nulle partout et
+                    indéfinie au point de bascule. Le gradient (c'est-à-dire la
+                    valeur de la pente), ne donne aucune indication sur la
+                    distance et la direction à suivre pour réduire l'erreur.
                 </p>
-            </div>
-
-            <div class="section">
-                <h2>Les limites du perceptron H et <i>l'hiver de l'IA</i></h2>
 
                 <p>
-                    Même avec un nombre quelconque de couches cachées, les
-                    limites du perceptron à seuil (H) sont fondamentales :
-                    toutes les zones reste<strong>ront des polygones</strong>.
-                    On ne pourra jamais délimiter des zones
-                    <strong>courbes ou non convexes</strong> avec cette fonction
-                    d'activation binaire.
+                    Cette incapacité à apprendre sur de grands volumes  a bloqué les développements et provoqué
+                    <b><i>l'hiver de l'IA</i></b
+                    >.
                 </p>
 
-                <div class="important-box">
-                    <p>
-                        La fonction d'activation à seuil
-                        <span class="keyword">H</span> ne dit pas
-                        <em
-                            >si un point est proche ou loin de la frontière de
-                            décision</em
-                        >
-                        : elle se contente de dire « oui » ou « non ».
-                    </p>
-
-                    <p>
-                        Faute de <strong>distance mesurable</strong>, on ne sait
-                        pas <em>de combien</em> ajuster les poids, ce qui limite
-                        fortement les capacités d'apprentissage.
-                    </p>
-
-                    <p>
-                        Le perceptron (1957) ne sait résoudre que des
-                        <strong>problèmes linéairement séparables</strong> :
-                        toute frontière non droite lui échappe. Toute tentative
-                        de modéliser une courbe ou une spirale avec des
-                        perceptrons à seuil est vouée à l'échec.
-                    </p>
+                <div class="note">
+                    Le premier hiver de l'IA commence à la fin des années 1960,
+                    quand on démontre mathématiquement les limites du perceptron
+                    (1969). Le doute s'aggrave avec un rapport très critique de
+                    1973 (Lighthill) qui entraîne l'arrêt des financements
+                    publics. Il ne prendra fin qu'au début des années 1980, avec
+                    l'essor des systèmes experts puis le renouveau des réseaux
+                    de neurones à rétropropagation (1986).
+                    <br>Du perceptron d'origine, seul le nom a survécu : on parle de
+                    <b>MLP, Multi Layer Perceptron</b>
+                    alors que la fonction d'activation a évolué.
                 </div>
 
-                <p>
-                    Le constat de ces limites a asséché les financements : c'est
-                    le début du premier
-                    <i><strong>hiver de l'IA</strong></i
-                    >. Durant cette période, l'intérêt et les investissements
-                    dans l'intelligence artificielle se sont fortement réduits.
-                </p>
+     
+          <h2> Passage à la non linéarité </h2>
+          <h3> La fonction d'activation Sigmoïde </h3>
+          
+            <div class="center">
+                    <img
+                        src="./img/sigmoide.png"
+                        width="200px"
+                        alt="Front lissé de la sigmoide"
+                    />
+                </div>
 
-                <p>
-                    Du perceptron d'origine,
-                    <strong>seul le nom a survécu</strong> : il désigne
-                    aujourd'hui le <strong>réseau multicouche</strong>, et non
-                    plus le neurone d'origine à activation binaire.
-                </p>
-            </div>
 
-            <div class="section">
-                <h2>MLP — Multi Layer Perceptron</h2>
 
-                <p>
-                    Le neurone de base, lui, a radicalement changé : les
-                    fonctions d'activation
-                    <strong>continues</strong> (sigmoïde, ReLU, et autres)
-                    indiquent <em>à quel point</em> le point est proche ou loin
-                    de la frontière.
-                </p>
 
-                <p>
-                    Grâce à cette continuité, l'erreur devient
-                    <strong>différentiable</strong>. L'algorithme de
-                    <strong>rétropropagation</strong> (popularisé en 1986 par
-                    Rumelhart, Hinton et Williams) sait enfin entraîner les
-                    couches cachées en propageant le gradient de l'erreur à
-                    travers le réseau.
-                </p>
-
-                <p>
-                    Résultat : le réseau peut découper l'espace avec des
-                    <strong>frontières quelconques</strong>, et non plus un
-                    simple hyperplan. Les limites du perceptron original sont
-                    levées, et l'apprentissage profond moderne devient possible.
-                </p>
-            </div>
         </div>
     </body>
 </html>

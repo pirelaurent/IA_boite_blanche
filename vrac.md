@@ -376,9 +376,10 @@ Le gradient traverse les couches actives **sans être multiplié par un facteur 
             Chaque <strong>neurone</strong> (correspondant à un feu : vert, orange, rouge) doit apprendre à 
             <strong>s'allumer uniquement pour son cas spécifique</strong> et rester éteint pour les autres.
             C'est un <strong>problème de classification</strong> : le réseau doit discriminer les 4 configurations d'entrée.
-        </p>
-        <p> Le réseau du feu tricolore est un exemple simple de réseau de neurones à une seule couche (perceptron multi-sorties). 
-         il teste 2 entrées soit  4 cas fois 3 neurones, soit 12 calculs par itération. </p>
+       
+       Le réseau du feu tricolore est un exemple simple de réseau de neurones à une seule couche (perceptron multi-sorties). 
+         il teste 2 entrées soit  4 cas fois 3 neurones, soit 12 calculs par itération.
+     </p>
 <h3>Réseau de neurones classifieur d'images</h3>
         <p>
             Un réseaux de neurones classifieur d'images prend en entrée une image sous forme de tableau de pixels et doit déterminer à quelle catégorie elle appartient (chien, chat, voiture, etc.).
@@ -429,3 +430,31 @@ Note: L'activation <b>H</b> d'un Perceptron est:
             D'où
             <b><i>biais = -seuil</i></b> dans l'interface pour revenir à la
             forme standard.
+
+            <div class="section">
+                <h2>MLP — Multi Layer Perceptron</h2>
+
+                <p>
+                    Le neurone de base, lui, a radicalement changé : les
+                    fonctions d'activation
+                    <strong>continues</strong> (sigmoïde, ReLU, et autres)
+                    indiquent <em>à quel point</em> le point est proche ou loin
+                    de la frontière.
+                </p>
+
+                <p>
+                    Grâce à cette continuité, l'erreur devient
+                    <strong>différentiable</strong>. L'algorithme de
+                    <strong>rétropropagation</strong> (popularisé en 1986 par
+                    Rumelhart, Hinton et Williams) sait enfin entraîner les
+                    couches cachées en propageant le gradient de l'erreur à
+                    travers le réseau.
+                </p>
+
+                <p>
+                    Résultat : le réseau peut découper l'espace avec des
+                    <strong>frontières quelconques</strong>, et non plus un
+                    simple hyperplan. Les limites du perceptron original sont
+                    levées, et l'apprentissage profond moderne devient possible.
+                </p>
+            </div>

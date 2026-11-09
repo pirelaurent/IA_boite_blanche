@@ -184,8 +184,8 @@
                 <p><em>Schéma d'un neurone à deux entrées</em></p>
             </div>
             <p>
-                La formule de calcul d'un neurone artificiel à 2 entrées x1, x2
-                est : <b>f(w1·x1 + w2·x2 + b)</b> <br />
+                La formule de calcul du score brut d'un neurone artificiel à 2
+                entrées x1, x2 est simplement : <b> w1·x1 + w2·x2 + b</b> <br />
 
                 Les <span class="keyword">poids w1 w2</span>
                 codent l'importance de chaque entrée dans la décision commune.
@@ -194,11 +194,6 @@
                 -w1/w2) qui sépare les résultats positifs des négatifs <br />Le
                 <span class="keyword">biais b</span> décale la droite de
                 l'origine (0,0) (de -w2/b) <br />
-                La
-                <span class="keyword">fonction d'activation <b>f</b> </span
-                >transforme le <span class="keyword">score brut</span> (le cumul
-                w1·x1 + w2·x2 + b) en un
-                <span class="keyword">score de sortie</span>. <br />
             </p>
 
             <h3>
@@ -227,10 +222,11 @@
                 Le plan est découpé en deux parties: une où les scores bruts
                 sont positifs et l'autre où les scores bruts sont négatifs.
                 <br />
-                La valeur du score brut montre la distance, positive ou négative, 
-                du point à la frontière de décision . <br />
-                Une légère variation des poids modifiera la droite et un point
-                proche pourra plus facilement basculer qu'un point éloigné.
+                La valeur du score brut montre la distance, positive ou
+                négative, du point à la frontière de décision . <br />
+                Une légère variation des poids modifiera la droite: un point
+                proche pourra plus facilement changer de côté qu'un point
+                éloigné.
             </p>
 
             <h4>
@@ -254,10 +250,18 @@
                     </li>
                 </ul></em
             >
-
-            <h2>
-                Le neurone ancêtre, le perceptron, est un classifieur binaire
-            </h2>
+            <h3>La fonction d'activation : du score brut au score de sortie</h3>
+            <p>
+                La
+                <span class="keyword">fonction d'activation <b>f</b> </span
+                >transforme le <span class="keyword">score brut</span>
+                en un
+                <span class="keyword">score de sortie</span> : résultat final =
+                <b>f</b> (score brut) <br />
+                C'est par le changement de fonction d'activation que l'IA a pu
+                décoller du perceptron initial.
+            </p>
+            <h3>Le neurone ancêtre perceptron est un classifieur binaire</h3>
             <p>
                 Le <b>perceptron</b> est le premier et le plus simple des
                 neurones artificiels, mais il est suffisant pour en illustrer le
@@ -280,46 +284,51 @@
                     width="400"
                 />
                 <br />
-                <em>
-                    Le perceptron est un classifieur binaire.
-                
-                </em>
+                <em> Le perceptron est un classifieur binaire. </em>
             </div>
 
-Quelques exemples de classification binaire : 
+            Quelques exemples de classification binaire :
 
+            <ul>
+                <li><b>Filtrage de spam</b> (un message est-il spam ou non)</li>
+                <li>
+                    <b>Détection de fraude</b> bancaire (transaction frauduleuse
+                    ou légitime)
+                </li>
+                <li>
+                    <b>Diagnostic médical</b> (présence ou absence d'un marqueur
+                    de maladie)
+                </li>
+                <li><b>Analyse de sentiment</b> (avis positif ou négatif)</li>
+                <li>etc.</li>
+            </ul>
 
-<ul>
-<li><b>Filtrage de spam</b> (un message est-il spam ou non)</li>
-<li><b>Détection de fraude</b> bancaire (transaction frauduleuse ou légitime)</li>
-<li><b>Diagnostic médical</b> (présence ou absence d'un marqueur de maladie)</li>
-<li><b>Analyse de sentiment</b> (avis positif ou négatif)</li>
-<li>etc.</li>
-</ul>
-
-
-
-<p> Si on a plusieurs catégories on entraîne N classifieurs, un par classe. 
-<br> Si les catégories sont exclusives <i>One-vs-all (OvA)</i>  il faut que une seule
-sortie soit positive.
-
-</p>
-
+            <p>
+                Si on a plusieurs catégories on entraîne N classifieurs, un par
+                classe. <br />
+                Si les catégories sont exclusives <i>One-vs-all (OvA)</i> il
+                faut veiller à ce qu' une seule sortie soit positive.
+            </p>
 
             <hr />
 
-            <h2>🟡 Pour expérimenter: piloter un feu tricolore avec deux interrupteurs</h2>
+            <h2>
+                🟡 Expérimenter: piloter un feu tricolore avec deux
+                interrupteurs
+            </h2>
             <p>
+                On veut que selon la position des interrupteurs un seul feu
+                s'allume.
+                <br />
+                Du code simplissime pourrait le faire, mais l'ambition ici est
+                d'utiliser des perceptrons pour s'en sortir.<br /><br />
 
-  On veut que selon la position des interrupteurs un seul feu s'allume. 
-                L'ambition est d'utiliser des perceptrons pour s'en
-                sortir.<br /><br />
-
-                Un neurone fait des calculs : il faut
-                transformer notre problème  en nombres.
+                Un neurone ne sait faire que des calculs : il faut transformer
+                notre problème en nombres.
                 <br />
                 On prend arbitrairement comme convention qu'un interrupteur
-                fermé a la valeur 1.00 et ouvert la valeur 0.00 <br />
+                fermé a la valeur 1.0 et un interrupteur ouvert la valeur 0.0
+                <br />
                 De même on considère qu'une prise est alimentée si sa valeur est
                 1 et hors tension si elle vaut 0 .
             </p>
@@ -332,7 +341,7 @@ sortie soit positive.
                         <tr>
                             <th>Interrupteurs x1 x2</th>
                             <th>sortie attendue</th>
-                            <th>prise à activer</th>
+                            <th>prises actives</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -405,10 +414,11 @@ sortie soit positive.
                     </tbody>
                 </table>
             </div>
-
+            On a un système déterministe très simplifié en ne s'autorisant que 4
+            cas. On peut l'entrainer à la main.
             <h2>Un neurone pour chaque feu</h2>
             <p>
-                Un neurone n'a qu'une sortie. Il faut donc un
+                Un neurone n'ayant qu'une sortie. Il faut un
                 <span class="keyword">réseau</span> de 3 neurones distincts, un
                 pour chaque prise.
             </p>
@@ -422,16 +432,15 @@ sortie soit positive.
                     <em
                         >Réseau des 3 neurones perceptrons avec leurs paramètres
                         individuels. <br />
-                        Chacun multiplie x1 et x2 par ses propres poids.<br>
-                        La couche de sortie doit allumer un seul feu à la fois
-                        selon l'état des interrupteurs. 
+                        Chacun multiplie x1 et x2 par ses propres poids.<br />
+                        La couche de sortie doit allumer un seul feu à la fois.
                     </em>
                 </p>
             </div>
             <hr />
-            <h4>La taille d'un modèle IA</h4>
+            <h4>A propos de la taille des modèles IA</h4>
             <p>
-                Un <span class="keyword">modèle</span> est le tableau numérique
+                Le <span class="keyword">modèle</span> est le tableau numérique
                 des paramètres une fois le réseau entrainé. Sa taille est son
                 nombre de paramètres.
 
@@ -440,12 +449,9 @@ sortie soit positive.
 
             <ul>
                 <li>
-                    Notre réseau a une
-                    <span class="keyword">matrice</span> faite de <b>6</b> poids
-                    et <b>3</b> biais , ce 
-                    <span class="keyword">modèle a <b>9</b>
-                   paramètres</span>et une seule 
-                    couche, sa sortie.
+                    Notre réseau a <span class="keyword">1 couche</span> (de
+                    sortie) et 3 neurones avec 3 paramètres chacun. C'est un
+                    <span class="keyword">modèle a <b>9</b> paramètres</span>
                 </li>
                 <li>
                     Les réseaux de neurones pour la reconnaissance d'images ont
@@ -459,10 +465,11 @@ sortie soit positive.
                     des centaines de couches.
                 </li>
             </ul>
-
-            <b>Le fonctionnement de base reste le même </b>que ce soit pour 10 ,
-            10<sup>6</sup> ou 10<sup>12 </sup>paramètres, mais la puissance de calcul à mobiliser est exponentielle.
-
+            <p>
+                <b>Le fonctionnement de base reste toujours le même </b>que ce
+                soit pour 10 , 10<sup>6</sup> ou 10<sup>12 </sup>paramètres,
+                mais la puissance de calcul à mobiliser est exponentielle.
+            </p>
             <hr />
 
             <h2>
