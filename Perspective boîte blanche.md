@@ -19,7 +19,7 @@ L'IA  se compose de **plans superposés** avec des  **changements de  nature** d
 Le parcours _boîte blanche_ avance par **changements de question** et, avec chaque question, l'objet à décrire. 
 
 - **Que fait un réseau ?** (Chapitres 1–2) : il compose des transformations simples, de nombres en nombres.
-- **Comment s'est-il formé ?** (Chapitre 3) : non par des règles programmées, mais par réduction d'erreur.
+- **Comment s'est-il formé ?** (Chapitre 3) : non par des règles programmées, mais par apprentissage.
 - **Pour quoi est-il fait ?** (Chapitre 4) : une même mécanique, mise au service d'objectifs et de formats de sortie différents.
 - **Comment saisit-il le langage ?** (Chapitre 5) : par une architecture qui pondère ce qui précède pour prédire ce qui suit.
 - **Que produit-il exactement ?** (Chapitre 6) : une distribution de candidats conditionnée par un corpus.

@@ -4,146 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Boîte Blanche - Découverte de l'IA</title>
-        <style>
-            * {
-                box-sizing: border-box;
-            }
-
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background: #f8f9fa;
-                color: #333;
-                line-height: 1.6;
-            }
-
-            .container {
-                max-width: 900px;
-                margin: 0 auto;
-                padding: 40px 20px;
-            }
-
-            header {
-                text-align: center;
-                margin-bottom: 50px;
-                padding-bottom: 30px;
-                border-bottom: 2px solid #e0e0e0;
-            }
-
-            header h1 {
-                color: #2c3e50;
-                font-size: 2.5em;
-                margin: 0 0 15px 0;
-            }
-
-            header .subtitle {
-                color: #666;
-                font-size: 1.2em;
-                font-weight: normal;
-            }
-
-            .intro {
-                background: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-                margin-bottom: 40px;
-            }
-
-            .intro h2 {
-                color: #2c3e50;
-                margin-top: 0;
-            }
-
-            .chapters {
-                display: grid;
-                gap: 20px;
-            }
-
-            .chapter-card {
-                background: white;
-                padding: 25px;
-                border-radius: 10px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-                text-decoration: none;
-                color: inherit;
-                display: block;
-            }
-
-            .chapter-card:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-            }
-
-            .chapter-number {
-                display: inline-block;
-                background: #3498db;
-                color: white;
-                width: 40px;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                border-radius: 50%;
-                font-weight: bold;
-                font-size: 1.2em;
-                margin-right: 15px;
-            }
-
-            .chapter-card h3 {
-                margin: 0 0 10px 0;
-                color: #2c3e50;
-                font-size: 1.3em;
-            }
-
-            .chapter-card p {
-                margin: 0;
-                color: #666;
-                font-size: 0.95em;
-            }
-
-            .chapter-card .title {
-                color: #2c3e50;
-                font-weight: bold;
-            }
-
-            .demarche {
-                background: #fff8e1;
-                padding: 20px;
-                border-radius: 8px;
-                margin-bottom: 40px;
-                border-left: 4px solid #ffc107;
-            }
-
-            .demarche h2 {
-                color: #ff9800;
-                margin-top: 0;
-            }
-
-            footer {
-                text-align: center;
-                margin-top: 60px;
-                padding-top: 20px;
-                border-top: 1px solid #e0e0e0;
-                color: #888;
-                font-size: 0.9em;
-            }
-
-            @media (max-width: 600px) {
-                .container {
-                    padding: 20px 15px;
-                }
-                
-                header h1 {
-                    font-size: 1.8em;
-                }
-                
-                .chapter-card {
-                    padding: 20px;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <div class="container">
@@ -158,24 +19,15 @@
                     Quand on regarde une IA de l'extérieur comme une <em>boîte noire</em>, on utilise des termes 
                     empruntés au lexique de la biologie et de l'esprit qui masquent les mécanismes intérieurs.
                 </p>
-                <p>
                     <strong>Nommer le mécanisme sous le mot</strong>, c'est la démarche <em>boîte blanche</em>.
-                </p>
-                <p>
                     L'IA se compose de <strong>plans superposés</strong> avec des <strong>changements de nature</strong> 
                     de son objet. Le parcours avance par <strong>changements de question</strong>, et avec chaque 
                     question, l'objet à décrire.
-                </p>
             </section>
-
             <section class="demarche">
                 <h2>Parcours pédagogique</h2>
-                <p>
                     <strong>Objectif</strong> : Il ne s'agit pas d'utiliser ni de juger l'IA, mais d'<em>armer l'esprit critique</em> 
                     par une compréhension de ses mécanismes.
-                </p>
-            </section>
-
             <section class="chapters">
                 <a href="chapitre1.html" class="chapter-card">
                     <span class="chapter-number">1</span>
@@ -183,64 +35,40 @@
                     <p><span class="title">Changement de question</span> : on abandonne « est-il intelligent ? » pour « que calcule-t-il ? »</p>
                     <p>Ramenons le « neurone » à ce qu'il est réellement : une somme pondérée suivie d'une fonction d'activation.</p>
                 </a>
-
                 <a href="chapitre2.html" class="chapter-card">
                     <span class="chapter-number">2</span>
                     <h3>Le réseau : composer des transformations simples</h3>
                     <p><span class="title">Changement de question</span> : « que fait un neurone ? » cède la place à « que fait un réseau de neurones ? »</p>
                     <p>Montrer que le réseau ne « contient » rien d'autre qu'une chaîne de multiplications matricielles et de non-linéarités.</p>
-                </a>
-
                 <a href="#" class="chapter-card">
                     <span class="chapter-number">3</span>
                     <h3>L'apprentissage : comment les poids se fixent</h3>
                     <p><span class="title">Changement de question</span> : on ne demande plus ce que fait le réseau, mais comment il s'est formé.</p>
                     <p>Aucune règle n'est programmée : les poids résultent d'une minimisation d'erreur (descente de gradient, rétropropagation).</p>
-                </a>
-
-                <a href="#" class="chapter-card">
                     <span class="chapter-number">4</span>
                     <h3>Une même mécanique, des objectifs différents</h3>
                     <p><span class="title">Changement de question</span> : on ne demande plus comment il s'est formé, mais pour quoi il est fait.</p>
                     <p>La taxonomie des IA est une taxonomie d'objectifs et de formats de sortie, pas de mécanismes.</p>
-                </a>
-
-                <a href="#" class="chapter-card">
                     <span class="chapter-number">5</span>
                     <h3>La mécanique propre au langage</h3>
                     <p><span class="title">Changement de question</span> : on ne demande plus pour quoi il est fait, mais comment il saisit le langage.</p>
                     <p>Tokenisation → représentations vectorielles → attention → prédiction du token suivant.</p>
-                </a>
-
-                <a href="#" class="chapter-card">
                     <span class="chapter-number">6</span>
                     <h3>Données et probabilités : ce que le modèle « sait » vraiment</h3>
                     <p><span class="title">Changement de question</span> : on ne demande plus comment il saisit le langage, mais ce qu'il produit exactement.</p>
                     <p>La sortie est une distribution de probabilités conditionnée par le corpus.</p>
-                </a>
-
-                <a href="#" class="chapter-card">
                     <span class="chapter-number">7</span>
                     <h3>« Comprendre » la question et planifier la réponse</h3>
                     <p><span class="title">Changement de question</span> : on ne demande plus ce qu'il produit, mais ce qu'il fait paraître.</p>
                     <p>Dissocier l'effet de compréhension du mécanisme : le « plan de réponse » émerge d'un conditionnement.</p>
-                </a>
-
-                <a href="#" class="chapter-card">
                     <span class="chapter-number">8</span>
                     <h3>Chain of thought : le raisonnement comme comportement émergent</h3>
                     <p><span class="title">Changement de question</span> : on ne demande plus seulement ce qu'il dit, mais ce qu'il fait.</p>
                     <p>Expliquer pourquoi dérouler des étapes intermédiaires améliore les résultats.</p>
-                </a>
-
-                <a href="#" class="chapter-card">
                     <span class="chapter-number">9</span>
                     <h3>Ce que la boîte blanche révèle des limites</h3>
                     <p><span class="title">Changement de question</span> : on retourne la question sur elle-même — que révèle cette mécanique de ses limites ?</p>
                     <p>Armer l'esprit critique : absence de modèle du monde, dépendance aux données, évaluation, coûts.</p>
-                </a>
-            </section>
-
             <footer>
                 <p>Parcours pédagogique Boîte Blanche — Comprendre les mécanismes de l'IA</p>
             </footer>
