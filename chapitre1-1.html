@@ -12,20 +12,15 @@
 
       <div class="info">
         <h4>
-         <p>
-<b>Objectif :</b> chaque feu possède un neurone dont les paramètres définissent
-une droite de séparation (position et pente). 
-<br>Ajustez avec +/- ces paramètres pour
-placer chaque feu dans la partie positive de sa droite. (la droite apparait dans la fenêtre de visualisation).
-<br>
+   
+<b>Objectif :</b> Ajustez (+/-) les poids ou les biais 
+pour orienter la frontière de chaque neurone vers son objectif unique. <br>
+
 <b>Vérifications :</b> appuyez sur le bouton d'un feu : il doit s'allumer seul.
 Si plusieurs feux s'allument, ou aucun, continuez à ajuster les droites.
 <br><b>Bloqué ?</b> Cliquez sur « Solution aléatoire » pour voir des paramètrages qui satisfont la demande.
-</p>
-<p>
-L'apprentissage automatique est ralenti pour rendre les approches itératives
-observables : modifiez les seuils (bj) et observer différents cas d'apprentissage.
-</p>    </div>
+<br><b>Laisser faire ?</b> Lancez un apprentissage automatique et observez. (De rares cas peuvent nécessiter des centaines d'itérations. Patientez)
+  </h4><code> rafraîchir la page pour un nouveau cas initial </code> </div>
 
 
     <br>
@@ -84,7 +79,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
         <!-- Matrice et sorties -->
         <div class="matrix-output-section">
           <div class="model-header">
-            <div class="section-label">Ajuster les paramètres de chaque neurone pour isoler les feux et passer les quatres cas de test </div>
+            <div class="section-label">Ajuster les paramètres de chaque neurone pour isoler les feux dans une seule catégorie </div>
           </div>
           <div class="matrix-and-learning-row">
             <div class="matrix-section">
@@ -116,7 +111,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                   <div class="neuron-params">
                     <div class="param-cell">
                       <div class="cell" id="cell-0-2">
-                        <div class="cell-value" id="cell-value-0-2">0.0</div>
+                        <div class="cell-value" id="cell-value-0-2">0.3</div>
                         <button class="cell-btn up" onclick="adjustCell(0, 2, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustCell(0, 2, -0.1)">-</button>
                       </div>
@@ -125,7 +120,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                     <div class="plus-symbol">+</div>
                     <div class="param-cell">
                       <div class="cell" id="cell-1-2">
-                        <div class="cell-value" id="cell-value-1-2">0.0</div>
+                        <div class="cell-value" id="cell-value-1-2">0.1</div>
                         <button class="cell-btn up" onclick="adjustCell(1, 2, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustCell(1, 2, -0.1)">-</button>
                       </div>
@@ -134,7 +129,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                     <div class="plus-symbol">-</div>
                     <div class="param-cell">
                       <div class="cell" id="seuil-cell-2">
-                        <div class="cell-value" id="seuil-value-2">0.8</div>
+                        <div class="cell-value" id="seuil-value-2">0.5</div>
                         <button class="cell-btn up" onclick="adjustSeuil(2, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustSeuil(2, -0.1)">-</button>
                       </div>
@@ -155,7 +150,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                   <div class="neuron-params">
                     <div class="param-cell">
                       <div class="cell" id="cell-0-1">
-                        <div class="cell-value" id="cell-value-0-1">0.0</div>
+                        <div class="cell-value" id="cell-value-0-1">0.1</div>
                         <button class="cell-btn up" onclick="adjustCell(0, 1, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustCell(0, 1, -0.1)">-</button>
                       </div>
@@ -164,7 +159,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                     <div class="plus-symbol">+</div>
                     <div class="param-cell">
                       <div class="cell" id="cell-1-1">
-                        <div class="cell-value" id="cell-value-1-1">0.0</div>
+                        <div class="cell-value" id="cell-value-1-1">-0.3</div>
                         <button class="cell-btn up" onclick="adjustCell(1, 1, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustCell(1, 1, -0.1)">-</button>
                       </div>
@@ -173,7 +168,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                     <div class="plus-symbol">-</div>
                     <div class="param-cell">
                       <div class="cell" id="seuil-cell-1">
-                        <div class="cell-value" id="seuil-value-1">0.8</div>
+                        <div class="cell-value" id="seuil-value-1">0.1</div>
                         <button class="cell-btn up" onclick="adjustSeuil(1, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustSeuil(1, -0.1)">-</button>
                       </div>
@@ -194,7 +189,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                   <div class="neuron-params">
                     <div class="param-cell">
                       <div class="cell" id="cell-0-0">
-                        <div class="cell-value" id="cell-value-0-0">0</div>
+                        <div class="cell-value" id="cell-value-0-0">0.4</div>
                         <button class="cell-btn up" onclick="adjustCell(0, 0, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustCell(0, 0, -0.1)">-</button>
                       </div>
@@ -203,7 +198,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
                     <div class="plus-symbol">+</div>
                     <div class="param-cell">
                       <div class="cell" id="cell-1-0">
-                        <div class="cell-value" id="cell-value-1-0">0.0</div>
+                        <div class="cell-value" id="cell-value-1-0">0.3</div>
                         <button class="cell-btn up" onclick="adjustCell(1, 0, 0.1)">+</button>
                         <button class="cell-btn down" onclick="adjustCell(1, 0, -0.1)">-</button>
                       </div>
@@ -231,9 +226,9 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
               
             <!-- Info sur le fonctionnement -->
             <div class="seuil-control">
-              <div class="formula">
+
                feu allumé si w₁ⱼ×x₁ + w₂ⱼ×x₂ - bⱼ &gt;= 0
-              </div>
+
             </div>
           </div>
           
@@ -262,17 +257,44 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
           </div>
 
         </div>
-        
+
       </div>
+<h4>Algorithme d'apprentissage de Rosenblatt </h4>
+<p>
+ Il n'y a que 4 cas possibles d'erreur ( objectif - prédiction ) avec un perceptron classifieur : 
+
+<table class="perceptron">
+    <thead>
+        <tr>
+            <th>objectif</th><th>prédiction</th><th>erreur e</th><th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>0</td><td>0</td><td>0</td><td>rien</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td>rien</td></tr>
+        <tr><td>0</td><td>1</td><td>−1</td><td><code>w ← w − η·x</code>, <code>b ← b − η</code> <br>(baisser le score brut)</td></tr>
+        <tr><td>1</td><td>0</td><td>+1</td><td><code>w ← w + η·x</code>, <code>b ← b + η</code> <<br>(monter le score brut )</td></tr>
+    </tbody>
+</table>
+Le <span class = "keyword"> taux d'apprentissage η  
+(êta) </span> est petit nombre positif qui contrôle l'amplitude de la correction à chaque erreur.
+
+<br>Les poids convergent ainsi progressivement vers une séparation correcte.
+<br> Pour accélérer l'apprentissage, les corrections commencent par de grands pas puis, au fur et à mesure des itérations, le pas est réduit. 
+
+</p>
+
+
+
 
     <script>
       let matrix = [
-        [0.0, 0.0, 0.0],
-        [0.0, 0.0, 0.0],
+        [0.4, 0.1, 0.3],
+        [0.3, -0.3, 0.1],
       ];
       let x1 = 0;
       let x2 = 0;
-      let seuils = [0.8, 0.8, 0.8]; // Un biais par neurone (index 0=vert/s1, 1=orange/s2, 2=rouge/s3)
+      let seuils = [0.8, 0.1, 0.5]; // Un biais par neurone (index 0=vert/s1, 1=orange/s2, 2=rouge/s3)
       let activeButton = null;
       let learningInterval = null;
       let learningStepCount = 0;
@@ -614,20 +636,7 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
       function startAutoLearning() {
         if (learningInterval) return;
         
-        // Réinitialiser la matrice mais GARDER les seuils actuels
-        matrix = [
-          [0.0, 0.0, 0.0],
-          [0.0, 0.0, 0.0],
-        ];
-        
-        // Mettre à jour l'affichage
-        for (let row = 0; row < 2; row++) {
-          for (let col = 0; col < 3; col++) {
-            document.getElementById(`cell-value-${row}-${col}`).textContent = "0.0";
-            document.getElementById(`cell-${row}-${col}`).classList.remove("filled");
-          }
-        }
-        
+        // Conserver les poids et biais actuels, réinitialiser seulement le statut
         learningStepCount = 0;
         currentTestCase = 0;
         learningStatus.textContent = "Apprentissage en cours... (0)";
@@ -1083,12 +1092,72 @@ observables : modifiez les seuils (bj) et observer différents cas d'apprentissa
         ctx.fillText("Les zones colorées montrent quel feu s'allume. Les droites sont les limites de décision.", width / 2, margin - 10);
       }
 
-      window.addEventListener("load", function() {
-        vizSection = document.getElementById("visualization-section");
+      function initializeRandomMatrix() {
+        // Fonction pour générer une droite qui traverse le carré [0,1]x[0,1]
+        function generateValidLine() {
+          // Générer des poids aléatoires
+          const w1 = (Math.random() * 4 - 2).toFixed(1); // entre -2 et 2
+          const w2 = (Math.random() * 4 - 2).toFixed(1); // entre -2 et 2
+
+          // Calculer les valeurs aux coins du carré
+          const cornerValues = [
+            0,                     // (0,0)
+            parseFloat(w2),        // (0,1)
+            parseFloat(w1),        // (1,0)
+            parseFloat(w1) + parseFloat(w2)  // (1,1)
+          ];
+
+          const minVal = Math.min(...cornerValues);
+          const maxVal = Math.max(...cornerValues);
+
+          // Choisir un biais entre min et max pour garantir que la droite traverse le carré
+          const b = (minVal + Math.random() * (maxVal - minVal)).toFixed(1);
+
+          return {
+            w1: parseFloat(w1),
+            w2: parseFloat(w2),
+            b: parseFloat(b)
+          };
+        }
+
+        // Générer 3 droites valides
+        const lines = [];
+        for (let j = 0; j < 3; j++) {
+          lines.push(generateValidLine());
+        }
+
+        // Appliquer à la matrice et aux seuils
+        matrix = [
+          [lines[0].w1, lines[1].w1, lines[2].w1],
+          [lines[0].w2, lines[1].w2, lines[2].w2]
+        ];
+
+        seuils = [lines[0].b, lines[1].b, lines[2].b];
+
+        // Mettre à jour l'affichage
+        for (let row = 0; row < 2; row++) {
+          for (let col = 0; col < 3; col++) {
+            const value = matrix[row][col];
+            document.getElementById(`cell-value-${row}-${col}`).textContent =
+              value === 0 ? "0" : value.toFixed(1);
+            document.getElementById(`cell-${row}-${col}`).classList.toggle("filled", value !== 0);
+          }
+        }
+
+        for (let j = 0; j < 3; j++) {
+          document.getElementById(`seuil-value-${j}`).textContent = seuils[j].toFixed(1);
+        }
+
         computeProducts();
         drawVisualization();
+      }
+
+      window.addEventListener("load", function() {
+        vizSection = document.getElementById("visualization-section");
+        initializeRandomMatrix();
       });
     </script>
+    <hr>
     <div style="margin-top: 20px; text-align: center;">
     <h4 id="bravo-message" style="display: none;"> Bravo ! Vous avez entrainé un réseau de neurones perceptron et obtenu un modèle réutilisable. </h4>
       <a href="chapitre2.html" class="more-info-link">

@@ -1590,6 +1590,12 @@ footer {
     margin-top: 0;
 }
 
+
+.perceptron { border-collapse: collapse; text-align: center; }
+.perceptron th, .perceptron td { border: 1px solid #333; padding: 4px; }
+
+
+
 /* ===================================================================
    END OF FILE
    =================================================================== */

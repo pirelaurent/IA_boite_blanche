@@ -17,10 +17,10 @@
                     frontière linéaire qui sépare sa zone d'activation de sa
                     zone d'inhibition.
                 </p>
-                    A supposer qu'un système veuille cibler une région
-                    circulaire associée à une catégorie donnée. On peut
-                    approximer sa géométrie par une série de 12 droites issues
-                    de 12 neurones.
+                <p>
+                    À supposer qu'un système veuille cibler une région circulaire associée à une catégorie donnée.
+                    On peut approximer sa géométrie par une série de 12 droites issues de 12 neurones.
+                </p>
                 <div class="image-container">
                     <img
                         width="240"
@@ -28,136 +28,176 @@
                         alt="Approximation d'un cercle par 12 droites (12 neurones)"
                     />
                 </div>
-                    Une <span class="keyword">couche cachée</span> va porter cette
-                    préparation et la
-                    <span class="keyword">couche de sortie</span> effectuera
-                     un ET logique de ces sorties:
+                <p>
+                    Une <span class="keyword">couche cachée</span> va porter cette préparation et la
+                    <span class="keyword">couche de sortie</span> effectuera un ET logique de ces sorties :
+                </p>
+                <div class="image-container">
+                    <img
                         width="500"
                         src="img/chap2/réseauA12.png"
                         alt="Approximation d'un cercle par un réseau de 12 neurones"
-                    <p>
-                        <em
-                            >Si un point (x1,x2) satisfait à toutes les zones
-                            actives des 12 neurones, il tombe dans cette
-                            catégorie.</em
-                        >
-                    </p>
+                    />
+                </div>
+                <p>
+                    <em>
+                        Si un point (x1,x2) satisfait à toutes les zones actives des 12 neurones,
+                        il tombe dans cette catégorie.
+                    </em>
+         
+
+                <br><br> Un tel réseau se construit à la main, poids fixés par le concepteur. 
+                <br>Mais aucun apprentissage automatique n'est possible : 
+                une erreur en sortie (+1 ou −1) n'indique pas quel neurone caché il faut corriger, ni de combien.  
+                <br>Un changement de la fonction d'activation par seuil est nécessaire. 
+      
+       </p>
+
             </div>
+
             <hr />
-            <h2>Expérimenter par un exemple</h2>
-            <h3>Pilotage des feux tricolores avec une tablette tactile</h3>
-            <p>
-                Soit une tablette tactile de 200 x 400 pixels sur laquelle on
-                présente des zones à cliquer pour allumer les feux.
-            </p>
-            <div
-                style="
-                    display: flex;
-                    gap: 30px;
-                    align-items: flex-start;
-                    margin: 20px 0;
-                "
-            >
-                <div>
-                        width="120"
-                        src="img/chap2/tablette200x400.png"
-                        alt="Tablette tactile"
-                <div style="flex: 1">
-                    <h3>Comportement attendu</h3>
-                        Un doigt sur la tablette va pointer une coordonnée (x,y)
-                        et de sa position dépendra une action.
-<table style="width: 100%; max-width: 500px">
-    <tr>
-        <th>Le clic (x,y) a lieu</th>
-        <th>Action</th>
-        <th>Sortie</th>
-    </tr>
-    <tr>
-        <td>dans le cercle Rouge</td>
-        <td>
-            <img src="img/chap1/001.png" alt="Feu rouge allumé" width="70"
-                 style="transform-origin: center; display: inline-block;" />
-        </td>
-        <td>[0,0,1]</td>
-    </tr>
-    <tr>
-        <td>dans le cercle Orange</td>
-        <td>
-            <img src="img/chap1/010.png" alt="Feu orange allumé" width="70"
-                 style="transform-origin: center; display: inline-block;" />
-        </td>
-        <td>[0,1,0]</td>
-    </tr>
-    <tr>
-        <td>dans le cercle Vert</td>
-        <td>
-            <img src="img/chap1/100.png" alt="Feu vert allumé" width="70"
-                 style="transform-origin: center; display: inline-block;" />
-        </td>
-        <td>[1,0,0]</td>
-    </tr>
-    <tr>
-        <td>Ailleurs</td>
-        <td>
-            <img src="img/chap1/000.png" alt="Feu éteint" width="70"
-                 style="transform-origin: center; display: inline-block;" />
-        </td>
-        <td>[0,0,0]</td>
-    </tr>
-</table>
-            <h3>Une nouvelle problématique : la masse des cas possibles</h3>
-                Au lieu des 4 cas du chapitre 1 avec deux interrupteurs,
-                on a ici 200x400 = <b>80 000 cas possibles de couple x1,x2</b>. <br />Il n'est
-                plus possible de traiter directement: Il faut que le réseau
-                apprenne seul sur des échantillons suffisants.
-            <h4>Un apprentissage impossible avec le perceptron H</h4>
-                Pour apprendre, un algorithme cherche à réduire l'erreur
-                ,la distance entre la prédiction et la valeur cible, pour chacun des points des
-                données d'entraînement. <br />Avec la fonction d'activation à échelon du perceptron, entre les
-                zones « oui » et « non », il y a un front vertical: 
-            <div class="center">
-                <img
-                    src="img/chap2/relief01.png"
-                    width="200px"
-                    alt="Front vertical du perceptron"
-                />
-<p>
-                <br />En termes mathématiques, la fonction est
-                <i>non dérivable</i> : Le gradient (c'est-à-dire la valeur de la
-                pente) est nulle partout et indéfinie au point de bascule.
-            L'erreur vaut toujours -1, 0 ou +1. 
-            <br>L'algorithme sait dans quelle
-            direction corriger, mais pas de combien il se trompe. Il erre alors
-            par une multitude de petits pas, dont la taille est arbitraire, sans
-            jamais pouvoir mesurer s'il se rapproche du but.
-</p>
-            <h4>Echec du perceptron d'origine et hiver de l'IA</h4>
-                Cette incapacité à apprendre sur de grands volumes a bloqué les
-                développements et provoqué
-                <i>l'hiver de l'IA</i>
-                .
-            <div class="note">
-                Le premier hiver de l'IA commence à la fin des années 1960,
-                quand on démontre mathématiquement les limites du perceptron
-                (1969). Le doute s'aggrave avec un rapport très critique de 1973
-                (Lighthill) qui entraîne l'arrêt des financements publics. Il ne
-                prendra fin qu'au début des années 1980, avec l'essor des
-                systèmes experts puis le renouveau des réseaux de neurones à
-                rétropropagation (1986).
-                
-<p><br />Du perceptron d'origine, seul le nom a survécu : on parle
-                aujourd'hui de
-                <b>MLP</b> pour  Multi Layer <b>Perceptron</b>
-                <h2>Les fonctions d'activation dérivables</h2>
-                    La percée des IA modernes est arrivée quand on a pensé à
-                    remplacer le tout ou rien de la fonction échelon par des
-                    fonctions mathématiques dérivables.
+
+            <div class="section">
+                <h2>Expérimenter par l'exemple</h2>
+                <h3>Piloter les feux tricolores - avec une tablette tactile</h3>
+                <p>
+                    Soit une tablette tactile de 200 x 400 pixels sur laquelle on présente des zones à cliquer
+                    pour allumer les feux.
+                </p>
+
+                <div
+                    style="
+                        display: flex;
+                        gap: 30px;
+                        align-items: flex-start;
+                        margin: 20px 0;
+                    "
+                >
+                    <div>
+                        <img
+                            width="120"
+                            src="img/chap2/tablette200x400.png"
+                            alt="Tablette tactile"
+                        />
+                        <br> Tablette 200x400
+                    </div>
+                    
+                    <div style="flex: 1">
+                        <h4>Comportement attendu</h4>
+                        <p>
+                            Un doigt sur l'écran va pointer une coordonnée (x,y) et de sa position dépendra une action.
+                        </p>
+                        <table style="width: 100%; max-width: 500px">
+                            <tr>
+                                <th>Le clic (x,y) a lieu</th>
+                                <th>Action</th>
+                                <th>Sortie</th>
+                            </tr>
+                            <tr>
+                                <td>dans le cercle Rouge</td>
+                                <td>
+                                    <img src="img/chap1/001.png" alt="Feu rouge allumé" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[0,0,1]</td>
+                            </tr>
+                            <tr>
+                                <td>dans le cercle Orange</td>
+                                <td>
+                                    <img src="img/chap1/010.png" alt="Feu orange allumé" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[0,1,0]</td>
+                            </tr>
+                            <tr>
+                                <td>dans le cercle Vert</td>
+                                <td>
+                                    <img src="img/chap1/100.png" alt="Feu vert allumé" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[1,0,0]</td>
+                            </tr>
+                            <tr>
+                                <td>Ailleurs</td>
+                                <td>
+                                    <img src="img/chap1/000.png" alt="Feu éteint" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[0,0,0]</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <h3>Une nouvelle problématique : la masse des cas possibles</h3>
+                <p>
+                    Au lieu des 4 cas des deux interrupteurs du chapitre 1, on a ici 200x400 =
+                    <b>80 000 cas possibles de couple x1,x2</b>.<br />
+                    Il n'est plus possible de traiter chaque cas : il faut que le réseau apprenne seul
+                    sur des échantillons suffisants.
+                </p>
+
+                <h4>Un apprentissage impossible avec le perceptron H</h4>
+                <p>
+                    Pour apprendre, un algorithme cherche à réduire l'erreur, la distance entre la prédiction
+                    et la valeur cible, pour chacun des points des données d'entraînement.<br />
+                    Avec la fonction d'activation à échelon du perceptron, entre les zones « 0 non » et « 1 oui »,
+                    il y a un front vertical :
+                </p>
                 <div class="center">
-                <img
+                    <img
+                        src="img/chap2/relief01.png"
+                        width="200px"
+                        alt="Front vertical du perceptron"
+                    />
+                </div>
+                <p>
+                    <br />
+                En termes mathématiques, la fonction échelon est non dérivable :
+                 sa pente est nulle partout et indéfinie au point de bascule. 
+                 <br>Une descente de gradient est donc impossible ; 
+                c'est pourquoi Rosenblatt la remplace par une erreur discrète, qui vaut toujours −1, 0 ou +1.
+                   <br> L'algorithme sait dans quelle direction corriger, mais pas de combien il se trompe : il avance par pas de taille arbitraire (η), découplée de l'ampleur réelle de l'erreur. Il ne peut mesurer sa distance à la solution ; 
+                  <br> il ne peut qu'observer empiriquement si le nombre d'erreurs diminue à chaque  <span class = "keyword">époque</span>(un passage complet de l'algorithme sur tous les exemples du jeu d'entraînement.)
+                </p>
+
+                <h4>Échec du perceptron d'origine et hiver de l'IA</h4>
+                <p>
+                    Cette incapacité à apprendre sur de grands volumes a bloqué les développements et provoqué
+                    <i>l'hiver de l'IA</i>.
+                </p>
+                <div class="note">
+                    <p>
+                        Le premier hiver de l'IA commence à la fin des années 1960, quand on démontre
+                        mathématiquement les limites du perceptron (1969). Le doute s'aggrave avec un rapport très
+                        critique de 1973 (Lighthill) qui entraîne l'arrêt des financements publics. Il ne prendra
+                        fin qu'au début des années 1980, avec l'essor des systèmes experts puis le renouveau des
+                        réseaux de neurones à rétropropagation (1986).
+                    </p>
+                    <p>
+                        <br />
+                        Du perceptron d'origine, seul le nom a survécu : on parle aujourd'hui de <b>MLP</b>
+                        pour Multi Layer <b>Perceptron</b>.
+                    </p>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="section">
+                <h2>Les fonctions d'activation dérivables</h2>
+                <p>
+                    La percée des IA modernes est arrivée quand on a pensé à remplacer le tout ou rien de la
+                    fonction échelon par des fonctions mathématiques dérivables.
+                </p>
+                <div class="center">
+                    <img
                         src="img/chap2/sigmoide.png"
                         width="200px"
                         alt="Front lissé de la sigmoide"
-                        />
+                    />
+                </div>
+            </div>
         </div>
     </body>
 </html>
