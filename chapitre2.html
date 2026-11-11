@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>2 — Le réseau : composer des transformations simples</title>
+        <title>2 — Le réseau : composer des transformations</title>
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
@@ -12,14 +12,26 @@
 
             <div class="section">
                 <h2>Combiner des neurones dans un réseau multicouche</h2>
+                <h4> Le neurone est un classifieur binaire </h4>
                 <p>
-                    Par construction, tout neurone coupe l'espace en deux parties avec une
+                    Tout neurone coupe l'espace en deux parties avec une
                     frontière linéaire qui sépare sa zone d'activation de sa
                     zone d'inhibition.
+                    <br> En deux dimensions, c'est une droite.
+                        Avec une <b>fonction d'activation à échelon </b>tout résultat est soit 0 soit 1.
                 </p>
+                <div class="image-container">
+                    <img
+                        width="140"
+                        src="img/chap2/droite01.png"
+                        alt="découpage du plan"
+                    />
+                </div>
+
+            <h4>Classifier une surface</h4>
                 <p>
-                    À supposer qu'un système veuille cibler une région circulaire associée à une catégorie donnée.
-                    On peut approximer sa géométrie par une série de 12 droites issues de 12 neurones.
+                    Pour cibler une figure convexe tel qu'un disque correspondant à une catégorie, on peut l'approximer par de multiples droites 
+                     issues d'autant de neurones:
                 </p>
                 <div class="image-container">
                     <img
@@ -28,9 +40,13 @@
                         alt="Approximation d'un cercle par 12 droites (12 neurones)"
                     />
                 </div>
+                <h4>Une couche cachée intermédiaire </h4>
                 <p>
-                    Une <span class="keyword">couche cachée</span> va porter cette préparation et la
-                    <span class="keyword">couche de sortie</span> effectuera un ET logique de ces sorties :
+                    Il faut une <span class="keyword">couche cachée</span> pour porter ces neurones de préparation.
+
+                    <br>La <span class="keyword">couche de sortie</span> effectuera une combinaison 
+                        des sorties de la couche cachée pour répondre au final 0 ou 1 (hors cercle ou dans le cercle).
+                 
                 </p>
                 <div class="image-container">
                     <img
@@ -40,24 +56,119 @@
                     />
                 </div>
                 <p>
-                    <em>
-                        Si un point (x1,x2) satisfait à toutes les zones actives des 12 neurones,
-                        il tombe dans cette catégorie.
-                    </em>
-         
-
-                <br><br> Un tel réseau se construit à la main, poids fixés par le concepteur. 
-                <br>Mais aucun apprentissage automatique n'est possible : 
-                une erreur en sortie (+1 ou −1) n'indique pas quel neurone caché il faut corriger, ni de combien.  
-                <br>Un changement de la fonction d'activation par seuil est nécessaire. 
-      
-       </p>
-
+                    Un tel réseau de perceptron à échelon peut se construire à la main, en fixant les poids comme vu au chapitre 1 . 
+                </p>
+        </div>
+        <div class = "section">
+             <h4>Un apprentissage impossible avec le perceptron H</h4>
+                <p>           
+                    Pour pouvoir apprendre, il faut un automatisme qui sache réduire l'erreur, la distance entre la prédiction
+                    et la cible, pour chacun des points des données d'entraînement.<br />
+                    Avec la fonction d'activation à échelon, entre la zones « non » et la zone « oui »
+                    il y a un front vertical :
+                </p>
+                <div class="image-container">
+                    <img
+                        src="img/chap2/relief01.png"
+                        width="200px"
+                        alt="Front vertical du perceptron"
+                    />
+                </div>
+                    <p>
+                        Une erreur en sortie sera toujours discrète : 0 (rester), +1 (descendre) ou −1 (remonter)   
+                        quelle que soit la position et la distance du point de mesure jusqu'à la frontière. 
+            
+                        <br> Pire : <b>la couche de sortie est incapable de transmettre son erreur à la couche cachée</b>.
+                        Comme elle ne sait rien mesurer, elle ne peut rien répartir : 
+                        aucun moyen de dire quel neurone caché est responsable, de combien, et dans quel sens le corriger.                </p>
+                    </p>
+                </div>
+        <div class = "section">
+                    <h4>Échec du perceptron d'origine et hiver de l'IA</h4>
+                        <p>
+                            Cette incapacité à apprendre avec plusieurs couches a bloqué les développements et provoqué ce qu'on a appelé 
+                            <i><b>l'hiver de l'IA</b></i>.
+                        </p>
+                        <div class="note">
+                            <p>
+                                Le premier hiver de l'IA commence à la fin des années 1960, quand on démontre
+                                mathématiquement les limites du perceptron (1969). Le doute s'aggrave avec un rapport très
+                                critique de 1973 (Lighthill) qui entraîne l'arrêt des financements publics. Il ne prendra
+                                fin qu'au début des années 1980, avec l'essor des systèmes experts puis le renouveau des
+                                réseaux de neurones à rétropropagation (1986).
+                            </p>
+                        </div>
+                             <h4>Ce qu'il en reste</h4>
+                            <p>
+                            <b>La mécanique</b> : tout neurone continue de fonctionner sur le même principe de séparation. Seuls les fonctions d'activation ont évolués.
+                                <br />
+                                <b>Le nom </b> : on continue d'utilise le terme dans <b>MLP</b>
+                                pour Multi Layer <b>Perceptron</b>.
+                            </p>
             </div>
-
+     
             <hr />
 
             <div class="section">
+                <h2>Les fonctions d'activation dérivables</h2>
+                <p>
+                   En utilisant une fonction d'activation continue et dérivable, on obtient une pente entre le vrai et le faux </p>
+                 <div class="center">
+                    <img
+                        src="img/chap2/derivable.png"
+                        width="500px"
+                        height ="200px"
+                        alt="Front lissé de la sigmoide"
+                    />
+                    <br><em> 
+                    La surface de prédiction avec une fonction d'activation <b>sigmoïde</b>. 
+                    <br>la frontière correspond à une sortie de 0,5. 
+                    <br>Chaque correction d'erreur fait monter ou descendre le score d'un point sur cette surface. 
+                   
+                </em>
+                </div>
+         
+    <h4> Les principales fonctions d'activation</h4>
+            <b> A seuil H </b> : abandonnée
+            <br><b>Sigmoïde</b> ( logistic, 1970s) : une courbe en S douce qui écrase toute valeur entre 0 et 1. 
+            <br><b>Tanh</b> : la même courbe en S, mais entre -1 et +1. Centrée sur zéro, elle converge souvent plus vite.
+            <br><b>ReLU</b> (Rectified Linear Unit, popularisée en 2010) : si l'entrée est négative, sortie 0 ; sinon, sortie = entrée. Ultra simple à calculer, elle a permis d'entraîner des réseaux très profonds et a déclenché la révolution du deep learning.
+
+
+
+                <div class="image-container">
+                                    <img
+                                        src="img/chap2/derivable_4.png"
+                                        width="600px"
+                                        alt="Front lissé de la sigmoide"
+                                    />
+                </div>
+
+            <h4> Descendre de la montagne par temps de brouillard </h4>
+            <p> Dans le brouillard, on ne sait pas où on est.
+            <br> Mais on arrive à sentir sous ses pieds comment est la pente.
+            <br> On fait le choix de descendre - tant qu'on peut. 
+
+            <h4> Méthode d'apprentissage en IA : La descente de gradient</h4>
+            <p>
+            La montagne a pour relief l'erreur :  chaque position (chaque valeur des poids) a une altitude (une valeur d'erreur). 
+             <br>Cette correspondance entre chaque position et son altitude s'appelle la <span class = "keyword">fonction de coût</span>. 
+             On ne connaît ni son maximum ni son minimum.
+            <br>On ne peut pas savoir si on est loin du fond de la vallée, 
+                ni même s'il existe une seule vallée plutôt que plusieurs.
+
+            <br> Achaque changement des poids (de position), 
+            on peut mesurer la pente (pointée vers le haut) : le <span class = "keyword">gradient.</span>
+            <br>On fait alors le choix rationnel d'un petit pas dans la direction opposée, celle où l'erreur diminue.
+            <br> On recommence tant qu'on peut descendre.C'est la <span class = "keyword"> descente de gradient. </span> 
+            <br> <br><b>Attention:</b> Le relief peut tromper:  Si on a atteint une cuvette au lieu de la vallée, l'erreur restera grande et l'apprentissage râté .
+         
+
+    </p>
+
+
+        </div>
+        <div class="section">
                 <h2>Expérimenter par l'exemple</h2>
                 <h3>Piloter les feux tricolores - avec une tablette tactile</h3>
                 <p>
@@ -75,11 +186,12 @@
                 >
                     <div>
                         <img
-                            width="120"
+                            height="150"
                             src="img/chap2/tablette200x400.png"
                             alt="Tablette tactile"
                         />
                         <br> Tablette 200x400
+                    </div>
                     </div>
                     
                     <div style="flex: 1">
@@ -126,7 +238,7 @@
                                 <td>[0,0,0]</td>
                             </tr>
                         </table>
-                    </div>
+                    
                 </div>
 
                 <h3>Une nouvelle problématique : la masse des cas possibles</h3>
@@ -137,21 +249,7 @@
                     sur des échantillons suffisants.
                 </p>
 
-                <h4>Un apprentissage impossible avec le perceptron H</h4>
-                <p>
-                    Pour apprendre, un algorithme cherche à réduire l'erreur, la distance entre la prédiction
-                    et la valeur cible, pour chacun des points des données d'entraînement.<br />
-                    Avec la fonction d'activation à échelon du perceptron, entre les zones « 0 non » et « 1 oui »,
-                    il y a un front vertical :
-                </p>
-                <div class="center">
-                    <img
-                        src="img/chap2/relief01.png"
-                        width="200px"
-                        alt="Front vertical du perceptron"
-                    />
-                </div>
-                <p>
+               
                     <br />
                 En termes mathématiques, la fonction échelon est non dérivable :
                  sa pente est nulle partout et indéfinie au point de bascule. 
@@ -161,43 +259,12 @@
                   <br> il ne peut qu'observer empiriquement si le nombre d'erreurs diminue à chaque  <span class = "keyword">époque</span>(un passage complet de l'algorithme sur tous les exemples du jeu d'entraînement.)
                 </p>
 
-                <h4>Échec du perceptron d'origine et hiver de l'IA</h4>
-                <p>
-                    Cette incapacité à apprendre sur de grands volumes a bloqué les développements et provoqué
-                    <i>l'hiver de l'IA</i>.
-                </p>
-                <div class="note">
-                    <p>
-                        Le premier hiver de l'IA commence à la fin des années 1960, quand on démontre
-                        mathématiquement les limites du perceptron (1969). Le doute s'aggrave avec un rapport très
-                        critique de 1973 (Lighthill) qui entraîne l'arrêt des financements publics. Il ne prendra
-                        fin qu'au début des années 1980, avec l'essor des systèmes experts puis le renouveau des
-                        réseaux de neurones à rétropropagation (1986).
-                    </p>
-                    <p>
-                        <br />
-                        Du perceptron d'origine, seul le nom a survécu : on parle aujourd'hui de <b>MLP</b>
-                        pour Multi Layer <b>Perceptron</b>.
-                    </p>
-                </div>
+                
             </div>
 
             <hr />
 
-            <div class="section">
-                <h2>Les fonctions d'activation dérivables</h2>
-                <p>
-                    La percée des IA modernes est arrivée quand on a pensé à remplacer le tout ou rien de la
-                    fonction échelon par des fonctions mathématiques dérivables.
-                </p>
-                <div class="center">
-                    <img
-                        src="img/chap2/sigmoide.png"
-                        width="200px"
-                        alt="Front lissé de la sigmoide"
-                    />
-                </div>
-            </div>
+
         </div>
     </body>
 </html>
