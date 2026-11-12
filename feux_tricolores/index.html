@@ -1,88 +1,559 @@
 <!doctype html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            Feux tricolores - Accueil
-        </title>
-        <link rel="stylesheet" href="../style.css" />
-    </head>
-    <body>
-        <div class="container">
-            <h1>Projet Feux Tricolores</h1>
-            
-            <p class="note">
-                Exemple concret d'application d'un réseau de neurones MLP pour la classification 
-                de points sur une tablette tactile avec 4 cercles tactiles (noir, vert, orange, rouge).
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feux Tricolores RGB - Réseau de Neurones</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* Styles spécifiques à cette page */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1, h2, h3 {
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #2196F3;
+        }
+        
+        .btn-secondary:hover {
+            background: #0b7dda;
+        }
+        
+        .btn-danger {
+            background: #f44336;
+        }
+        
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+        
+        .status {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .status.info {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .metrics-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        canvas {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .important-box {
+            background: #fffde7;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        
+        th {
+            background: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Feux Tricolores RGB - Réseau de Neurones</h1>
+        
+        <div class="section">
+            <h2>📊 Description du Problème</h2>
+            <p>
+                Ce projet implémente un réseau de neurones <strong>MLP (Multi-Layer Perceptron)</strong> 
+                pour classer les zones tactiles d'une tablette de <strong>200×400 pixels</strong>.
             </p>
-            <div class="card-container">
-                <div class="card">
-                    <h3>📋 Description</h3>
-                    <p>
-                        Description détaillée du problème, de l'architecture du réseau,
-                        de la constitution du dataset et des paramètres d'entraînement.
-                    </p>
-                        <strong>Contenu :</strong>
+            
+            <div style="display: flex; gap: 30px; align-items: center; margin: 20px 0; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3>Configuration de la tablette :</h3>
                     <ul>
-                        <li>Configuration de la tablette tactile 200×400</li>
-                        <li>Positionnement des 4 cercles (rayon 30, espacés de 15px)</li>
-                        <li>Architecture MLP 2-12-4</li>
-                        <li>Stratégie de constitution du dataset</li>
-                        <li>Paramètres d'entraînement</li>
-                        <li>Figures explicatives SVG</li>
+                        <li><strong>Dimensions :</strong> 200 × 400 pixels</li>
+                        <li><strong>3 zones tactiles circulaires :</strong>
+                            <ul>
+                                <li><span style="color: #F44336; font-weight: bold;">Rouge</span> : centre à (100, 320), rayon 50px</li>
+                                <li><span style="color: #4CAF50; font-weight: bold;">Vert</span> : centre à (100, 80), rayon 50px</li>
+                                <li><span style="color: #2196F3; font-weight: bold;">Bleu</span> : centre à (100, 200), rayon 50px</li>
+                            </ul>
+                        </li>
+                        <li><strong>Fond :</strong> <span style="color: #000000; font-weight: bold;">Noir</span> (quand on clique en dehors des cercles)</li>
                     </ul>
-                    <a href="description.html">Voir la description</a>
                 </div>
                 
-                    <h3>🧠 Entraînement</h3>
-                        Implémentation interactive du réseau de neurones avec entraînement 
-                        en JavaScript pur (sans framework).
-                        <strong>Fonctionnalités :</strong>
-                        <li>Génération du dataset (1 800 échantillons)</li>
-                        <li>Entraînement avec Adam et Binary Cross-Entropy</li>
-                        <li>Visualisation des frontières de décision</li>
-                        <li>Matrice de confusion</li>
-                        <li>Test de points spécifiques</li>
-                        <li>Export/Import du modèle</li>
-                    <a href="entrainement.html">Lancer l'entraînement</a>
+                <div style="flex: 1; min-width: 300px;">
+                    <svg width="220" height="420" viewBox="0 0 220 420" style="background: #f0f0f0; border-radius: 8px;">
+                        <!-- Tablette -->
+                        <rect x="10" y="10" width="200" height="400" fill="none" stroke="#333" stroke-width="2"/>
+                        
+                        <!-- Cercle Rouge (y=320) -->
+                        <circle cx="110" cy="330" r="50" fill="none" stroke="#F44336" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="110" y="330" text-anchor="middle" fill="#F44336" font-weight="bold">ROUGE</text>
+                        
+                        <!-- Cercle Vert (y=80) -->
+                        <circle cx="110" cy="90" r="50" fill="none" stroke="#4CAF50" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="110" y="90" text-anchor="middle" fill="#4CAF50" font-weight="bold">VERT</text>
+                        
+                        <!-- Cercle Bleu (y=200) -->
+                        <circle cx="110" cy="210" r="50" fill="none" stroke="#2196F3" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="110" y="210" text-anchor="middle" fill="#2196F3" font-weight="bold">BLEU</text>
+                        
+                        <!-- Légende -->
+                        <text x="110" y="415" text-anchor="middle" font-size="12">Tablette 200×400 pixels</text>
+                    </svg>
+                </div>
             </div>
-            <hr/>
-            <div class="section">
-                <h2>Résumé technique</h2>
-                <p>
-                    Ce projet illustre un <span class="keyword">réseau de neurones MLP</span> pour classer les appuis 
-                    sur une tablette tactile en 5 catégories :
-                </p>
-                <table>
-                    <tr><th>Aspect</th><th>Valeur</th></tr>
-                    <tr><td>Tablette</td><td>200×400 pixels</td></tr>
-                    <tr><td>Cercles</td><td>4 × rayon 30px, espacés de 15px</td></tr>
-                    <tr><td>Réseau</td><td>MLP 2-12-4</td></tr>
-                    <tr><td>Activations</td><td>ReLU (cachée), Sigmoïde (sortie)</td></tr>
-                    <tr><td>Dataset</td><td>1 500 entraînement + 300 validation</td></tr>
-                    <tr><td>Optimiseur</td><td>Adam</td></tr>
-                    <tr><td>Fonction coût</td><td>Binary Cross-Entropy</td></tr>
-                </table>
-                <h2>Comment utiliser</h2>
-                <ol>
-                    <li><strong>Lire la description</strong> : Comprendre le problème et la méthode proposée</li>
-                    <li><strong>Générer le dataset</strong> : Cliquer sur le bouton pour créer les échantillons</li>
-                    <li><strong>Visualiser le dataset</strong> : Vérifier la distribution des points</li>
-                    <li><strong>Entraîner le réseau</strong> : Configurer les paramètres et lancer l'entraînement</li>
-                    <li><strong>Analyser les résultats</strong> : Visualiser les prédictions et la matrice de confusion</li>
-                    <li><strong>Tester manuellement</strong> : Entrer des coordonnées pour vérifier le comportement</li>
-                </ol>
-                <p class="note">
-                    <strong>Note</strong> : L'entraînement s'exécute dans le navigateur et peut prendre 
-                    quelques minutes selon la configuration. Utilisez Chrome ou Firefox pour de meilleures performances.
-                <h2>Fichiers du projet</h2>
-                <ul>
-                    <li><code>index.html</code> - Cette page</li>
-                    <li><code>description.html</code> - Description détaillée avec figures SVG</li>
-                    <li><code>entrainement.html</code> - Interface interactive d'entraînement</li>
-                    <li><code>network.js</code> - Implémentation du réseau de neurones</li>
-                </ul>
+            
+            <p>
+                Le réseau doit apprendre à associer chaque coordonnée (x,y) à la bonne couleur :
+            </p>
+            <table>
+                <tr>
+                    <th>Position</th>
+                    <th>Couleur</th>
+                    <th>Sortie du réseau</th>
+                </tr>
+                <tr>
+                    <td>Dans le cercle Rouge</td>
+                    <td style="color: #F44336; font-weight: bold;">⬤ Rouge</td>
+                    <td><code>[1, 0, 0]</code></td>
+                </tr>
+                <tr>
+                    <td>Dans le cercle Vert</td>
+                    <td style="color: #4CAF50; font-weight: bold;">⬤ Vert</td>
+                    <td><code>[0, 1, 0]</code></td>
+                </tr>
+                <tr>
+                    <td>Dans le cercle Bleu</td>
+                    <td style="color: #2196F3; font-weight: bold;">⬤ Bleu</td>
+                    <td><code>[0, 0, 1]</code></td>
+                </tr>
+                <tr>
+                    <td>Ailleurs (fond)</td>
+                    <td style="color: #000000; font-weight: bold;">⬤ Noir</td>
+                    <td><code>[0, 0, 0]</code></td>
+                </tr>
+            </table>
         </div>
-    </body>
+        
+        <div class="section">
+            <h2>🧠 Architecture du Réseau</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>Topologie</h3>
+                    <ul>
+                        <li><strong>Couche d'entrée :</strong> 2 neurones (x, y normalisés dans [0, 1])</li>
+                        <li><strong>Couche cachée :</strong> <span id="hiddenSizeDisplay">12 neurones</span> avec activation <strong>ReLU</strong></li>
+                        <li><strong>Couche de sortie :</strong> 3 neurones avec activation <strong>Sigmoïde</strong></li>
+                    </ul>
+                    
+                    <h3>Pourquoi ces choix ?</h3>
+                    <ul>
+                        <li><strong>ReLU</strong> : Évite le problème du gradient évanescent et permet un apprentissage plus rapide</li>
+                        <li><strong>Sigmoïde</strong> : Produit des valeurs entre 0 et 1 pour chaque sortie</li>
+                        <li><strong>12 neurones cachés</strong> : Suffisant pour approximer les 3 frontières circulaires</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3>Diagramme du réseau</h3>
+                    <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace;">
+  Input Layer (2)       Hidden Layer (12)       Output Layer (3)
+  ───────────────        ─────────────────        ───────────────
+       x ────┬───►│                    │         │
+             │   ►│                    │         ► R (Rouge)
+       y ────┴───►│                    │         │
+                  │                    │         ► V (Vert)
+                  │   ReLU            │ Sigmoid  │
+                  │                    │         ► B (Bleu)
+                  └─────────────────┘         │
+                                            └────────────────
+                    </pre>
+                </div>
+            </div>
+            
+            <h3>Code du réseau</h3>
+            <div id="networkCode" class="code-block"></div>
+        </div>
+        
+        <div class="section">
+            <h2>📈 Génération du Dataset</h2>
+            <p>
+                Générez un dataset de points aléatoires dans et hors des cercles pour entraîner le réseau.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn" onclick="generateDataset()">Générer le Dataset</button>
+                <button class="btn btn-secondary" onclick="showDatasetPreview()">Aperçu du Dataset</button>
+                <button class="btn btn-secondary" onclick="visualizeDataset()">Visualiser le Dataset</button>
+            </div>
+            
+            <div id="datasetStatus" class="status"></div>
+            
+            <!-- Aperçu textuel du dataset -->
+            <div id="datasetPreview" class="hidden">
+                <h3>Aperçu du Dataset</h3>
+                <pre id="datasetPreviewContent" style="background: #f5f5f5; padding: 15px; border-radius: 5px; max-height: 300px; overflow-y: auto;"></pre>
+                <button class="btn" onclick="document.getElementById('datasetPreview').classList.add('hidden')" style="margin-top: 10px;">Fermer</button>
+            </div>
+            
+            <!-- Visualisation du dataset -->
+            <div id="datasetVisualization" class="hidden">
+                <h3>Visualisation du Dataset</h3>
+                <canvas id="datasetCanvas" width="600" height="500"></canvas>
+                <button class="btn" onclick="document.getElementById('datasetVisualization').classList.add('hidden')" style="margin-top: 10px;">Fermer</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎓 Entraînement du Réseau</h2>
+            <p>
+                Entraînez le réseau de neurones sur le dataset généré. Vous pouvez configurer les paramètres d'entraînement.
+            </p>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>Paramètres</h3>
+                    <div class="form-group">
+                        <label for="hiddenSize">Taille de la couche cachée :</label>
+                        <select id="hiddenSize">
+                            <option value="8">8 neurones</option>
+                            <option value="10">10 neurones</option>
+                            <option value="12" selected>12 neurones</option>
+                            <option value="16">16 neurones</option>
+                            <option value="20">20 neurones</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="epochs">Nombre d'époques :</label>
+                        <input type="number" id="epochs" value="2000" min="100" max="10000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="batchSize">Taille du batch :</label>
+                        <select id="batchSize">
+                            <option value="16">16</option>
+                            <option value="32" selected>32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="learningRate">Taux d'apprentissage :</label>
+                        <select id="learningRate">
+                            <option value="0.1">0.1</option>
+                            <option value="0.05">0.05</option>
+                            <option value="0.01" selected>0.01</option>
+                            <option value="0.005">0.005</option>
+                            <option value="0.001">0.001</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn" onclick="trainNetwork()" id="trainBtn">Entraîner le Réseau</button>
+                    <button class="btn btn-danger" onclick="stopTraining()" id="stopBtn" disabled>Arrêter</button>
+                </div>
+                
+                <div>
+                    <h3>Évolution de l'entraînement</h3>
+                    <div id="trainingStatus" class="status"></div>
+                    
+                    <div class="metrics-container hidden" id="metricsContainer">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="trainingProgress"></div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <div>
+                                <strong>Époque :</strong> <span id="currentEpoch">0/0</span>
+                            </div>
+                            <div>
+                                <strong>Temps :</strong> <span id="elapsedTime">0s</span>
+                            </div>
+                            <div>
+                                <strong>Perte Train :</strong> <span id="trainLoss">0</span>
+                            </div>
+                            <div>
+                                <strong>Perte Val :</strong> <span id="valLoss">0</span>
+                            </div>
+                            <div>
+                                <strong>Acc Train :</strong> <span id="trainAccuracy">0%</span>
+                            </div>
+                            <div>
+                                <strong>Acc Val :</strong> <span id="valAccuracy">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="trainingChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Visualisation des Prédictions</h2>
+            <p>
+                Visualisez comment le réseau classifie chaque point de la tablette après l'entraînement.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn btn-secondary" onclick="visualizePredictions()" id="predictBtn" disabled>Visualiser les Prédictions</button>
+            </div>
+            
+            <div id="predictionsVisualization" class="hidden">
+                <h3>Carte des prédictions du réseau</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    Chaque pixel représente la couleur prédite par le réseau pour cette position.<br>
+                    Les cercles pointillés blancs montrent les zones réelles.
+                </p>
+                <canvas id="predictionsCanvas" width="600" height="500"></canvas>
+                <button class="btn" onclick="document.getElementById('predictionsVisualization').classList.add('hidden')" style="margin-top: 10px;">Fermer</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔍 Test de Points Spécifiques</h2>
+            <p>
+                Testez le réseau sur des coordonnées spécifiques pour vérifier ses prédictions.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn btn-secondary" onclick="testSpecificPoint()" id="testBtn" disabled>Tester un Point Spécifique</button>
+            </div>
+            
+            <div id="specificPointTest" class="hidden">
+                <h3>Test de point spécifique</h3>
+                <div style="display: grid; grid-template-columns: auto auto; gap: 15px; align-items: center;">
+                    <div class="form-group">
+                        <label for="testX">Coordonnée X (0-199) :</label>
+                        <input type="number" id="testX" value="100" min="0" max="199">
+                    </div>
+                    <div class="form-group">
+                        <label for="testY">Coordonnée Y (0-399) :</label>
+                        <input type="number" id="testY" value="200" min="0" max="399">
+                    </div>
+                </div>
+                <button class="btn" onclick="runSpecificPointTest()">Tester</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('specificPointTest').classList.add('hidden')">Fermer</button>
+                
+                <div id="testResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Matrice de Confusion</h2>
+            <p>
+                Analysez les performances du réseau sur le jeu de validation avec une matrice de confusion.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn btn-secondary" onclick="computeConfusionMatrix()" id="confusionBtn" disabled>Afficher la Matrice de Confusion</button>
+            </div>
+            
+            <div id="confusionMatrixContainer" class="hidden"></div>
+        </div>
+        
+        <div class="section">
+            <h2>💾 Export/Import du Modèle</h2>
+            <p>
+                Exportez ou importez le modèle entraîné pour le réutiliser plus tard.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn btn-secondary" onclick="exportModel()">Exporter le Modèle</button>
+                <button class="btn btn-secondary" onclick="importModel()">Importer un Modèle</button>
+                <input type="file" id="modelFileInput" accept=".json" style="display: none;" onchange="loadModelFile(event)">
+            </div>
+            
+            <div id="modelExport" class="hidden">
+                <h3>Modèle JSON</h3>
+                <textarea id="modelJson" style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;" readonly></textarea>
+                <div style="margin-top: 10px;">
+                    <button class="btn" onclick="copyModelToClipboard()">Copier dans le presse-papiers</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('modelExport').classList.add('hidden')">Fermer</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📚 Code Complet</h2>
+            <p>
+                Consultez le code complet de l'implémentation du réseau de neurones.
+            </p>
+            
+            <button class="btn btn-secondary" onclick="showFullNetworkCode()">Afficher le Code Complet</button>
+            
+            <div id="fullNetworkCode" class="hidden"></div>
+        </div>
+    </div>
+    
+    <!-- Script principal -->
+    <script src="network.js"></script>
+    <script>
+        // Initialisation des événements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mettre à jour l'affichage de la taille de la couche cachée
+            document.getElementById('hiddenSize').addEventListener('change', function() {
+                document.getElementById('hiddenSizeDisplay').textContent = this.value + ' neurones';
+            });
+        });
+    </script>
+</body>
 </html>

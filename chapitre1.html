@@ -11,11 +11,13 @@
             <h1>Le neurone artificiel : une fonction, pas un organe</h1>
 
             <div class="section">
-                <h2>Pourquoi chercher à copier le neurone biologique</h2>
+                <h2>Pourquoi <i>"neurone"</i></h2>
                 <p>
-                    Le neurone biologique est un déclencheur à effet de seuil : si le cumul des stimulations
-                    reçues dépasse un certain niveau, il excite son axone. Ce comportement est apparu comme simple
-                    à simuler. On a cru que l'intelligence émergerait du nombre de connexions.
+                    Dans un neurone biologique, si le cumul des stimulations
+                    reçues dépasse un certain niveau, il excite son axone. 
+                    <br><b>Ce comportement à effet de seuil est apparu comme simple
+                    à simuler</b>. 
+                    <br>On a cru que l'intelligence émergerait du nombre de connexions.
                 </p>
                 <div class="image-container">
                     <img
@@ -28,15 +30,18 @@
 
                 <h2>Le neurone artificiel est un calcul</h2>
                 <p>
-                    Un neurone artificiel reproduit la logique du neurone biologique par des opérations simples.
+                    Un neurone artificiel cherche à reproduire cette logique par des opérations simples.
                 </p>
                 <p>
                     Il associe à chaque entrée un <span class="keyword">poids</span> lui fixant son importance
-                    dans la décision commune. Par des multiplications et une sommation, il va produire un
-                    <span class="keyword">score brut</span>. Ce score brut est traduit en
+                    dans la décision commune. 
+                    <br>Par des multiplications et une sommation, il va produire un
+                    <span class="keyword">score brut</span>. 
+                    <br>Ce score brut est traduit en
                     <span class="keyword">prédiction</span> par une
-                    <span class="keyword">fonction d'activation</span> (au début de l'IA c'est la surveillance d'un
-                    seuil).
+                    <span class="keyword">fonction d'activation</span> 
+                    <br>Le <span class = "keyword">perceptron</span> est comme le neurone d'origine: Il s'active sur un dépassement de seuil (ou échelon).
+                    
                 </p>
                 <div class="image-container">
                     <img
@@ -47,17 +52,14 @@
                     <p><em>Schéma d'un neurone artificiel à deux entrées</em></p>
                 </div>
                 <p>
-                    Le <span class="keyword">score brut</span> = <i>(somme(xi.wi) + biais)</i>. Pour cet exemple :
-                    <i>(w1·x1 + w2·x2 + b)</i><br />
-                    C'est l'équation d'une droite que le <span class="keyword">biais b</span> décale de l'origine
-                    (0,0).
+                    Le <span class="keyword">score brut</span> est un calcul simple : <i>somme(xi.wi) + biais</i>. Ci-dessus  <i>w1·x1 + w2·x2 + b</i>
+                   <br />
+                    Avec deux entrées x1,x2, c' est l'équation d'une droite dans le plan, décalée de l'origine par le <span class="keyword">biais b</span>.
+                    <br>La droite est une frontière qui sépare les scores bruts positifs des négatifs.
                 </p>
 
-                <h4>Représentation géométrique du score brut</h4>
-                <p>
-                    Un neurone découpe des régions dans l'espace des nombres réels. En deux dimensions, c'est une
-                    droite frontière qui sépare les scores positifs des négatifs.
-                </p>
+                <h4>Représentation géométrique du score brut d'un neurone artificiel</h4>
+      
                 <div class="image-container">
                     <img
                         src="img/chap1/uneDroite.png"
@@ -66,16 +68,14 @@
                     />
                     <p>
                         <em>
-                            Les poids w1,w2 conditionnent la pente d'une droite, décalée de l'origine par le biais.
+                            Les poids w1,w2 conditionnent la pente de la droite, et le biais son décalage de l'origine.
                             <br />
-                            (Quelques valeurs de score brut sont affichées)
+                            Les scores bruts montrent la distance, positive ou négative, d'un point à la frontière de
+                    décision.
                         </em>
                     </p>
                 </div>
-                <p>
-                    La valeur du score brut montre la distance, positive ou négative, du point à la frontière de
-                    décision.
-                </p>
+
 
                 <h4>Tout neurone artificiel découpe son espace de nombres en deux parties.</h4>
                 <ul>
@@ -90,22 +90,23 @@
                     <span class="keyword">score brut</span> en une <span class="keyword">prédiction.</span>
                 </p>
                 <p>
-                    Celle du perceptron historique est la <span class="keyword">fonction échelon</span>
+                    Celle du perceptron historique est la <span class="keyword">fonction échelon H</span>
                     (<i>Heaviside step function</i> du nom de son inventeur).
                 </p>
                 <ul>
-                    <li>prédiction 1 si le <b>score brut</b> est supérieur ou égal à 0</li>
-                    <li>prédiction 0 s'il est inférieur</li>
+                    <li>La prédiction est 1 (vrai) si le <b>score brut</b> est supérieur ou égal à 0</li>
+                    <li>La prédiction est 0 (faux) s'il est inférieur</li>
                 </ul>
 
                 <div class="image-container">
-                    <img src="img/chap1/uneDroite_H.png" width="400" />
+                    <img src="img/chap1/uneDroite_H.png" width="380" />
                     <p><em>Le perceptron historique est un classifieur binaire.</em></p>
                 </div>
 
                 <h4>Classifieur binaire</h4>
                 <p>
-                    La fonction d'activation échelon crée des classifieurs binaires aux multiples usages :
+                    La fonction d'activation échelon crée des classifieurs binaires, tout ou rien, vrai ou faux.
+                    <br>Au final, de nombreuses demandes sont binaires: 
                 </p>
                 <ul>
                     <li><b>Filtrage de spam</b> (un message est-il spam ou non)</li>
@@ -126,15 +127,15 @@
             <hr />
 
             <div class="section">
-                <h2>🟡 Expérimentation pratique</h2>
+                <h2>🟡 Un exemple simplifié: un feu tricolore, deux interrupteurs</h2>
                 <p>
                     Le <b>perceptron</b> est le premier et le plus simple des neurones artificiels, mais il est
                     suffisant pour en illustrer le fonctionnement.
                 </p>
 
-                <h3>Piloter un feu tricolore avec des perceptrons</h3>
+             
 
-                <h4>On imagine n'avoir que deux interrupteurs pour allumer trois feux.</h4>
+                <b>On imagine n'avoir que deux interrupteurs pour allumer distinctment chacun des trois feux.</b>
                 <p>
                     <span class="note">
                         Du code simplissime pourrait le faire. L'ambition est d'utiliser des perceptrons pour en
@@ -142,27 +143,32 @@
                     </span>
                 </p>
                 <p>
-                    <b>Encodage préalable :</b><br />
-                    Un neurone ne sait faire que des calculs : il faut transformer ce problème en nombres.<br />
+                    <b>Encodage des deux entrées et des trois sorties:</b><br />
+                    <ul>
+                    <li>
                     On prend arbitrairement comme convention qu'un interrupteur fermé a la valeur 1 et un
                     interrupteur ouvert la valeur 0.<br />
-                    De même on considère qu'une prise est alimentée si sa valeur est 1 et hors tension si elle vaut
+                    </li><li>On considère qu'une prise est alimentée si sa valeur est 1 et hors tension si elle vaut
                     0.
+                    </li>
+                    </ul>
                 </p>
 
-                <h3>But à atteindre</h3>
+                <h3>Le jeu de données et de test</h3>
+                Il définit le comportement attendu du réseau de neurones.
                 <div class="center">
                     <table class="weight-table">
                         <thead>
                             <tr>
                                 <th>Interrupteurs</th>
-                                <th>sortie attendue</th>
-                                <th>en numérique</th>
+                                <th>sortie visuelle</th>
+                                <th>sortie numérique</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><span class="code">ouvert ouvert: 0 0</span></td>
+                                <td>0 0 <span class = "code"> ouvert ouvert</span>
+                                </td>
                                 <td>
                                     <img
                                         src="img/chap1/000.png"
@@ -174,7 +180,7 @@
                                 <td>0 0 0</td>
                             </tr>
                             <tr>
-                                <td><span class="code">ouvert fermé: 0 1</span></td>
+                                <td>0 1<span class = "code">ouvert fermé </span> </td>
                                 <td>
                                     <img
                                         src="img/chap1/100.png"
@@ -186,7 +192,7 @@
                                 <td>1 0 0</td>
                             </tr>
                             <tr>
-                                <td><span class="code">fermé ouvert: 1 0</span></td>
+                                <td>1 0 <span class = "code">&nbsp;fermé ouvert</span> </td>
                                 <td>
                                     <img
                                         src="img/chap1/010.png"
@@ -198,7 +204,7 @@
                                 <td>0 1 0</td>
                             </tr>
                             <tr>
-                                <td><span class="code">fermé fermé: 1 1</span></td>
+                                <td>1 1 <span class = "code">fermé fermé</span></td>
                                 <td>
                                     <img
                                         src="img/chap1/001.png"
@@ -212,12 +218,13 @@
                         </tbody>
                     </table>
                 </div>
-                <p>On a un système déterministe très simple à 4 cas. On peut l'entraîner soi-même.</p>
+                <p>On a un système déterministe élémentaire avec 4 cas à superviser. 
+                <br> Simplissime, on peut entraîner un réseau soi-même.</p>
 
-                <h3>Un neurone pour chaque feu</h3>
+                <h3>Un neurone par feu</h3>
                 <p>
                     Un neurone n'ayant qu'une sortie. Il faut un <span class="keyword">réseau</span> de 3 neurones
-                    distincts, un pour chaque prise.
+                    distincts.
                 </p>
                 <div class="image-container">
                     <img
@@ -228,31 +235,50 @@
                     <p>
                         <em>
                             Représentation du réseau avec 3 neurones perceptrons en parallèle<br />
-                            Chacun multiplie les mêmes entrées mais par ses propres poids.<br />
+                            Chacun multiplie les mêmes entrées mais avec ses propres poids.<br />
                             La couche de sortie doit allumer un seul feu à la fois.
                         </em>
                     </p>
                 </div>
 
-                <h4>À propos de la taille des modèles IA</h4>
+                <h4>La taille d'un modèle</h4>
                 <p>
-                    Un <span class="keyword">modèle</span> est le tableau numérique des paramètres une fois le
+                    Le <span class="keyword">modèle</span> est le tableau numérique des paramètres une fois le
                     réseau entraîné. Sa taille est son nombre de paramètres.<br />
+
                     Notre réseau a <span class="keyword">1 couche</span> (de sortie) et 3 neurones avec 3
                     paramètres chacun. C'est un <span class="keyword">modèle à <b>9</b> paramètres</span>.<br />
-                    Les réseaux de neurones pour la reconnaissance d'images ont <b>des millions (10<sup>6</sup>)</b>
+                    Les réseaux  pour la reconnaissance d'images ont <b>des millions (10<sup>6</sup>)</b>
                     de paramètres et des dizaines de couches.<br />
-                    Les grands <span class="keyword">LLM (Large Language Model)</span> en ont des
-                    <b>milliers de milliards (10<sup>12</sup>)</b> et des centaines de couches.<br />
-                    <br />
-                    <b>Le fonctionnement de base reste toujours le même</b> que ce soit pour 10, 10<sup>6</sup> ou
+                    Les grands <span class="keyword">LLM (Large Language Model)</span> qui répondent aux questions en ont des
+                    <b>milliers de milliards (10<sup>12</sup>)</b> avec des centaines de couches.<br />
+                    
+                    <br>Le fonctionnement de base reste le même</b> que ce soit pour 10, 10<sup>6</sup> ou
                     10<sup>12</sup> paramètres, mais la puissance de calcul à mobiliser est exponentielle.
                 </p>
-
+                </div>
+                <div class = "section">
+                
+                <a href="./chapitre1-1.html">
                 <h4>
-                    <a href="./chapitre1-1.html">Voir et expérimenter le réseau des feux tricolores</a>
+                    Expérimenter ce réseau
                 </h4>
-            </div>
+                <p>
+                    On peut entrainer soi-même ce modèle en modifiant ses poids par petits pas comme le fait un apprentissage automatique. 
+                    <br>La matrice des poids est initialisée au hasard, à vous de corriger par étapes pour réduire l'erreur de prédiction.
+                    <br> En deux dimensions, vous pourrez voir les droites à orienter (changer les poids) afin d'isoler chaque feu indépendamment.
+            
+               </p>
+                  </a>
+         
+                 <a href="./chapitre2.html">
+                <h4>Sauter l'expérience et aller au chapitre 2</h4>
+                      <p>
+                 Surtout si vous avez déjà fait et réussi le test.
+                    </p>
+                </a>
+             
+           </div>
         </div>
     </body>
 </html>

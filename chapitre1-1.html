@@ -10,17 +10,19 @@
     <div class="container">
       <h1>Entrainez le réseau de neurones des feux tricolores</h1>
 
-      <div class="info">
-        <h4>
-   
-<b>Objectif :</b> Ajustez (+/-) les poids ou les biais 
-pour orienter la frontière de chaque neurone vers son objectif unique. <br>
+      <div class="info"  style = "font-size: 1.0em;">
 
-<b>Vérifications :</b> appuyez sur le bouton d'un feu : il doit s'allumer seul.
-Si plusieurs feux s'allument, ou aucun, continuez à ajuster les droites.
-<br><b>Bloqué ?</b> Cliquez sur « Solution aléatoire » pour voir des paramètrages qui satisfont la demande.
-<br><b>Laisser faire ?</b> Lancez un apprentissage automatique et observez. (De rares cas peuvent nécessiter des centaines d'itérations. Patientez)
-  </h4><code> rafraîchir la page pour un nouveau cas initial </code> </div>
+   
+        <b>Objectif :</b> Ajustez (+/-) les poids ou les biais 
+        pour orienter la frontière de chaque neurone vers son objectif unique. <br>
+
+        <b>Vérifications :</b> appuyez sur le bouton d'un feu : il doit s'allumer seul.
+        Si plusieurs feux s'allument, ou aucun, continuez à ajuster les droites.
+        <br><b>Bloqué ?</b> Cliquez sur « Solution aléatoire » pour voir des modèles de poids qui satisfont la demande.
+        <br><b>Laisser faire ?</b> Lancez un apprentissage automatique et observez. (De rares cas peuvent nécessiter des centaines d'itérations. Patientez)
+        <br><b>Recommencer</b> : rafraîchir cette page pour un nouveau jeu de poids initial.
+
+      </div>
 
 
     <br>
@@ -259,9 +261,9 @@ Si plusieurs feux s'allument, ou aucun, continuez à ajuster les droites.
         </div>
 
       </div>
-<h4>Algorithme d'apprentissage de Rosenblatt </h4>
+<h4>Algorithme d'apprentissage automatique de Rosenblatt </h4>
 <p>
- Il n'y a que 4 cas possibles d'erreur ( objectif - prédiction ) avec un perceptron classifieur : 
+ Avec un perceptron classifieur, il n'y a que 4 cas à tester et 3 cas d'erreurs (objectif - prédiction) possibles : 
 
 <table class="perceptron">
     <thead>
@@ -272,16 +274,17 @@ Si plusieurs feux s'allument, ou aucun, continuez à ajuster les droites.
     <tbody>
         <tr><td>0</td><td>0</td><td>0</td><td>rien</td></tr>
         <tr><td>1</td><td>1</td><td>0</td><td>rien</td></tr>
-        <tr><td>0</td><td>1</td><td>−1</td><td><code>w ← w − η·x</code>, <code>b ← b − η</code> <br>(baisser le score brut)</td></tr>
-        <tr><td>1</td><td>0</td><td>+1</td><td><code>w ← w + η·x</code>, <code>b ← b + η</code> <<br>(monter le score brut )</td></tr>
+        <tr><td>0</td><td>1</td><td>−1</td><td><code>w ← w − η·x</code>, <code>b ← b − η</code> <br>(pour baisser le score brut)</td></tr>
+        <tr><td>1</td><td>0</td><td>+1</td><td><code>w ← w + η·x</code>, <code>b ← b + η</code> <<br>(pour monter le score brut )</td></tr>
     </tbody>
 </table>
 Le <span class = "keyword"> taux d'apprentissage η  
 (êta) </span> est petit nombre positif qui contrôle l'amplitude de la correction à chaque erreur.
 
-<br>Les poids convergent ainsi progressivement vers une séparation correcte.
-<br> Pour accélérer l'apprentissage, les corrections commencent par de grands pas puis, au fur et à mesure des itérations, le pas est réduit. 
+<br>Les poids convergent ainsi progressivement, le plus souvent, vers une séparation correcte.
 
+<br>Pour accélérer l'apprentissage, les corrections commencent par de grands pas puis, au fil des itérations, le pas est réduit.
+<br> Un pas trop grand et l'algorithme <i>danse</i> au-dessus du minimum ; trop petit, il finit par <i>piétiner</i>: On n'aboutit pas toujours.
 </p>
 
 
@@ -1160,8 +1163,14 @@ Le <span class = "keyword"> taux d'apprentissage η
     <hr>
     <div style="margin-top: 20px; text-align: center;">
     <h4 id="bravo-message" style="display: none;"> Bravo ! Vous avez entrainé un réseau de neurones perceptron et obtenu un modèle réutilisable. </h4>
-      <a href="chapitre2.html" class="more-info-link">
-        <button class="more-info-button">Chapitre 2 - Réseaux de neurones</button></a>
-        </div>
+
+      <a href="./chapitre2.html">
+                <h4>Vers le chapitre 2</h4>
+                      <p>
+                 comment composer des transformations simples
+                    </p>
+                </a>
+    
+    </div>
   </body>
 </html>

@@ -1,398 +1,695 @@
 <!doctype html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            Feux tricolores - Description et figure explicative
-        </title>
-        <link rel="stylesheet" href="../style.css" />
-    </head>
-    <body>
-        <div class="container">
-            <h1>Feux tricolores - Tablette tactile et réseau de neurones</h1>
-
-            <div class="section">
-                <h2>1. Configuration du problème</h2>
-                <div class="two-columns">
-                    <div class="column">
-                        <h3>Tablette tactile</h3>
-                        <p>
-                            Une tablette de <span class="math">200 × 400</span> pixels avec trois cercles tactiles :
-                        </p>
-                        <ul>
-                            <li><strong>Vert</strong> : (x=100, y=80), rayon = 50px</li>
-                            <li><strong>Orange</strong> : (x=100, y=200), rayon = 50px</li>
-                            <li><strong>Rouge</strong> : (x=100, y=320), rayon = 50px</li>
-                        </ul>
-                            Les cercles sont <strong>distribués verticalement</strong> :
-                            Vert centré sur y=80, Rouge sur y=320, et Orange à mi-hauteur (y=200).
-                            Espacement de <span class="math">20px</span> entre les bords des cercles
-                            (distance entre centres = <span class="math">120px</span>).
-                        <h3>Comportement</h3>
-                            L'appui sur un cercle active une action spécifique :
-                        <table>
-                            <tr><th>Cercle</th><th>Couleur</th><th>Action</th><th>Sortie</th></tr>
-                            <tr><td>1</td><td>Vert</td><td>Allumer vert</td><td>[1,0,0]</td></tr>
-                            <tr><td>2</td><td>Orange</td><td>Allumer orange</td><td>[0,1,0]</td></tr>
-                            <tr><td>3</td><td>Rouge</td><td>Allumer rouge</td><td>[0,0,1]</td></tr>
-                            <tr><td>-</td><td>Ailleurs</td><td><strong>Éteindre tout</strong></td><td>[0,0,0]</td></tr>
-                        </table>
-                        
-                        <div class="important-box">
-                            <p>
-                                <strong>Encodage des sorties</strong> : Chaque sortie correspond à une couleur.
-                                <strong>Sortie = 1</strong> → la couleur est allumée.<br>
-                                <strong>Sortie = 0</strong> → la couleur est éteinte.<br>
-                                <strong>[0,0,0]</strong> → toutes les couleurs sont éteintes.
-                            </p>
-                        </div>
-                    </div>
-                        <h3>Schéma de la tablette</h3>
-                        <div class="figure-container">
-                            <svg width="220" height="450" viewBox="0 0 220 450">
-                                <!-- Fond -->
-                                <rect x="10" y="10" width="200" height="400" fill="#f0f0f0" stroke="#333" stroke-width="2" rx="5"/>
-                                
-                                <!-- Cercles -->
-                                <circle cx="110" cy="80" r="50" fill="#4CAF50" stroke="#333" stroke-width="1"/>
-                                <text x="110" y="80" text-anchor="middle" fill="white" font-size="14" dy="4">VERT</text>
-                                <circle cx="110" cy="200" r="50" fill="#FF9800" stroke="#333" stroke-width="1"/>
-                                <text x="110" y="200" text-anchor="middle" fill="white" font-size="14" dy="4">ORANGE</text>
-                                <circle cx="110" cy="320" r="50" fill="#F44336" stroke="#333" stroke-width="1"/>
-                                <text x="110" y="320" text-anchor="middle" fill="white" font-size="14" dy="4">ROUGE</text>
-                                <!-- Axes -->
-                                <line x1="10" y1="420" x2="210" y2="420" stroke="#666"/>
-                                <text x="10" y="435" font-size="10" fill="#666">0</text>
-                                <text x="110" y="435" text-anchor="middle" font-size="10" fill="#666">100</text>
-                                <text x="210" y="435" text-anchor="end" font-size="10" fill="#666">200</text>
-                                <line x1="40" y1="10" x2="40" y2="420" stroke="#666"/>
-                                <text x="35" y="80" text-anchor="end" font-size="10" fill="#666">80</text>
-                                <text x="35" y="200" text-anchor="end" font-size="10" fill="#666">200</text>
-                                <text x="35" y="320" text-anchor="end" font-size="10" fill="#666">320</text>
-                                <text x="35" y="420" text-anchor="end" font-size="10" fill="#666">400</text>
-                            </svg>
-                            <div class="figure-caption">
-                                Figure 1 : Disposition des 3 cercles tactiles sur la tablette 200×400 pixels.
-                                Vert centré à y=80, Rouge à y=320, Orange à mi-hauteur (y=200).
-                                Rayon de chaque cercle : 50 pixels.
-                            </div>
-                </div>
-                <p class="note">
-                    <strong>Remarque</strong> : Avec un rayon de 50 pixels et un espacement de 50 pixels entre les bords,
-                    la distance entre centres est de 100 pixels. Les centres sont positionnés à y=100, y=200 et y=300.
-                </p>
-            </div>
-            <hr/>
-                <h2>2. Architecture du réseau de neurones</h2>
-                        <h3>Topologie</h3>
-                            Réseau <span class="keyword">MLP</span> (Multi-Layer Perceptron) avec :
-                            <li><strong>Couche d'entrée</strong> : 2 neurones (x, y)</li>
-                            <li><strong>Couche cachée</strong> : 12 neurones</li>
-                            <li><strong>Couche de sortie</strong> : 3 neurones (Vert, Orange, Rouge)</li>
-                        <h3>Fonctions d'activation</h3>
-                            Choix optimaux pour ce problème de classification non-linéaire :
-                            <li><strong>Couche cachée</strong> : <span class="keyword">ReLU</span> (Rectified Linear Unit)
-                                <p class="note">Évite le problème du gradient évanescent et permet un apprentissage plus rapide.</p>
-                            </li>
-                            <li><strong>Couche de sortie</strong> : <span class="keyword">Sigmoïde</span>
-                                <p class="note">Produit des valeurs entre 0 et 1 pour chaque sortie, adaptée aux étiquettes binaires.</p>
-                                <strong>Pourquoi pas Softmax ?</strong> Softmax imposerait que la somme des sorties = 1,
-                                ce qui n'est pas adapté ici : on veut pouvoir avoir toutes les sorties à 0
-                                (éteindre tout) ou une seule à 1 (allumer une couleur).
-                        <h3>Schéma du réseau</h3>
-                            <svg width="400" height="250" viewBox="0 0 400 250">
-                                <!-- Couche d'entrée -->
-                                <circle cx="50" cy="100" r="18" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
-                                <text x="50" y="105" text-anchor="middle" font-size="12" fill="white">x</text>
-                                <circle cx="50" cy="150" r="18" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
-                                <text x="50" y="155" text-anchor="middle" font-size="12" fill="white">y</text>
-                                <text x="50" y="50" text-anchor="middle" font-size="11" fill="#333"><strong>Entrée</strong></text>
-                                <text x="50" y="40" text-anchor="middle" font-size="10" fill="#666">2 neurones</text>
-                                <!-- Flèches vers couche cachée -->
-                                <g stroke="#666" stroke-width="1" fill="none">
-                                    <line x1="65" y1="100" x2="120" y2="30"/>
-                                    <line x1="65" y1="100" x2="120" y2="60"/>
-                                    <line x1="65" y1="100" x2="120" y2="90"/>
-                                    <line x1="65" y1="100" x2="120" y2="120"/>
-                                    <line x1="65" y1="100" x2="120" y2="150"/>
-                                    <line x1="65" y1="100" x2="120" y2="180"/>
-                                    <line x1="65" y1="150" x2="120" y2="30"/>
-                                    <line x1="65" y1="150" x2="120" y2="60"/>
-                                    <line x1="65" y1="150" x2="120" y2="90"/>
-                                    <line x1="65" y1="150" x2="120" y2="120"/>
-                                    <line x1="65" y1="150" x2="120" y2="150"/>
-                                    <line x1="65" y1="150" x2="120" y2="180"/>
-                                </g>
-                                <!-- Couche cachée (12 neurones) -->
-                                <circle cx="150" cy="30" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="150" cy="60" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="150" cy="90" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="150" cy="120" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="150" cy="150" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="150" cy="180" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="170" cy="45" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="170" cy="75" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="170" cy="105" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="170" cy="135" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="170" cy="165" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="170" cy="195" r="15" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                                <text x="160" y="20" text-anchor="middle" font-size="11" fill="#333"><strong>Cachée</strong></text>
-                                <text x="160" y="10" text-anchor="middle" font-size="10" fill="#666">12 neurones</text>
-                                <text x="160" y="-5" text-anchor="middle" font-size="9" fill="#666">ReLU</text>
-                                <!-- Flèches vers couche de sortie -->
-                                    <line x1="185" y1="30" x2="240" y2="70"/>
-                                    <line x1="185" y1="60" x2="240" y2="70"/>
-                                    <line x1="185" y1="90" x2="240" y2="70"/>
-                                    <line x1="185" y1="120" x2="240" y2="110"/>
-                                    <line x1="185" y1="150" x2="240" y2="110"/>
-                                    <line x1="185" y1="180" x2="240" y2="110"/>
-                                    <line x1="195" y1="45" x2="240" y2="150"/>
-                                    <line x1="195" y1="75" x2="240" y2="150"/>
-                                    <line x1="195" y1="105" x2="240" y2="150"/>
-                                    <line x1="195" y1="135" x2="240" y2="190"/>
-                                    <line x1="195" y1="165" x2="240" y2="190"/>
-                                    <line x1="195" y1="195" x2="240" y2="190"/>
-                                <!-- Couche de sortie -->
-                                <circle cx="280" cy="70" r="15" fill="#9C27B0" stroke="#7B1FA2" stroke-width="2"/>
-                                <text x="280" y="75" text-anchor="middle" font-size="12" fill="white">V</text>
-                                <circle cx="280" cy="110" r="15" fill="#FF9800" stroke="#E68A00" stroke-width="2"/>
-                                <text x="280" y="115" text-anchor="middle" font-size="12" fill="white">O</text>
-                                <circle cx="280" cy="150" r="15" fill="#F44336" stroke="#D32F2F" stroke-width="2"/>
-                                <text x="280" y="155" text-anchor="middle" font-size="12" fill="white">R</text>
-                                <text x="280" y="180" text-anchor="middle" font-size="11" fill="#333"><strong>Sortie</strong></text>
-                                <text x="280" y="190" text-anchor="middle" font-size="10" fill="#666">3 neurones</text>
-                                <text x="280" y="200" text-anchor="middle" font-size="9" fill="#666">Sigmoïde</text>
-                                Figure 2 : Architecture du réseau MLP 2-12-3 avec fonctions d'activation ReLU (cachée) et Sigmoïde (sortie).
-                <h3>Fonctionnement mathématique</h3>
-                <p>
-                    Pour une entrée <span class="math">(x, y)</span> normalisée dans [0,1] :
-                
-                <div class="code-block">
-// Couche cachée (12 neurones avec ReLU)<br>
-hidden = ReLU(W₁·[x,y]ᵀ + b₁)  // W₁ : matrice 12×2, b₁ : vecteur 12<br><br>
-// Couche de sortie (3 neurones avec Sigmoïde)<br>
-output = σ(W₂·hidden + b₂)  // W₂ : matrice 3×12, b₂ : vecteur 3<br><br>
-// ReLU(z) = max(0, z)<br>
-// σ(z) = 1 / (1 + exp(-z))
-                <h2>3. Constitution du jeu de données</h2>
-                <h3>Problématique</h3>
-                    La tablette compte <span class="math">200 × 400 = 80 000</span> pixels.
-                    Tester toutes les positions est :
-                <ul>
-                    <li><strong>Calculatoirement coûteux</strong> : 80 000 itérations par epoch</li>
-                    <li><strong>Redondant</strong> : Les pixels voisins donnent des sorties très similaires</li>
-                    <li><strong>Innécessaire</strong> : Le réseau peut généraliser à partir d'un échantillonnage représentatif</li>
-                </ul>
-                <h3>Stratégie d'échantillonnage</h3>
-                        <h4>Taille du jeu d'entraînement</h4>
-                            <strong>1 200 échantillons</strong> au total :
-                            <tr><th>Catégorie</th><th>Nombre</th><th>% du total</th></tr>
-                            <tr><td>Vert</td><td>300</td><td>25%</td></tr>
-                            <tr><td>Orange</td><td>300</td><td>25%</td></tr>
-                            <tr><td>Rouge</td><td>300</td><td>25%</td></tr>
-                            <tr><td>Ailleurs</td><td>300</td><td>25%</td></tr>
-                            <tr><th>Total</th><th>1 200</th><th>100%</th></tr>
-                                <strong>Équilibrage des classes</strong> : Chaque catégorie (3 cercles + extérieur) 
-                                a le même nombre d'échantillons pour éviter un biais d'apprentissage.
-                        <h4>Méthode de génération</h4>
-                            <strong>Pour chaque cercle</strong> :
-                        <ol>
-                            <li>Définir un carré englobant (<span class="math">100×100</span> pixels)</li>
-                            <li>Générer 300 points aléatoires dans ce carré</li>
-                            <li>Filtrer : ne garder que les points <em>dans</em> le cercle</li>
-                            <li>Répéter jusqu'à obtenir 300 points valides</li>
-                        </ol>
-                            <strong>Pour l'extérieur</strong> :
-                            <li>Générer des points aléatoires sur toute la tablette</li>
-                            <li>Rejeter ceux qui tombent dans un cercle</li>
-                            <li>Jusqu'à obtenir 300 points</li>
-                <h3>Jeu de validation (Validation Set)</h3>
-                    <strong>240 échantillons</strong> (20% du dataset total de 1 440) générés avec la même méthode
-                    mais avec une graine aléatoire différente.
-                    <strong>Composition</strong> :
-                    <li>60 points par cercle (180 total)</li>
-                    <li>60 points en dehors des cercles</li>
-                <h3>Visualisation de l'échantillonnage</h3>
-                <div class="figure-container">
-                    <svg width="220" height="450" viewBox="0 0 220 450">
-                        <!-- Fond -->
-                        <rect x="10" y="10" width="200" height="400" fill="#f0f0f0" stroke="#333" stroke-width="2" rx="5"/>
-                        <!-- Cercles (transparents) -->
-                        <circle cx="110" cy="80" r="50" fill="none" stroke="#4CAF50" stroke-width="1" stroke-dasharray="2,2"/>
-                        <circle cx="110" cy="200" r="50" fill="none" stroke="#FF9800" stroke-width="1" stroke-dasharray="2,2"/>
-                        <circle cx="110" cy="320" r="50" fill="none" stroke="#F44336" stroke-width="1" stroke-dasharray="2,2"/>
-                        <!-- Points échantillonnés (Vert) -->
-                        <g fill="#4CAF50">
-                            <circle cx="90" cy="60" r="1.5"/>
-                            <circle cx="100" cy="70" r="1.5"/>
-                            <circle cx="110" cy="80" r="1.5"/>
-                            <circle cx="120" cy="90" r="1.5"/>
-                            <circle cx="130" cy="100" r="1.5"/>
-                            <circle cx="95" cy="95" r="1.5"/>
-                            <circle cx="105" cy="85" r="1.5"/>
-                            <circle cx="115" cy="75" r="1.5"/>
-                            <circle cx="85" cy="80" r="1.5"/>
-                            <circle cx="125" cy="70" r="1.5"/>
-                        </g>
-                        <!-- Points échantillonnés (Orange) -->
-                        <g fill="#FF9800">
-                            <circle cx="90" cy="180" r="1.5"/>
-                            <circle cx="100" cy="190" r="1.5"/>
-                            <circle cx="110" cy="200" r="1.5"/>
-                            <circle cx="120" cy="210" r="1.5"/>
-                            <circle cx="130" cy="220" r="1.5"/>
-                            <circle cx="95" cy="215" r="1.5"/>
-                            <circle cx="105" cy="205" r="1.5"/>
-                            <circle cx="115" cy="195" r="1.5"/>
-                            <circle cx="85" cy="200" r="1.5"/>
-                            <circle cx="125" cy="190" r="1.5"/>
-                        <!-- Points échantillonnés (Rouge) -->
-                        <g fill="#F44336">
-                            <circle cx="90" cy="300" r="1.5"/>
-                            <circle cx="100" cy="310" r="1.5"/>
-                            <circle cx="110" cy="320" r="1.5"/>
-                            <circle cx="120" cy="330" r="1.5"/>
-                            <circle cx="130" cy="340" r="1.5"/>
-                            <circle cx="95" cy="335" r="1.5"/>
-                            <circle cx="105" cy="325" r="1.5"/>
-                            <circle cx="115" cy="315" r="1.5"/>
-                            <circle cx="85" cy="320" r="1.5"/>
-                            <circle cx="125" cy="310" r="1.5"/>
-                        <!-- Points échantillonnés (Extérieur) -->
-                        <g fill="#666">
-                            <circle cx="50" cy="50" r="1.5"/>
-                            <circle cx="150" cy="50" r="1.5"/>
-                            <circle cx="50" cy="130" r="1.5"/>
-                            <circle cx="150" cy="130" r="1.5"/>
-                            <circle cx="50" cy="250" r="1.5"/>
-                            <circle cx="150" cy="250" r="1.5"/>
-                            <circle cx="50" cy="350" r="1.5"/>
-                            <circle cx="150" cy="350" r="1.5"/>
-                            <circle cx="110" cy="20" r="1.5"/>
-                            <circle cx="110" cy="380" r="1.5"/>
-                        <!-- Légende -->
-                        <g x="25" y="420">
-                            <circle cx="30" cy="430" r="1.5" fill="#4CAF50"/>
-                            <text x="40" y="435" font-size="10" fill="#333">Vert (300 pts)</text>
-                            
-                            <circle cx="120" cy="430" r="1.5" fill="#FF9800"/>
-                            <text x="130" y="435" font-size="10" fill="#333">Orange (300 pts)</text>
-                            <circle cx="30" cy="445" r="1.5" fill="#F44336"/>
-                            <text x="40" y="450" font-size="10" fill="#333">Rouge (300 pts)</text>
-                            <circle cx="120" cy="445" r="1.5" fill="#666"/>
-                            <text x="130" y="450" font-size="10" fill="#333">Extérieur (300 pts)</text>
-                    </svg>
-                    <div class="figure-caption">
-                        Figure 3 : Échantillonnage du jeu de données - 300 points par catégorie (1 200 total).
-                        Les points sont générés aléatoirement dans chaque région cible.
-                <h2>4. Entraînement du réseau</h2>
-                        <h3>Paramètres d'apprentissage</h3>
-                            <tr><th>Paramètre</th><th>Valeur</th><th>Justification</th></tr>
-                            <tr>
-                                <td>Fonction de coût</td>
-                                <td>Binary Cross-Entropy</td>
-                                <td>Adaptée aux sorties binaires indépendantes</td>
-                            </tr>
-                                <td>Optimiseur</td>
-                                <td>Adam</td>
-                                <td>Adaptatif, efficace pour ce type de problème</td>
-                                <td>Taux d'apprentissage</td>
-                                <td>0.01</td>
-                                <td>Valeur standard pour Adam</td>
-                                <td>Nombre d'epochs</td>
-                                <td>500-1000</td>
-                                <td>Suffisant pour converger</td>
-                                <td>Taille batch</td>
-                                <td>32</td>
-                                <td>Mini-batch pour l'optimisation</td>
-                        <h3>Normalisation des entrées</h3>
-                            Les coordonnées (x, y) sont normalisées entre <span class="math">[0, 1]</span> :
-                        <div class="code-block">
-x_normalisé = x / 199  // 0 ≤ x ≤ 199<br>
-y_normalisé = y / 399  // 0 ≤ y ≤ 399
-                            Cela améliore la convergence de l'algorithme d'optimisation.
-                        <h3>Encodage des sorties</h3>
-                            Chaque classe est représentée par un vecteur de 3 dimensions :
-Vert   : [1, 0, 0]  // Allumer vert<br>
-Orange : [0, 1, 0]  // Allumer orange<br>
-Rouge  : [0, 0, 1]  // Allumer rouge<br>
-Ailleurs: [0, 0, 0]  // Éteindre tout
-                <h3>Processus d'entraînement</h3>
-                    L'algorithme suit ces étapes :
-                <ol>
-                    <li><strong>Initialisation</strong> : Poids aléatoires (Xavier/Glorot)</li>
-                    <li><strong>Forward Pass</strong> : Calculer les prédictions du réseau</li>
-                    <li><strong>Calcul de la perte</strong> : Binary Cross-Entropy entre prédiction et cible</li>
-                    <li><strong>Backpropagation</strong> : Calculer les gradients par rapport aux poids</li>
-                    <li><strong>Mise à jour des poids</strong> : Utiliser Adam avec le gradient</li>
-                    <li><strong>Répéter</strong> pour tous les échantillons du batch, puis pour tous les epochs</li>
-                </ol>
-                <div class="important-box">
-                    <p>
-                        <strong>Validation</strong> : Après chaque epoch, évaluer le réseau sur le jeu de validation
-                        pour détecter le <em>overfitting</em>. Si l'erreur de validation commence à augmenter alors que
-                        l'erreur d'entraînement diminue encore, il faut arrêter l'entraînement (early stopping).
-                    </p>
-                <h2>5. Évaluation attendue</h2>
-                <h3>Métriques</h3>
-                    Après entraînement, on évalue :
-                    <li><strong>Accuracy</strong> : % de prédictions correctes (toutes les sorties exactes)</li>
-                    <li><strong>Precision/Recall par classe</strong> : Performance individuelle pour chaque cercle</li>
-                    <li><strong>Matrice de confusion</strong> : Visualisation des erreurs entre classes</li>
-                <h3>Visualisation de la frontière de décision</h3>
-                    On peut afficher :
-                    <li>La tablette avec une grille de prédictions du réseau</li>
-                    <li>Les régions prédites pour chaque classe</li>
-                    <li>Comparaison avec les cercles réels</li>
-                    Le réseau devrait apprendre à approximer les 3 cercles avec ses frontières non-linéaires,
-                    bien que la forme ne soit pas parfaitement circulaire (limitation des réseaux MLP).
-                <h3>Attentes</h3>
-                    Avec 12 neurones dans la couche cachée, le réseau devrait atteindre :
-                    <li><strong>Accuracy > 95%</strong> sur le jeu d'entraînement</li>
-                    <li><strong>Accuracy > 90%</strong> sur le jeu de validation</li>
-                    <li>Une bonne généralisation aux points non vus</li>
-                <h2>6. Résumé</h2>
-                <table>
-                    <tr><th>Aspect</th><th>Choix retenu</th><th>Justification</th></tr>
-                    <tr>
-                        <td>Taille tablette</td>
-                        <td>200×400 pixels</td>
-                        <td>Accueille 3 cercles de rayon 50 espacés de 50px</td>
-                    </tr>
-                        <td>Cercles</td>
-                        <td>Rayon 50px, centres à (100,100), (100,200), (100,300)</td>
-                        <td>Centrés verticalement, espacement de 50px entre bords</td>
-                        <td>Architecture réseau</td>
-                        <td>MLP 2-12-3</td>
-                        <td>2 entrées, 12 cachés (ReLU), 3 sorties (Sigmoïde)</td>
-                        <td>Taille dataset</td>
-                        <td>1 200 échantillons</td>
-                        <td>300 par classe, équilibré</td>
-                        <td>Validation set</td>
-                        <td>240 échantillons</td>
-                        <td>20% du total, même distribution</td>
-                        <td>Encodage sorties</td>
-                        <td>[1,0,0], [0,1,0], [0,0,1], [0,0,0]</td>
-                        <td>Vert, Orange, Rouge, Ailleurs (éteindre)</td>
-                        <td>Fonction d'activation</td>
-                        <td>ReLU + Sigmoïde</td>
-                        <td>ReLU pour cachée, Sigmoïde pour sortie binaire</td>
-                        <td>Fonction de coût</td>
-                        <td>Binary Cross-Entropy</td>
-                        <td>Adaptée aux sorties binaires indépendantes</td>
-                        <td>Optimiseur</td>
-                        <td>Adam</td>
-                        <td>Adaptatif et efficace</td>
-                </table>
-                <h2>Prochaines étapes</h2>
-                    La description ci-dessus définit complètement le problème et la méthode.
-                    La prochaine étape consiste à :
-                    <li>Générer le dataset d'entraînement et de validation</li>
-                    <li>Implémenter le réseau de neurones MLP</li>
-                    <li>Entraîner le réseau avec les paramètres définis</li>
-                    <li>Évaluer et visualiser les résultats</li>
-                    Voir le fichier <code>entrainement.html</code> pour l'implémentation complète.
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Description - Feux Tricolores RGB</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #2196F3;
+        }
+        
+        .btn-secondary:hover {
+            background: #0b7dda;
+        }
+        
+        .important-box {
+            background: #fffde7;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .note-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .diagram {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Feux Tricolores RGB - Description Complète</h1>
+        
+        <div class="center" style="margin: 20px 0;">
+            <a href="index.html" class="btn">Retour à l'accueil</a>
+            <a href="entrainement.html" class="btn btn-secondary">Aller à l'entraînement</a>
         </div>
-    </body>
+        
+        <div class="section">
+            <h2>🎯 Introduction</h2>
+            <p>
+                Ce projet implémente un <strong>réseau de neurones artificiels</strong> de type 
+                <strong>MLP (Multi-Layer Perceptron)</strong> pour résoudre un problème de classification 
+                visuelle : reconnaître sur quelle zone tactile d'une tablette l'utilisateur a cliqué.
+            </p>
+            
+            <div class="important-box">
+                <strong>Objectif :</strong> Créer un système capable de classer automatiquement les coordonnées 
+                (x, y) d'un clic sur une tablette tactile en une des 4 catégories : 
+                <strong>Rouge</strong>, <strong>Vert</strong>, <strong>Bleu</strong>, ou <strong>Noir</strong> (fond).
+            </div>
+            
+            <p>
+                Ce projet illustre les concepts fondamentaux des réseaux de neurones :
+            </p>
+            <ul>
+                <li>Architecture des réseaux MLP</li>
+                <li>Fonctions d'activation (ReLU, Sigmoïde)</li>
+                <li>Descente de gradient avec Adam</li>
+                <li>Apprentissage supervisé</li>
+                <li>Validation et évaluation de modèles</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>📐 Configuration du Problème</h2>
+            
+            <h3>Tablette Tactile</h3>
+            <ul>
+                <li><strong>Dimensions :</strong> 200 × 400 pixels</li>
+                <li><strong>Système de coordonnées :</strong> Origine (0,0) en haut à gauche, (199,399) en bas à droite</li>
+            </ul>
+            
+            <h3>Zones Tactiles (Cercles)</h3>
+            <p>
+                Trois cercles de couleur sont positionnés verticalement sur la tablette :
+            </p>
+            
+            <table>
+                <tr>
+                    <th>Couleur</th>
+                    <th>Centre (x,y)</th>
+                    <th>Rayon</th>
+                    <th>Sortie Attendue</th>
+                </tr>
+                <tr>
+                    <td style="color: #F44336; font-weight: bold;">Rouge</td>
+                    <td>(100, 320)</td>
+                    <td>50 pixels</td>
+                    <td><code>[1, 0, 0]</code></td>
+                </tr>
+                <tr>
+                    <td style="color: #4CAF50; font-weight: bold;">Vert</td>
+                    <td>(100, 80)</td>
+                    <td>50 pixels</td>
+                    <td><code>[0, 1, 0]</code></td>
+                </tr>
+                <tr>
+                    <td style="color: #2196F3; font-weight: bold;">Bleu</td>
+                    <td>(100, 200)</td>
+                    <td>50 pixels</td>
+                    <td><code>[0, 0, 1]</code></td>
+                </tr>
+                <tr>
+                    <td style="color: #000000; font-weight: bold;">Noir (Fond)</td>
+                    <td>Partout ailleurs</td>
+                    <td>-</td>
+                    <td><code>[0, 0, 0]</code></td>
+                </tr>
+            </table>
+            
+            <div class="diagram">
+                <svg width="240" height="440" viewBox="0 0 240 440">
+                    <!-- Tablette -->
+                    <rect x="10" y="10" width="200" height="400" fill="none" stroke="#333" stroke-width="3" rx="5"/>
+                    <text x="110" y="25" text-anchor="middle" font-size="14" fill="#333">Tablette 200×400</text>
+                    
+                    <!-- Cercle Vert (y=80) -->
+                    <circle cx="110" cy="90" r="50" fill="none" stroke="#4CAF50" stroke-width="3" stroke-dasharray="5,5"/>
+                    <circle cx="110" cy="90" r="3" fill="#4CAF50"/>
+                    <text x="110" y="95" text-anchor="middle" font-size="14" fill="#4CAF50" font-weight="bold">VERT</text>
+                    <text x="110" y="108" text-anchor="middle" font-size="11" fill="#666">(100,80)</text>
+                    
+                    <!-- Cercle Bleu (y=200) -->
+                    <circle cx="110" cy="210" r="50" fill="none" stroke="#2196F3" stroke-width="3" stroke-dasharray="5,5"/>
+                    <circle cx="110" cy="210" r="3" fill="#2196F3"/>
+                    <text x="110" y="215" text-anchor="middle" font-size="14" fill="#2196F3" font-weight="bold">BLEU</text>
+                    <text x="110" y="228" text-anchor="middle" font-size="11" fill="#666">(100,200)</text>
+                    
+                    <!-- Cercle Rouge (y=320) -->
+                    <circle cx="110" cy="330" r="50" fill="none" stroke="#F44336" stroke-width="3" stroke-dasharray="5,5"/>
+                    <circle cx="110" cy="330" r="3" fill="#F44336"/>
+                    <text x="110" y="335" text-anchor="middle" font-size="14" fill="#F44336" font-weight="bold">ROUGE</text>
+                    <text x="110" y="348" text-anchor="middle" font-size="11" fill="#666">(100,320)</text>
+                    
+                    <!-- Légende -->
+                    <g transform="translate(220, 10)">
+                        <text x="0" y="20" font-size="12" fill="#333">Légende :</text>
+                        <circle cx="10" cy="40" r="8" fill="#4CAF50"/>
+                        <text x="25" y="45" font-size="12" fill="#333">Vert</text>
+                        <circle cx="10" cy="60" r="8" fill="#2196F3"/>
+                        <text x="25" y="65" font-size="12" fill="#333">Bleu</text>
+                        <circle cx="10" cy="80" r="8" fill="#F44336"/>
+                        <text x="25" y="85" font-size="12" fill="#333">Rouge</text>
+                        <circle cx="10" cy="100" r="8" fill="#000000"/>
+                        <text x="25" y="105" font-size="12" fill="#333">Noir</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🧠 Architecture du Réseau de Neurones</h2>
+            
+            <h3>Topologie</h3>
+            <p>
+                Le réseau utilisé est un <strong>Perceptron Multi-Couche (MLP)</strong> avec l'architecture suivante :
+            </p>
+            
+            <div class="diagram">
+                <pre style="font-family: 'Courier New', monospace; font-size: 16px; line-height: 2;">
+    ┌─────────────┐       ┌─────────────┐       ┌─────────────┐
+    │   Entrée    │──────►│   Cachée    │──────►│   Sortie    │
+    │   (2)       │       │   (12)      │       │   (3)       │
+    └─────────────┘       └─────────────┘       └─────────────┘
+          │                           │                         │
+          ▼                           ▼                         ▼
+        (x,y)                     ReLU                   Sigmoïde
+        normalisés                 activation             activation
+        [0,1]×[0,1]
+                </pre>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>Couche</th>
+                    <th>Nombre de neurones</th>
+                    <th>Fonction d'activation</th>
+                    <th>Rôle</th>
+                </tr>
+                <tr>
+                    <td><strong>Entrée</strong></td>
+                    <td>2</td>
+                    <td>Linéraire</td>
+                    <td>Reçoit les coordonnées (x, y) normalisées</td>
+                </tr>
+                <tr>
+                    <td><strong>Cachée</strong></td>
+                    <td>12 (configurable : 8, 10, 12, 16, 20)</td>
+                    <td><span class="highlight">ReLU</span></td>
+                    <td>Extrait des caractéristiques non-linéaires</td>
+                </tr>
+                <tr>
+                    <td><strong>Sortie</strong></td>
+                    <td>3</td>
+                    <td><span class="highlight">Sigmoïde</span></td>
+                    <td>Produit les probabilités pour R, V, B</td>
+                </tr>
+            </table>
+            
+            <h3>Pourquoi ReLU et Sigmoïde ?</h3>
+            <ul>
+                <li>
+                    <strong>ReLU (Rectified Linear Unit) :</strong> 
+                    <span class="math">f(z) = max(0, z)</span>
+                    <ul>
+                        <li>Évite le problème du <strong>gradient évanescent</strong></li>
+                        <li>Permet un apprentissage plus rapide</li>
+                        <li>Simple à calculer</li>
+                        <li>Populaire en deep learning (depuis ~2010)</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Sigmoïde :</strong> 
+                    <span class="math">f(z) = 1 / (1 + e<sup>-z</sup>)</span>
+                    <ul>
+                        <li>Produit des valeurs entre 0 et 1 (probabilités)</li>
+                        <li>Adaptée pour la classification binaire multi-labels</li>
+                        <li>Dérivable partout (nécessaire pour la rétropropagation)</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="note-box">
+                <strong>Note :</strong> Pourquoi pas Softmax ? Softmax imposerait que la somme des sorties = 1, 
+                ce qui n'est pas adapté ici car nous voulons pouvoir avoir toutes les sorties à 0 (fond noir).
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Fonctionnement du Réseau</h2>
+            
+            <h3>Propagation Avant (Forward Pass)</h3>
+            <p>
+                Pour une entrée <span class="math">(x, y)</span>, le réseau calcule :
+            </p>
+            
+            <div class="code-block">
+// Couche cachée (ReLU)
+z<sub>1</sub>[j] = b<sub>1</sub>[j] + Σ (x[i] × W1[i][j])  pour j = 0..11
+hidden[j] = ReLU(z<sub>1</sub>[j]) = max(0, z<sub>1</sub>[j])
+
+// Couche de sortie (Sigmoid)
+z<sub>2</sub>[k] = b<sub>2</sub>[k] + Σ (hidden[j] × W2[j][k])  pour k = 0..2
+output[k] = σ(z<sub>2</sub>[k]) = 1 / (1 + e<sup>-z<sup>2</sup>[k]</sup>)
+            </div>
+            
+            <h3>Classification</h3>
+            <p>
+                La sortie <span class="math">[o<sub>0</sub>, o<sub>1</sub>, o<sub>2</sub>]</span> est interprétée comme suit :
+            </p>
+            <ul>
+                <li>Si <span class="math">o<sub>0</sub> > 0.5</span> : Clic dans le <strong>cercle Rouge</strong> → <code>[1,0,0]</code></li>
+                <li>Si <span class="math">o<sub>1</sub> > 0.5</span> : Clic dans le <strong>cercle Vert</strong> → <code>[0,1,0]</code></li>
+                <li>Si <span class="math">o<sub>2</sub> > 0.5</span> : Clic dans le <strong>cercle Bleu</strong> → <code>[0,0,1]</code></li>
+                <li>Si toutes <span class="math">≤ 0.5</span> : Clic dans le <strong>fond Noir</strong> → <code>[0,0,0]</code></li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>🔄 Apprentissage</h2>
+            
+            <h3>Fonction de Coût</h3>
+            <p>
+                Le réseau utilise la <strong>Binary Cross-Entropy Loss</strong> pour chaque neurone de sortie :
+            </p>
+            
+            <div class="code-block">
+L<sub>BCE</sub>(y, ŷ) = - [y × log(ŷ) + (1 - y) × log(1 - ŷ)]
+
+Où :
+- y : valeur attendue (0 ou 1)
+- ŷ : valeur prédite (entre 0 et 1)
+
+Perte totale = Moyenne des pertes sur les 3 sorties
+            </div>
+            
+            <h3>Optimiseur : Adam</h3>
+            <p>
+                L'optimiseur <strong>Adam</strong> (Adaptive Moment Estimation) est utilisé pour mettre à jour les poids :
+            </p>
+            
+            <table>
+                <tr>
+                    <th>Paramètre</th>
+                    <th>Valeur</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>β<sub>1</sub></td>
+                    <td>0.9</td>
+                    <td>Coefficient de la moyenne mobile exponentielle</td>
+                </tr>
+                <tr>
+                    <td>β<sub>2</sub></td>
+                    <td>0.999</td>
+                    <td>Coefficient du carré de la moyenne mobile</td>
+                </tr>
+                <tr>
+                    <td>ε</td>
+                    <td>1e-8</td>
+                    <td>Petite constante pour éviter la division par zéro</td>
+                </tr>
+                <tr>
+                    <td>Learning Rate</td>
+                    <td>0.01 (configurable)</td>
+                    <td>Taille du pas de mise à jour</td>
+                </tr>
+            </table>
+            
+            <p>
+                Adam combine les avantages de :
+            </p>
+            <ul>
+                <li><strong>AdaGrad</strong> : Adaptation des taux d'apprentissage par paramètre</li>
+                <li><strong>RMSProp</strong> : Normalisation par la racine carrée moyenne</li>
+                <li><strong>Momentum</strong> : Accélération dans la direction des gradients persistants</li>
+            </ul>
+            
+            <h3>Rétropropagation (Backpropagation)</h3>
+            <p>
+                L'algorithme de rétropropagation calcule les gradients de la fonction de coût par rapport 
+                à tous les poids en utilisant la règle de la chaîne :
+            </p>
+            <ol>
+                <li><strong>Forward Pass</strong> : Calculer les sorties du réseau</li>
+                <li><strong>Calcul de la perte</strong> : Comparer avec les valeurs attendues</li>
+                <li><strong>Backward Pass</strong> : Remonter les gradients couche par couche</li>
+                <li><strong>Mise à jour des poids</strong> : Appliquer les corrections avec Adam</li>
+            </ol>
+            
+            <div class="important-box">
+                <strong>💡 Insight :</strong> La rétropropagation est possible grâce aux fonctions d'activation 
+                <strong>dérivables</strong>. C'est pourquoi ReLU et Sigmoïde sont utilisées plutôt que 
+                la fonction échelon (non dérivable) du perceptron original.
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Dataset et Préparation des Données</h2>
+            
+            <h3>Génération des Données</h3>
+            <p>
+                Le dataset est généré aléatoirement avec :
+            </p>
+            <ul>
+                <li><strong>Points positifs</strong> : 300 points par cercle (900 total)</li>
+                <li><strong>Points négatifs</strong> : 300 points dans le fond (noir)</li>
+                <li><strong>Total</strong> : 1200 points d'entraînement</li>
+                <li><strong>Validation</strong> : 240 points (20% du dataset)</li>
+            </ul>
+            
+            <h3>Normalisation</h3>
+            <p>
+                Les coordonnées sont normalisées entre 0 et 1 :
+            </p>
+            <div class="code-block">
+x<sub>norm</sub> = x / 199    (puisque la tablette fait 200 pixels de large)
+y<sub>norm</sub> = y / 399    (puisque la tablette fait 400 pixels de haut)
+            </div>
+            <p>
+                La normalisation permet :
+            </p>
+            <ul>
+                <li>D'accélérer la convergence de l'apprentissage</li>
+                <li>D'éviter que les valeurs absolues des coordonnées n'affectent la stabilité numérique</li>
+                <li>De rendre les poids comparables en magnitude</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>✅ Évaluation et Métriques</h2>
+            
+            <h3>Accuracy (Précision)</h3>
+            <p>
+                La principale métrique utilisée est l'<strong>accuracy</strong> :
+            </p>
+            <div class="code-block">
+Accuracy = (Nombre de prédictions correctes) / (Nombre total de prédictions)
+            </div>
+            
+            <h3>Matrice de Confusion</h3>
+            <p>
+                La matrice de confusion permet de visualiser les performances par classe :
+            </p>
+            <table>
+                <tr>
+                    <th>Vrai \ Prédit</th>
+                    <th>Rouge</th>
+                    <th>Vert</th>
+                    <th>Bleu</th>
+                    <th>Noir</th>
+                </tr>
+                <tr>
+                    <th>Rouge</th>
+                    <td style="background: #e8f5e9;">TP</td>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #ffebee;">FP</td>
+                </tr>
+                <tr>
+                    <th>Vert</th>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #e8f5e9;">TP</td>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #ffebee;">FP</td>
+                </tr>
+                <tr>
+                    <th>Bleu</th>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #e8f5e9;">TP</td>
+                    <td style="background: #ffebee;">FP</td>
+                </tr>
+                <tr>
+                    <th>Noir</th>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #ffebee;">FP</td>
+                    <td style="background: #e8f5e9;">TP</td>
+                </tr>
+            </table>
+            <p style="margin-top: 10px;">
+                <strong>TP</strong> = Vrai Positif, <strong>FP</strong> = Faux Positif
+            </p>
+            
+            <h3>Précision par Classe</h3>
+            <p>
+                Pour chaque classe, on calcule :
+            </p>
+            <div class="code-block">
+Précision = TP / (TP + FP) = Vrais Positifs / Total des prédictions pour cette classe
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎨 Visualisation des Résultats</h2>
+            <p>
+                Après l'entraînement, plusieurs visualisations sont disponibles :
+            </p>
+            <ul>
+                <li>
+                    <strong>Carte des prédictions :</strong> Une grille où chaque pixel montre la couleur 
+                    prédite par le réseau pour cette position. Permet de voir les frontières apprises.
+                </li>
+                <li>
+                    <strong>Graphiques d'entraînement :</strong> Courbes de perte et de précision 
+                    sur les jeux d'entraînement et de validation.
+                </li>
+                <li>
+                    <strong>Test de points spécifiques :</strong> Permet de tester manuellement 
+                    des coordonnées pour vérifier la prédiction.
+                </li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>📦 Résultats Attendus</h2>
+            
+            <p>
+                Avec une architecture MLP 2-12-3 et un entraînement adéquat, on peut s'attendre à :
+            </p>
+            
+            <table>
+                <tr>
+                    <th>Taille couche cachée</th>
+                    <th>Précision attendue</th>
+                    <th>Temps d'entraînement</th>
+                    <th>Remarques</th>
+                </tr>
+                <tr>
+                    <td>8 neurones</td>
+                    <td>~90-93%</td>
+                    <td>0.5-1s</td>
+                    <td>Minimal, frontières approximatives</td>
+                </tr>
+                <tr>
+                    <td>10 neurones</td>
+                    <td>~95-97%</td>
+                    <td>0.7-1.2s</td>
+                    <td>Bon compromis</td>
+                </tr>
+                <tr>
+                    <td><strong>12 neurones</strong></td>
+                    <td><strong>~96-98%</strong></td>
+                    <td>1-1.5s</td>
+                    <td><strong>Recommandé</strong></td>
+                </tr>
+                <tr>
+                    <td>16 neurones</td>
+                    <td>~95-97%</td>
+                    <td>1.5-2s</td>
+                    <td>Peut surapprendre</td>
+                </tr>
+                <tr>
+                    <td>20+ neurones</td>
+                    <td>~95-98%</td>
+                    <td>2-3s+</td>
+                    <td>Surapprentissage probable</td>
+                </tr>
+            </table>
+            
+            <div class="note-box">
+                <strong>💡 Remarque :</strong> Les résultats peuvent varier légèrement selon l'initialisation 
+                aléatoire des poids. La normalisation et l'utilisation d'Adam permettent une convergence 
+                rapide et stable dans la plupart des cas.
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔧 Configuration Recommandée</h2>
+            <p>
+                Pour obtenir de bons résultats rapidement :
+            </p>
+            <ul>
+                <li><strong>Taille couche cachée :</strong> 12 neurones</li>
+                <li><strong>Nombre d'époques :</strong> 2000</li>
+                <li><strong>Taille du batch :</strong> 32</li>
+                <li><strong>Taux d'apprentissage :</strong> 0.01</li>
+                <li><strong>Optimiseur :</strong> Adam (β1=0.9, β2=0.999)</li>
+                <li><strong>Fonction de coût :</strong> Binary Cross-Entropy</li>
+            </ul>
+            
+            <p>
+                Avec ces paramètres, l'entraînement devrait prendre environ <strong>1-2 secondes</strong> 
+                et atteindre une précision de <strong>96-98%</strong> sur le jeu de validation.
+            </p>
+        </div>
+        
+        <div class="section">
+            <h2>🚀 Aller Plus Loin</h2>
+            <p>
+                Ce projet peut être étendu de plusieurs manières :
+            </p>
+            <ul>
+                <li>
+                    <strong>Ajouter plus de couleurs :</strong> Modifier le code pour supporter 4 ou 5 cercles 
+                    de couleurs différentes.
+                </li>
+                <li>
+                    <strong>Changer la géométrie :</strong> Utiliser des carrés, des triangles ou d'autres formes 
+                    au lieu de cercles.
+                </li>
+                <li>
+                    <strong>Augmenter la complexité :</strong> Ajouter une deuxième couche cachée pour 
+                    créer un réseau plus profond.
+                </li>
+                <li>
+                    <strong>Autres optimiseurs :</strong> Tester SGD, RMSProp, ou AdaGrad et comparer 
+                    les performances avec Adam.
+                </li>
+                <li>
+                    <strong>Regularisation :</strong> Ajouter du dropout ou de la régularisation L2 pour 
+                    prévenir le surapprentissage.
+                </li>
+                <li>
+                    <strong>Data Augmentation :</strong> Générer plus de données avec des variations 
+                    pour améliorer la robustesse.
+                </li>
+            </ul>
+        </div>
+        
+        <div class="center" style="margin: 40px 0;">
+            <a href="index.html" class="btn">Retour à l'accueil</a>
+            <a href="entrainement.html" class="btn btn-secondary">Aller à l'entraînement</a>
+        </div>
+    </div>
+</body>
 </html>

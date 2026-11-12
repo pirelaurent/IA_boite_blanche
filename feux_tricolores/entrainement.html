@@ -1,102 +1,457 @@
 <!doctype html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            Feux tricolores - Entraînement du réseau de neurones
-        </title>
-        <link rel="stylesheet" href="../style.css" />
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Feux tricolores - Entraînement du réseau de neurones</h1>
-
-            <div class="section">
-                <h2>1. Génération du dataset</h2>
-                <p>Génération de 1 800 échantillons (1 500 entraînement + 300 validation) avec 300 points par classe.</p>
-                <div class="controls">
-                    <button onclick="generateDataset()" id="generateBtn">Générer le dataset</button>
-                    <button onclick="showDatasetPreview()" id="previewBtn" disabled>Voir un extrait</button>
-                    <button onclick="visualizeDataset()" id="visualizeBtn" disabled>Visualiser</button>
-                    <div class="status" id="datasetStatus"></div>
-                </div>
-                <div id="datasetPreview" class="hidden">
-                    <h3>Extrait du dataset</h3>
-                    <div class="code-block" id="datasetPreviewContent"></div>
-                <div id="datasetVisualization" class="hidden">
-                    <h3>Visualisation du dataset</h3>
-                    <div class="figure-container">
-                        <canvas id="datasetCanvas" width="220" height="450"></canvas>
-                        <div class="figure-caption">Points du dataset par classe</div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Entraînement - Feux Tricolores RGB</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #2196F3;
+        }
+        
+        .btn-secondary:hover {
+            background: #0b7dda;
+        }
+        
+        .status {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .status.info {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .metrics-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        canvas {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .important-box {
+            background: #fffde7;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        
+        th {
+            background: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Entraînement du Réseau de Neurones</h1>
+        
+        <div class="section">
+            <h2>📊 Paramètres d'Entraînement</h2>
+            <p>
+                Configurez les paramètres du réseau avant de lancer l'entraînement.
+            </p>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>Architecture du réseau</h3>
+                    <div class="form-group">
+                        <label for="hiddenSize">Neurones en couche cachée :</label>
+                        <select id="hiddenSize">
+                            <option value="8">8 neurones</option>
+                            <option value="10">10 neurones</option>
+                            <option value="12" selected>12 neurones</option>
+                            <option value="16">16 neurones</option>
+                            <option value="20">20 neurones</option>
+                            <option value="24">24 neurones</option>
+                        </select>
+                        <p style="color: #666; font-size: 14px; margin-top: 5px;">
+                            Recommandé : 12 neurones pour ce problème
+                        </p>
                     </div>
+                    
+                    <div class="important-box">
+                        <strong>💡 Conseil :</strong> Avec 3 cercles à reconnaître, 12 neurones en couche cachée 
+                        offrent un bon compromis entre capacité d'apprentissage et complexité.
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>Paramètres d'optimisation</h3>
+                    <div class="form-group">
+                        <label for="epochs">Nombre d'époques :</label>
+                        <input type="number" id="epochs" value="2000" min="100" max="10000">
+                        <p style="color: #666; font-size: 14px; margin-top: 5px;">
+                            Une époque = un passage complet sur tout le dataset
+                        </p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="batchSize">Taille du batch :</label>
+                        <select id="batchSize">
+                            <option value="16">16</option>
+                            <option value="32" selected>32</option>
+                            <option value="64">64</option>
+                            <option value="128">128</option>
+                            <option value="256">256</option>
+                        </select>
+                        <p style="color: #666; font-size: 14px; margin-top: 5px;">
+                            Plus petit = plus précis mais plus lent
+                        </p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="learningRate">Taux d'apprentissage :</label>
+                        <select id="learningRate">
+                            <option value="0.1">0.1 (grand)</option>
+                            <option value="0.05">0.05</option>
+                            <option value="0.01" selected>0.01 (recommandé)</option>
+                            <option value="0.005">0.005</option>
+                            <option value="0.001">0.001 (petit)</option>
+                        </select>
+                        <p style="color: #666; font-size: 14px; margin-top: 5px;">
+                            Contrôle la taille des pas dans la descente de gradient
+                        </p>
+                    </div>
+                </div>
             </div>
-            <hr/>
-                <h2>2. Architecture du réseau MLP 2-12-4</h2>
-                <p>2 entrées (x,y) → 12 neurones cachés (ReLU) → 4 neurones de sortie (Sigmoïde)</p>
-                <div class="code-block" id="networkCode">Réseau en cours d'implémentation...</div>
-                <button class="secondary" onclick="showFullNetworkCode()">Voir le code complet</button>
-                <div id="fullNetworkCode" class="hidden"></div>
-                <h2>3. Entraînement du réseau</h2>
-                    <div class="control-group">
-                        <label for="epochs">Épochs:</label>
-                        <input type="number" id="epochs" value="500" min="10" max="2000" step="10">
-                        <label for="batchSize">Batch:</label>
-                        <input type="number" id="batchSize" value="32" min="8" max="100" step="8">
-                        <label for="learningRate">Taux apprentissage:</label>
-                        <input type="number" id="learningRate" value="0.01" min="0.0001" max="0.1" step="0.001">
-                        <label></label>
-                        <button onclick="trainNetwork()" id="trainBtn" disabled>Entraîner</button>
-                        <button onclick="stopTraining()" id="stopBtn" disabled>Arrêter</button>
-                    <div class="progress-bar"><div class="progress-fill" id="trainingProgress" style="width: 0%"></div></div>
-                    <div class="status" id="trainingStatus"></div>
-                <div class="metrics" id="metricsContainer" class="hidden">
-                    <div class="metric-card">
-                        <div class="metric-label">Accuracy (Train)</div>
-                        <div class="metric-value" id="trainAccuracy">-</div>
-                        <div class="metric-label">Accuracy (Val)</div>
-                        <div class="metric-value" id="valAccuracy">-</div>
-                        <div class="metric-label">Perte (Train)</div>
-                        <div class="metric-value" id="trainLoss">-</div>
-                        <div class="metric-label">Perte (Val)</div>
-                        <div class="metric-value" id="valLoss">-</div>
-                        <div class="metric-label">Épochs</div>
-                        <div class="metric-value" id="currentEpoch">-</div>
-                        <div class="metric-label">Temps</div>
-                        <div class="metric-value" id="elapsedTime">-</div>
-                <div class="chart-container"><canvas id="trainingChart"></canvas></div>
-                <h2>4. Visualisation des résultats</h2>
-                    <button onclick="visualizePredictions()" id="predictBtn" disabled>Visualiser prédictions</button>
-                    <button onclick="testSpecificPoint()" id="testBtn" disabled>Tester un point</button>
-                <div id="predictionsVisualization" class="hidden">
-                    <h3>Frontières de décision</h3>
-                        <canvas id="predictionsCanvas" width="220" height="450"></canvas>
-                        <div class="figure-caption">Prédictions du réseau (cercles réels en pointillés)</div>
-                <div id="specificPointTest" class="hidden">
-                    <h3>Test d'un point</h3>
-                    <div class="controls">
-                        <div class="control-group"><label for="testX">X:</label><input type="number" id="testX" value="100" min="0" max="199"></div>
-                        <div class="control-group"><label for="testY">Y:</label><input type="number" id="testY" value="50" min="0" max="399"></div>
-                        <button onclick="runSpecificPointTest()">Tester</button>
-                    <div id="testResult" style="margin-top: 20px;"></div>
-                <h2>5. Matrice de confusion</h2>
-                <div class="controls"><button onclick="computeConfusionMatrix()" id="confusionBtn" disabled>Calculer</button></div>
-                <div id="confusionMatrixContainer" class="hidden"></div>
-                <h2>6. Export/Import</h2>
-                    <button onclick="exportModel()">Exporter</button>
-                    <button onclick="importModel()">Importer</button>
-                    <input type="file" id="modelFileInput" accept=".json" style="display: none;" onchange="loadModelFile(event)">
-                <div id="modelExport" class="hidden"><h3>Modèle (JSON)</h3><textarea id="modelJson" rows="10" style="width:100%;font-family:monospace;" readonly></textarea><br><button onclick="copyModelToClipboard()">Copier</button></div>
-                <h2>Instructions</h2>
-                <ol>
-                    <li>Générer le dataset</li>
-                    <li>Vérifier la distribution</li>
-                    <li>Configurer et lancer l'entraînement</li>
-                    <li>Visualiser les prédictions et la matrice de confusion</li>
-                    <li>Tester des points spécifiques</li>
-                </ol>
         </div>
-        <script src="network.js"></script>
-    </body>
+        
+        <div class="section">
+            <h2>🎯 Génération du Dataset</h2>
+            <p>
+                Le dataset contient des points générés aléatoirement dans les cercles Rouge, Vert, Bleu 
+                et à l'extérieur (fond Noir).
+            </p>
+            
+            <div class="form-group">
+                <button class="btn" onclick="generateDataset()">Générer le Dataset</button>
+                <button class="btn btn-secondary" onclick="showDatasetPreview()">Aperçu Textuel</button>
+                <button class="btn btn-secondary" onclick="visualizeDataset()">Visualiser Graphiquement</button>
+            </div>
+            
+            <div id="datasetStatus" class="status"></div>
+            
+            <div id="datasetPreview" class="hidden">
+                <h3>Aperçu Textuel du Dataset</h3>
+                <pre id="datasetPreviewContent" style="background: #f5f5f5; padding: 15px; border-radius: 5px; max-height: 300px; overflow-y: auto;"></pre>
+                <button class="btn" onclick="document.getElementById('datasetPreview').classList.add('hidden')">Fermer</button>
+            </div>
+            
+            <div id="datasetVisualization" class="hidden">
+                <h3>Visualisation Graphique du Dataset</h3>
+                <canvas id="datasetCanvas" width="600" height="500"></canvas>
+                <button class="btn" onclick="document.getElementById('datasetVisualization').classList.add('hidden')">Fermer</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>⚡ Entraînement</h2>
+            <p>
+                Lancez l'entraînement du réseau avec les paramètres configurés. 
+                Le processus peut prendre quelques secondes selon les paramètres.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn" onclick="trainNetwork()" id="trainBtn">🚀 Entraîner le Réseau</button>
+                <button class="btn btn-secondary" onclick="stopTraining()" id="stopBtn" disabled>⏹️ Arrêter</button>
+            </div>
+            
+            <div id="trainingStatus" class="status"></div>
+            
+            <div class="metrics-container hidden" id="metricsContainer">
+                <h3>Métriques en temps réel</h3>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="trainingProgress"></div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px;">
+                    <div>
+                        <strong>Époque :</strong> <span id="currentEpoch">0/0</span>
+                    </div>
+                    <div>
+                        <strong>Temps écoulé :</strong> <span id="elapsedTime">0s</span>
+                    </div>
+                    <div>
+                        <strong>Perte (Train) :</strong> <span id="trainLoss">0</span>
+                    </div>
+                    <div>
+                        <strong>Perte (Val) :</strong> <span id="valLoss">0</span>
+                    </div>
+                    <div>
+                        <strong>Précision (Train) :</strong> <span id="trainAccuracy">0%</span>
+                    </div>
+                    <div>
+                        <strong>Précision (Val) :</strong> <span id="valAccuracy">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="trainingChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Résultats et Visualisation</h2>
+            <p>
+                Après l'entraînement, visualisez les prédictions du réseau sur toute la tablette.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn btn-secondary" onclick="visualizePredictions()" id="predictBtn" disabled>🎨 Visualiser les Prédictions</button>
+            </div>
+            
+            <div id="predictionsVisualization" class="hidden">
+                <h3>Carte des Prédictions</h3>
+                <p style="color: #666;">
+                    Chaque pixel représente la couleur prédite par le réseau. 
+                    Les cercles en pointillés blancs montrent les zones réelles.
+                </p>
+                <canvas id="predictionsCanvas" width="600" height="500"></canvas>
+                <button class="btn" onclick="document.getElementById('predictionsVisualization').classList.add('hidden')">Fermer</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>✅ Validation du Modèle</h2>
+            <p>
+                Évaluez les performances du réseau sur le jeu de validation.
+            </p>
+            
+            <div class="grid-2">
+                <div>
+                    <div class="form-group">
+                        <button class="btn btn-secondary" onclick="computeConfusionMatrix()" id="confusionBtn" disabled>📋 Matrice de Confusion</button>
+                    </div>
+                    <div id="confusionMatrixContainer" class="hidden"></div>
+                </div>
+                
+                <div>
+                    <div class="form-group">
+                        <button class="btn btn-secondary" onclick="testSpecificPoint()" id="testBtn" disabled>🎯 Tester un Point</button>
+                    </div>
+                    <div id="specificPointTest" class="hidden">
+                        <h3>Test de Point Spécifique</h3>
+                        <div style="display: grid; grid-template-columns: auto auto; gap: 15px; align-items: center;">
+                            <div class="form-group">
+                                <label for="testX">X (0-199) :</label>
+                                <input type="number" id="testX" value="100" min="0" max="199">
+                            </div>
+                            <div class="form-group">
+                                <label for="testY">Y (0-399) :</label>
+                                <input type="number" id="testY" value="200" min="0" max="399">
+                            </div>
+                        </div>
+                        <button class="btn" onclick="runSpecificPointTest()">Tester</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('specificPointTest').classList.add('hidden')">Fermer</button>
+                        <div id="testResult" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💾 Sauvegarde et Chargement</h2>
+            <p>
+                Exportez votre modèle entraîné pour le réutiliser plus tard ou partagez-le.
+            </p>
+            
+            <div class="form-group">
+                <button class="btn btn-secondary" onclick="exportModel()">📤 Exporter le Modèle</button>
+                <button class="btn btn-secondary" onclick="importModel()">📥 Importer un Modèle</button>
+                <input type="file" id="modelFileInput" accept=".json" style="display: none;" onchange="loadModelFile(event)">
+            </div>
+            
+            <div id="modelExport" class="hidden">
+                <h3>Modèle JSON</h3>
+                <textarea id="modelJson" style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;" readonly></textarea>
+                <div style="margin-top: 10px;">
+                    <button class="btn" onclick="copyModelToClipboard()">📋 Copier</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('modelExport').classList.add('hidden')">Fermer</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📚 Documentation Technique</h2>
+            <p>
+                En savoir plus sur l'implémentation du réseau de neurones.
+            </p>
+            
+            <button class="btn btn-secondary" onclick="showFullNetworkCode()">💻 Afficher le Code Complet</button>
+            
+            <div id="fullNetworkCode" class="hidden"></div>
+        </div>
+    </div>
+    
+    <!-- Inclusion du script principal -->
+    <script src="network.js"></script>
+    <script>
+        // Met à jour l'affichage de la taille de la couche cachée
+        document.getElementById('hiddenSize').addEventListener('change', function() {
+            const size = this.value;
+            const display = document.getElementById('hiddenSizeDisplay') || 
+                          (() => {
+                              const el = document.createElement('span');
+                              el.id = 'hiddenSizeDisplay';
+                              return el;
+                          })();
+            if (display) display.textContent = size + ' neurones';
+        });
+    </script>
+</body>
 </html>

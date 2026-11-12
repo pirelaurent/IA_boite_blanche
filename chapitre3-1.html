@@ -1,0 +1,94 @@
+        <div class="section">
+                <h2>🟡 Expérimentation </h2>
+                <h3>Piloter les feux tricolores depuis une tablette tactile</h3>
+                <p>
+                    Soit une tablette tactile de 200 x 400 pixels sur laquelle on présente des zones à cliquer
+                    pour allumer les feux.
+                </p>
+
+                    <div
+                        style="
+                            display: flex;
+                            gap: 30px;
+                            align-items: flex-start;
+                            margin: 20px 0;
+                        "
+                    >
+                    <div>
+                        <img
+                            height="200"
+                            src="img/chap2/tablette200x400.png"
+                            alt="Tablette tactile"
+                        />
+                        <br> Tablette 200x400
+                    </div>
+                </div>
+                    
+                    <div style="flex: 1">
+                        <h4>Comportement attendu</h4>
+                        <p>
+                            Un appui sur l'écran va ramener une coordonnée (x,y) à transposer en action:
+                        </p>
+                        <table style="width: 100%; max-width: 500px">
+                            <tr>
+                                <th>Le clic (x,y) a lieu</th>
+                                <th>Action </th>
+                                <th>Sortie</th>
+                            </tr>
+                            <tr>
+                                <td>dans le cercle Rouge</td>
+                                <td>
+                                    <img src="img/chap1/001.png" alt="Feu rouge allumé" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[0,0,1]</td>
+                            </tr>
+                            <tr>
+                                <td>dans le cercle Orange</td>
+                                <td>
+                                    <img src="img/chap1/010.png" alt="Feu orange allumé" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[0,1,0]</td>
+                            </tr>
+                            <tr>
+                                <td>dans le cercle Vert</td>
+                                <td>
+                                    <img src="img/chap1/100.png" alt="Feu vert allumé" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[1,0,0]</td>
+                            </tr>
+                            <tr>
+                                <td>Ailleurs</td>
+                                <td>
+                                    <img src="img/chap1/000.png" alt="Feu éteint" width="70"
+                                        style="transform-origin: center; display: inline-block;" />
+                                </td>
+                                <td>[0,0,0]</td>
+                            </tr>
+                        </table>
+                    
+                </div>
+
+                <h3>Une nouvelle problématique : 80 000 cas possibles</h3>
+                    <p>
+                        Au lieu des 4 cas des deux interrupteurs du chapitre 1, on a ici 200x400 pixels =
+                        <b>80 000 cas possibles de coordonnées x1,x2</b>.<br />
+                        Il n'est plus possible de traiter cas par cas : il faut que le réseau apprenne seul
+                        sur des échantillons suffisants.
+                    </p>
+        </div>
+
+
+
+
+
+
+
+                   <ul>
+                <li>
+                375 points par cercle (fois trois couleurs)
+                </li><li>375 points dans le fond (noir)
+                </li>
+            </ul>

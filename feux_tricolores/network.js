@@ -1,22 +1,24 @@
 // ========================================================================
-// FEUX TRICOLORES - NEURAL NETWORK IMPLEMENTATION
+// FEUX TRICOLORES RGB - NEURAL NETWORK IMPLEMENTATION
 // ========================================================================
 
-// Configuration
+// Configuration : 3 cercles tactiles RGB sur tablette 200x400
 const TABLET_WIDTH = 200;
 const TABLET_HEIGHT = 400;
-const CIRCLE_RADIUS = 30;
+const CIRCLE_RADIUS = 50;
+
+// Centres des cercles : Rouge, Vert, Bleu
 const CIRCLE_CENTERS = [
-    { x: 100, y: 87.5, color: '#000000', label: 'Noir' },
-    { x: 100, y: 162.5, color: '#4CAF50', label: 'Vert' },
-    { x: 100, y: 237.5, color: '#FF9800', label: 'Orange' },
-    { x: 100, y: 312.5, color: '#F44336', label: 'Rouge' }
+    { x: 100, y: 320, color: '#F44336', label: 'Rouge' },
+    { x: 100, y: 80, color: '#4CAF50', label: 'Vert' },
+    { x: 100, y: 200, color: '#2196F3', label: 'Bleu' }
 ];
 
-const CLASS_NAMES = ['Noir', 'Vert', 'Orange', 'Rouge', 'Ailleurs'];
-const CLASS_COLORS = ['#000000', '#4CAF50', '#FF9800', '#F44336', '#666666'];
+// Noms et couleurs des classes : [Rouge, Vert, Bleu, Noir(fond)]
+const CLASS_NAMES = ['Rouge', 'Vert', 'Bleu', 'Noir'];
+const CLASS_COLORS = ['#F44336', '#4CAF50', '#2196F3', '#000000'];
 
-// Global variables
+// Variables globales
 let trainingData = [];
 let validationData = [];
 let datasetGenerated = false;
@@ -30,27 +32,42 @@ let trainingTimeout = null;
 // DATASET GENERATION
 // ========================================================================
 
+/**
+ * Génère le dataset complet avec des points dans chaque cercle et à l'extérieur
+ */
 function generateDataset() {
     showStatus('datasetStatus', 'Génération du dataset...', 'info');
     
     trainingData = [];
     validationData = [];
     
-    const pointsPerClass = 300;
-    const totalTraining = pointsPerClass * 5;
+    const pointsPerCircle = 300;
+    const pointsOutside = 300;
+    const totalTraining = pointsPerCircle * 3 + pointsOutside;
     
-    // Training set
-    for (let i = 0; i < totalTraining; i++) {
-        const classIndex = Math.floor(i / pointsPerClass);
-        trainingData.push(generatePointForClass(classIndex));
+    // Training set : points dans les cercles
+    for (let circleIndex = 0; circleIndex < CIRCLE_CENTERS.length; circleIndex++) {
+        for (let i = 0; i < pointsPerCircle; i++) {
+            trainingData.push(generatePointForClass(circleIndex));
+        }
+    }
+    
+    // Training set : points à l'extérieur (fond noir)
+    for (let i = 0; i < pointsOutside; i++) {
+        trainingData.push(generateOutsidePoint());
     }
     
     // Validation set (20%)
     const validationSize = Math.floor(totalTraining * 0.2);
-    const validationPerClass = Math.floor(validationSize / 5);
-    for (let i = 0; i < validationSize; i++) {
-        const classIndex = Math.floor(i / validationPerClass);
-        validationData.push(generatePointForClass(classIndex));
+    const validationPerClass = Math.floor(validationSize / 4);
+    
+    for (let circleIndex = 0; circleIndex < CIRCLE_CENTERS.length; circleIndex++) {
+        for (let i = 0; i < validationPerClass; i++) {
+            validationData.push(generatePointForClass(circleIndex));
+        }
+    }
+    for (let i = 0; i < validationPerClass; i++) {
+        validationData.push(generateOutsidePoint());
     }
     
     datasetGenerated = true;
@@ -60,40 +77,70 @@ function generateDataset() {
     document.getElementById('trainBtn').disabled = false;
 }
 
-function generatePointForClass(classIndex) {
-    if (classIndex < 4) {
-        const circle = CIRCLE_CENTERS[classIndex];
-        let x, y;
-        do {
-            const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * CIRCLE_RADIUS;
-            x = circle.x + radius * Math.cos(angle);
-            y = circle.y + radius * Math.sin(angle);
-        } while (!isPointInCircle(x, y, classIndex));
-        
-        const xNorm = x / (TABLET_WIDTH - 1);
-        const yNorm = y / (TABLET_HEIGHT - 1);
-        
-        const output = new Array(4).fill(0);
-        if (classIndex === 1) output[0] = 1;
-        else if (classIndex === 2) output[1] = 1;
-        else if (classIndex === 3) output[2] = 1;
-        
-        return { x: xNorm, y: yNorm, output: output, trueClass: classIndex, original: {x, y} };
-    } else {
-        let x, y;
-        do {
-            x = Math.random() * (TABLET_WIDTH - 1);
-            y = Math.random() * (TABLET_HEIGHT - 1);
-        } while (isPointInAnyCircle(x, y));
-        
-        const xNorm = x / (TABLET_WIDTH - 1);
-        const yNorm = y / (TABLET_HEIGHT - 1);
-        
-        return { x: xNorm, y: yNorm, output: [0, 0, 0, 0], trueClass: 4, original: {x, y} };
-    }
+/**
+ * Génère un point aléatoire dans un cercle spécifié
+ * @param {number} circleIndex - Index du cercle (0=Rouge, 1=Vert, 2=Bleu)
+ * @returns {Object} Point avec coordonnées, sortie attendue et classe
+ */
+function generatePointForClass(circleIndex) {
+    const circle = CIRCLE_CENTERS[circleIndex];
+    let x, y;
+    
+    // Générer un point aléatoire dans le cercle
+    do {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * CIRCLE_RADIUS;
+        x = circle.x + radius * Math.cos(angle);
+        y = circle.y + radius * Math.sin(angle);
+    } while (!isPointInCircle(x, y, circleIndex));
+    
+    // Normaliser les coordonnées entre 0 et 1
+    const xNorm = x / (TABLET_WIDTH - 1);
+    const yNorm = y / (TABLET_HEIGHT - 1);
+    
+    // Créer la sortie attendue : [1,0,0] pour Rouge, [0,1,0] pour Vert, [0,0,1] pour Bleu
+    const output = new Array(3).fill(0);
+    output[circleIndex] = 1;
+    
+    return { 
+        x: xNorm, 
+        y: yNorm, 
+        output: output, 
+        trueClass: circleIndex, 
+        original: {x, y} 
+    };
 }
 
+/**
+ * Génère un point aléatoire à l'extérieur de tous les cercles (fond noir)
+ * @returns {Object} Point avec sortie [0,0,0] et classe 3 (Noir)
+ */
+function generateOutsidePoint() {
+    let x, y;
+    do {
+        x = Math.random() * (TABLET_WIDTH - 1);
+        y = Math.random() * (TABLET_HEIGHT - 1);
+    } while (isPointInAnyCircle(x, y));
+    
+    const xNorm = x / (TABLET_WIDTH - 1);
+    const yNorm = y / (TABLET_HEIGHT - 1);
+    
+    return { 
+        x: xNorm, 
+        y: yNorm, 
+        output: [0, 0, 0], 
+        trueClass: 3, // Noir = classe 3
+        original: {x, y} 
+    };
+}
+
+/**
+ * Vérifie si un point est dans un cercle spécifique
+ * @param {number} x - Coordonnée x
+ * @param {number} y - Coordonnée y
+ * @param {number} circleIndex - Index du cercle
+ * @returns {boolean}
+ */
 function isPointInCircle(x, y, circleIndex) {
     const circle = CIRCLE_CENTERS[circleIndex];
     const dx = x - circle.x;
@@ -101,6 +148,12 @@ function isPointInCircle(x, y, circleIndex) {
     return dx * dx + dy * dy <= CIRCLE_RADIUS * CIRCLE_RADIUS;
 }
 
+/**
+ * Vérifie si un point est dans n'importe quel cercle
+ * @param {number} x - Coordonnée x
+ * @param {number} y - Coordonnée y
+ * @returns {boolean}
+ */
 function isPointInAnyCircle(x, y) {
     for (let i = 0; i < CIRCLE_CENTERS.length; i++) {
         if (isPointInCircle(x, y, i)) return true;
@@ -108,28 +161,39 @@ function isPointInAnyCircle(x, y) {
     return false;
 }
 
+/**
+ * Affiche un aperçu textuel des premiers échantillons du dataset
+ */
 function showDatasetPreview() {
     if (!datasetGenerated) { alert('Générez le dataset d\'abord.'); return; }
     const preview = trainingData.slice(0, 20);
     let html = 'Premiers 20 échantillons:\n\n';
     preview.forEach((point, i) => {
-        html += `${i+1}. (x=${point.x.toFixed(4)}, y=${point.y.toFixed(4)}) → [${point.output.join(', ')}] (${CLASS_NAMES[point.trueClass]})\n`;
+        const className = point.trueClass < 3 ? CLASS_NAMES[point.trueClass] : 'Noir';
+        html += `${i+1}. (x=${point.x.toFixed(4)}, y=${point.y.toFixed(4)}) → [${point.output.join(', ')}] (${className})\n`;
     });
     document.getElementById('datasetPreviewContent').textContent = html;
     document.getElementById('datasetPreview').classList.remove('hidden');
 }
 
+/**
+ * Visualise le dataset sur un canvas
+ */
 function visualizeDataset() {
     if (!datasetGenerated) { alert('Générez le dataset d\'abord.'); return; }
     const canvas = document.getElementById('datasetCanvas');
     const ctx = canvas.getContext('2d');
     
+    // Effacer le canvas
     ctx.fillStyle = '#f0f0f0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Dessiner le cadre de la tablette
     ctx.strokeStyle = '#333';
     ctx.lineWidth = 2;
-    ctx.strokeRect(10, 10, 200, 400);
+    ctx.strokeRect(10, 10, TABLET_WIDTH, TABLET_HEIGHT);
     
+    // Dessiner les cercles en pointillés
     ctx.strokeStyle = '#666';
     ctx.setLineDash([2, 2]);
     CIRCLE_CENTERS.forEach(circle => {
@@ -139,6 +203,7 @@ function visualizeDataset() {
     });
     ctx.setLineDash([]);
     
+    // Dessiner les points du dataset
     trainingData.slice(0, 500).forEach(point => {
         const color = CLASS_COLORS[point.trueClass];
         ctx.fillStyle = color;
@@ -151,21 +216,28 @@ function visualizeDataset() {
 }
 
 // ========================================================================
-// NEURAL NETWORK
+// NEURAL NETWORK - MLP 2-H-3
 // ========================================================================
 
+/**
+ * Réseau de neurones MLP avec :
+ * - Couche d'entrée : 2 neurones (x, y)
+ * - Couche cachée : H neurones (ReLU)
+ * - Couche de sortie : 3 neurones (Sigmoid) pour R, V, B
+ */
 class NeuralNetwork {
-    constructor(inputSize, hiddenSize, outputSize) {
+    constructor(inputSize = 2, hiddenSize = 12, outputSize = 3) {
         this.inputSize = inputSize;
         this.hiddenSize = hiddenSize;
         this.outputSize = outputSize;
         
+        // Initialisation Xavier/Glorot
         this.W1 = this.xavierInitialize(inputSize, hiddenSize);
         this.b1 = new Array(hiddenSize).fill(0);
         this.W2 = this.xavierInitialize(hiddenSize, outputSize);
         this.b2 = new Array(outputSize).fill(0);
         
-        // Adam optimizer parameters
+        // Paramètres de l'optimiseur Adam
         this.mW1 = this.zerosMatrix(inputSize, hiddenSize);
         this.vW1 = this.zerosMatrix(inputSize, hiddenSize);
         this.mb1 = new Array(hiddenSize).fill(0);
@@ -176,6 +248,12 @@ class NeuralNetwork {
         this.vb2 = new Array(outputSize).fill(0);
     }
     
+    /**
+     * Initialisation Xavier pour éviter les problèmes de gradients
+     * @param {number} rows - Nombre de lignes
+     * @param {number} cols - Nombre de colonnes
+     * @returns {Array} Matrice de poids initialisés
+     */
     xavierInitialize(rows, cols) {
         const matrix = [];
         const scale = Math.sqrt(2 / (rows + cols));
@@ -188,6 +266,12 @@ class NeuralNetwork {
         return matrix;
     }
     
+    /**
+     * Crée une matrice de zéros
+     * @param {number} rows - Nombre de lignes
+     * @param {number} cols - Nombre de colonnes
+     * @returns {Array} Matrice de zéros
+     */
     zerosMatrix(rows, cols) {
         const matrix = [];
         for (let i = 0; i < rows; i++) {
@@ -196,16 +280,27 @@ class NeuralNetwork {
         return matrix;
     }
     
+    // Fonctions d'activation
     relu(z) { return Math.max(0, z); }
     reluDerivative(z) { return z > 0 ? 1 : 0; }
     sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
-    sigmoidDerivative(z) { const s = this.sigmoid(z); return s * (1 - s); }
+    sigmoidDerivative(z) { 
+        const s = this.sigmoid(z); 
+        return s * (1 - s); 
+    }
     
+    /**
+     * Forward pass : calcule la sortie du réseau
+     * @param {number} x - Coordonnée x normalisée
+     * @param {number} y - Coordonnée y normalisée
+     * @returns {Object} Sortie, couches cachées et valeurs intermédiaires
+     */
     forward(x, y) {
         const input = [x, y];
         const hidden = new Array(this.hiddenSize).fill(0);
         const z1 = new Array(this.hiddenSize).fill(0);
         
+        // Couche cachée avec ReLU
         for (let i = 0; i < this.hiddenSize; i++) {
             z1[i] = this.b1[i];
             for (let j = 0; j < this.inputSize; j++) {
@@ -214,6 +309,7 @@ class NeuralNetwork {
             hidden[i] = this.relu(z1[i]);
         }
         
+        // Couche de sortie avec Sigmoid
         const output = new Array(this.outputSize).fill(0);
         const z2 = new Array(this.outputSize).fill(0);
         
@@ -228,37 +324,60 @@ class NeuralNetwork {
         return { output, hidden, z1, z2 };
     }
     
+    /**
+     * Calcule la perte (Binary Cross-Entropy)
+     * @param {Array} output - Sortie prédite
+     * @param {Array} target - Sortie attendue
+     * @returns {number} Valeur de la perte
+     */
     computeLoss(output, target) {
         let loss = 0;
         for (let i = 0; i < output.length; i++) {
+            // Clip pour éviter log(0)
             const p = Math.max(Math.min(output[i], 1 - 1e-15), 1e-15);
             loss -= target[i] * Math.log(p) + (1 - target[i]) * Math.log(1 - p);
         }
         return loss / output.length;
     }
     
+    /**
+     * Backward pass : calcule les gradients
+     * @param {Object} point - Point de données
+     * @param {Array} output - Sortie prédite
+     * @param {Array} hidden - Couche cachée
+     * @param {Array} z1 - Pré-activation couche cachée
+     * @param {Array} z2 - Pré-activation couche de sortie
+     * @param {Array} dW1 - Accumulateur gradient W1
+     * @param {Array} db1 - Accumulateur gradient b1
+     * @param {Array} dW2 - Accumulateur gradient W2
+     * @param {Array} db2 - Accumulateur gradient b2
+     */
     backward(point, output, hidden, z1, z2, dW1, db1, dW2, db2) {
+        // Gradient de la couche de sortie
         const delta2 = new Array(this.outputSize).fill(0);
         for (let i = 0; i < this.outputSize; i++) {
-            delta2[i] = output[i] - point.output[i];
+            delta2[i] = (output[i] - point.output[i]) * this.sigmoidDerivative(z2[i]);
         }
         
+        // Accumuler les gradients pour W2 et b2
         for (let i = 0; i < this.outputSize; i++) {
-            db2[i] += delta2[i] * this.sigmoidDerivative(z2[i]);
+            db2[i] += delta2[i];
             for (let j = 0; j < this.hiddenSize; j++) {
-                dW2[j][i] += hidden[j] * delta2[i] * this.sigmoidDerivative(z2[i]);
+                dW2[j][i] += hidden[j] * delta2[i];
             }
         }
         
+        // Gradient de la couche cachée
         const delta1 = new Array(this.hiddenSize).fill(0);
         for (let j = 0; j < this.hiddenSize; j++) {
             let sum = 0;
             for (let i = 0; i < this.outputSize; i++) {
-                sum += this.W2[j][i] * delta2[i] * this.sigmoidDerivative(z2[i]);
+                sum += this.W2[j][i] * delta2[i];
             }
             delta1[j] = sum * this.reluDerivative(z1[j]);
         }
         
+        // Accumuler les gradients pour W1 et b1
         for (let j = 0; j < this.hiddenSize; j++) {
             db1[j] += delta1[j];
             for (let k = 0; k < this.inputSize; k++) {
@@ -268,7 +387,20 @@ class NeuralNetwork {
         }
     }
     
+    /**
+     * Met à jour les poids avec l'optimiseur Adam
+     * @param {Array} dW1 - Gradient W1
+     * @param {Array} db1 - Gradient b1
+     * @param {Array} dW2 - Gradient W2
+     * @param {Array} db2 - Gradient b2
+     * @param {number} learningRate - Taux d'apprentissage
+     * @param {number} t - Numéro de l'itération
+     * @param {number} beta1 - Paramètre Adam
+     * @param {number} beta2 - Paramètre Adam
+     * @param {number} epsilon - Petite constante pour éviter division par zéro
+     */
     updateWeights(dW1, db1, dW2, db2, learningRate, t, beta1, beta2, epsilon) {
+        // Mise à jour W1
         for (let i = 0; i < this.inputSize; i++) {
             for (let j = 0; j < this.hiddenSize; j++) {
                 this.mW1[i][j] = beta1 * this.mW1[i][j] + (1 - beta1) * dW1[i][j];
@@ -279,6 +411,7 @@ class NeuralNetwork {
             }
         }
         
+        // Mise à jour b1
         for (let j = 0; j < this.hiddenSize; j++) {
             this.mb1[j] = beta1 * this.mb1[j] + (1 - beta1) * db1[j];
             this.vb1[j] = beta2 * this.vb1[j] + (1 - beta2) * db1[j] * db1[j];
@@ -287,6 +420,7 @@ class NeuralNetwork {
             this.b1[j] -= learningRate * mb1Hat / (Math.sqrt(vb1Hat) + epsilon);
         }
         
+        // Mise à jour W2
         for (let i = 0; i < this.hiddenSize; i++) {
             for (let j = 0; j < this.outputSize; j++) {
                 this.mW2[i][j] = beta1 * this.mW2[i][j] + (1 - beta1) * dW2[i][j];
@@ -297,6 +431,7 @@ class NeuralNetwork {
             }
         }
         
+        // Mise à jour b2
         for (let j = 0; j < this.outputSize; j++) {
             this.mb2[j] = beta1 * this.mb2[j] + (1 - beta1) * db2[j];
             this.vb2[j] = beta2 * this.vb2[j] + (1 - beta2) * db2[j] * db2[j];
@@ -306,12 +441,28 @@ class NeuralNetwork {
         }
     }
     
+    /**
+     * Entraîne le réseau sur les données
+     * @param {Array} data - Données d'entraînement
+     * @param {number} batchSize - Taille des batches
+     * @param {number} learningRate - Taux d'apprentissage
+     * @param {number} epochs - Nombre d'époques
+     * @param {Array} validationData - Données de validation
+     * @param {Function} onEpoch - Callback après chaque époque
+     * @returns {Object} Résultats de l'entraînement
+     */
     train(data, batchSize, learningRate, epochs, validationData, onEpoch) {
         const beta1 = 0.9;
         const beta2 = 0.999;
         const epsilon = 1e-8;
         
-        const results = { trainLoss: [], valLoss: [], trainAccuracy: [], valAccuracy: [], times: [] };
+        const results = { 
+            trainLoss: [], 
+            valLoss: [], 
+            trainAccuracy: [], 
+            valAccuracy: [], 
+            times: [] 
+        };
         
         for (let epoch = 0; epoch < epochs; epoch++) {
             this.shuffleArray(data);
@@ -319,6 +470,7 @@ class NeuralNetwork {
             let epochTrainLoss = 0;
             let correctTrain = 0;
             
+            // Traiter par batches
             for (let i = 0; i < data.length; i += batchSize) {
                 const batch = data.slice(i, i + batchSize);
                 const dW1 = this.zerosMatrix(this.inputSize, this.hiddenSize);
@@ -336,6 +488,7 @@ class NeuralNetwork {
                     this.backward(point, output, hidden, z1, z2, dW1, db1, dW2, db2);
                 }
                 
+                // Mise à jour des poids après le batch
                 this.updateWeights(dW1, db1, dW2, db2, learningRate, epoch + 1, beta1, beta2, epsilon);
             }
             
@@ -349,15 +502,25 @@ class NeuralNetwork {
             results.valAccuracy.push(valAccuracy);
             results.times.push(Date.now());
             
-            if (onEpoch) onEpoch(epoch, epochs, epochTrainLoss, valLoss, trainAccuracy, valAccuracy);
+            if (onEpoch) {
+                onEpoch(epoch, epochs, epochTrainLoss, valLoss, trainAccuracy, valAccuracy);
+            }
             
-            // Early stopping
-            if (epoch > 50 && valLoss > results.valLoss[epoch - 1] * 1.01) break;
+            // Arrêt anticipé si la perte de validation augmente
+            if (epoch > 50 && results.valLoss.length > 1 && valLoss > results.valLoss[epoch - 1] * 1.01) {
+                console.log(`Arrêt anticipé à l'époque ${epoch}`);
+                break;
+            }
         }
         
         return results;
     }
     
+    /**
+     * Évalue le réseau sur des données de test
+     * @param {Array} data - Données à évaluer
+     * @returns {Object} Perte et précision
+     */
     evaluate(data) {
         let totalLoss = 0;
         let correct = 0;
@@ -367,27 +530,52 @@ class NeuralNetwork {
             const predicted = this.outputToClass(output);
             if (predicted === point.trueClass) correct++;
         }
-        return { valLoss: totalLoss / data.length, valAccuracy: correct / data.length };
+        return { 
+            valLoss: totalLoss / data.length, 
+            valAccuracy: correct / data.length 
+        };
     }
     
+    /**
+     * Convertit la sortie du réseau en classe prédite
+     * @param {Array} output - Sortie du réseau
+     * @returns {number} Classe prédite (0=Rouge, 1=Vert, 2=Bleu, 3=Noir)
+     */
     outputToClass(output) {
         const tolerance = 0.5;
         for (let i = 0; i < output.length; i++) {
-            if (output[i] > tolerance) return i + 1;
+            if (output[i] > tolerance) return i;
         }
-        return 0;
+        return 3; // Noir (fond)
     }
     
+    /**
+     * Prédit la classe pour des coordonnées données
+     * @param {number} x - Coordonnée x normalisée
+     * @param {number} y - Coordonnée y normalisée
+     * @returns {number} Classe prédite
+     */
     predictClass(x, y) {
         const { output } = this.forward(x, y);
         return this.outputToClass(output);
     }
     
+    /**
+     * Prédit la sortie brute pour des coordonnées données
+     * @param {number} x - Coordonnée x normalisée
+     * @param {number} y - Coordonnée y normalisée
+     * @returns {Array} Sortie du réseau
+     */
     predict(x, y) {
         const { output } = this.forward(x, y);
         return output;
     }
     
+    /**
+     * Mélange un tableau (pour randomiser l'ordre des données)
+     * @param {Array} array - Tableau à mélanger
+     * @returns {Array} Tableau mélangé
+     */
     shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -396,13 +584,32 @@ class NeuralNetwork {
         return array;
     }
     
+    /**
+     * Exporte les poids du réseau en JSON
+     * @returns {Object} Poids du réseau
+     */
     toJSON() {
-        return { W1: this.W1, b1: this.b1, W2: this.W2, b2: this.b2 };
+        return { 
+            W1: this.W1, 
+            b1: this.b1, 
+            W2: this.W2, 
+            b2: this.b2,
+            hiddenSize: this.hiddenSize
+        };
     }
     
+    /**
+     * Charge les poids du réseau depuis un JSON
+     * @param {Object} data - Poids à charger
+     */
     fromJSON(data) {
-        this.W1 = data.W1; this.b1 = data.b1; this.W2 = data.W2; this.b2 = data.b2;
-        // Reinitialize Adam parameters
+        this.W1 = data.W1;
+        this.b1 = data.b1;
+        this.W2 = data.W2;
+        this.b2 = data.b2;
+        this.hiddenSize = data.hiddenSize || this.hiddenSize;
+        
+        // Réinitialiser les paramètres Adam
         this.mW1 = this.zerosMatrix(this.inputSize, this.hiddenSize);
         this.vW1 = this.zerosMatrix(this.inputSize, this.hiddenSize);
         this.mb1 = new Array(this.hiddenSize).fill(0);
@@ -415,40 +622,70 @@ class NeuralNetwork {
 }
 
 // ========================================================================
-// TRAINING UI
+// TRAINING UI FUNCTIONS
 // ========================================================================
 
+/**
+ * Lance l'entraînement du réseau
+ */
 function trainNetwork() {
-    if (!datasetGenerated) { alert('Générez le dataset d\'abord.'); return; }
-    if (isTraining) { alert('Entraînement en cours.'); return; }
+    if (!datasetGenerated) { 
+        alert('Générez le dataset d\'abord.'); 
+        return; 
+    }
+    if (isTraining) { 
+        alert('Entraînement en cours.'); 
+        return; 
+    }
     
     isTraining = true;
     document.getElementById('trainBtn').disabled = true;
     document.getElementById('stopBtn').disabled = false;
     
-    const epochs = parseInt(document.getElementById('epochs').value);
-    const batchSize = parseInt(document.getElementById('batchSize').value);
-    const learningRate = parseFloat(document.getElementById('learningRate').value);
+    const epochs = parseInt(document.getElementById('epochs').value) || 1000;
+    const batchSize = parseInt(document.getElementById('batchSize').value) || 32;
+    const learningRate = parseFloat(document.getElementById('learningRate').value) || 0.01;
+    const hiddenSize = parseInt(document.getElementById('hiddenSize').value) || 12;
     
-    showStatus('trainingStatus', `Entraînement: ${epochs} epochs, batch ${batchSize}, lr ${learningRate}`, 'info');
+    showStatus('trainingStatus', `Entraînement: ${epochs} epochs, batch ${batchSize}, lr ${learningRate}, hidden ${hiddenSize}`, 'info');
     
-    network = new NeuralNetwork(2, 12, 4);
+    // Créer le réseau avec la taille de couche cachée sélectionnée
+    network = new NeuralNetwork(2, hiddenSize, 3);
     
+    // Initialiser le graphique
     const ctx = document.getElementById('trainingChart').getContext('2d');
     if (trainingChart) trainingChart.destroy();
+    
     trainingChart = new Chart(ctx, {
         type: 'line',
-        data: { labels: [], datasets: [
-            { label: 'Perte Train', data: [], borderColor: '#4CAF50', yAxisID: 'y' },
-            { label: 'Perte Val', data: [], borderColor: '#F44336', yAxisID: 'y' },
-            { label: 'Acc Train', data: [], borderColor: '#2196F3', yAxisID: 'y1' },
-            { label: 'Acc Val', data: [], borderColor: '#FF9800', yAxisID: 'y1' }
-        ] },
+        data: { 
+            labels: [], 
+            datasets: [
+                { label: 'Perte Train', data: [], borderColor: '#4CAF50', yAxisID: 'y' },
+                { label: 'Perte Val', data: [], borderColor: '#F44336', yAxisID: 'y' },
+                { label: 'Acc Train', data: [], borderColor: '#2196F3', yAxisID: 'y1' },
+                { label: 'Acc Val', data: [], borderColor: '#FF9800', yAxisID: 'y1' }
+            ] 
+        },
         options: {
-            responsive: true, maintainAspectRatio: false,
+            responsive: true, 
+            maintainAspectRatio: false,
             scales: {
-                y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Perte' } },
-                y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'Accuracy' }, min: 0, max: 1, grid: { drawOnChartArea: false } }
+                y: { 
+                    type: 'linear', 
+                    display: true, 
+                    position: 'left', 
+                    title: { display: true, text: 'Perte' } 
+                },
+                y1: { 
+                    type: 'linear', 
+                    display: true, 
+                    position: 'right', 
+                    title: { display: true, text: 'Accuracy' }, 
+                    min: 0, 
+                    max: 1, 
+                    grid: { drawOnChartArea: false } 
+                }
             }
         }
     });
@@ -457,7 +694,11 @@ function trainNetwork() {
     const startTime = Date.now();
     
     trainingResults = network.train(
-        trainingData, batchSize, learningRate, epochs, validationData,
+        trainingData, 
+        batchSize, 
+        learningRate, 
+        epochs, 
+        validationData,
         (epoch, totalEpochs, trainLoss, valLoss, trainAccuracy, valAccuracy) => {
             const progress = (epoch / totalEpochs) * 100;
             document.getElementById('trainingProgress').style.width = `${progress}%`;
@@ -492,6 +733,9 @@ function trainNetwork() {
     document.getElementById('confusionBtn').disabled = false;
 }
 
+/**
+ * Arrête l'entraînement
+ */
 function stopTraining() {
     if (trainingTimeout) clearTimeout(trainingTimeout);
     isTraining = false;
@@ -504,17 +748,27 @@ function stopTraining() {
 // PREDICTION VISUALIZATION
 // ========================================================================
 
+/**
+ * Visualise les prédictions du réseau sur toute la tablette
+ */
 function visualizePredictions() {
-    if (!network) { alert('Entraînez le réseau d\'abord.'); return; }
+    if (!network) { 
+        alert('Entraînez le réseau d\'abord.'); 
+        return; 
+    }
     showStatus('trainingStatus', 'Génération visualisation...', 'info');
     
     const canvas = document.getElementById('predictionsCanvas');
     const ctx = canvas.getContext('2d');
     const gridCanvas = document.createElement('canvas');
-    gridCanvas.width = TABLET_WIDTH; gridCanvas.height = TABLET_HEIGHT;
+    gridCanvas.width = TABLET_WIDTH;
+    gridCanvas.height = TABLET_HEIGHT;
     const gridCtx = gridCanvas.getContext('2d');
     
+    // Résolution pour la visualisation
     const step = 2;
+    
+    // Calculer les prédictions pour chaque pixel
     for (let y = 0; y < TABLET_HEIGHT; y += step) {
         for (let x = 0; x < TABLET_WIDTH; x += step) {
             const xNorm = x / (TABLET_WIDTH - 1);
@@ -525,27 +779,33 @@ function visualizePredictions() {
         }
     }
     
+    // Dessiner le canvas final
     ctx.fillStyle = '#f0f0f0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#333'; ctx.lineWidth = 2;
-    ctx.strokeRect(10, 10, 200, 400);
-    ctx.drawImage(gridCanvas, 10, 10, 200, 400);
     
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.strokeStyle = '#333'; 
+    ctx.lineWidth = 2;
+    ctx.strokeRect(10, 10, TABLET_WIDTH, TABLET_HEIGHT);
+    
+    ctx.drawImage(gridCanvas, 10, 10, TABLET_WIDTH, TABLET_HEIGHT);
+    
+    // Dessiner les cercles réels en superposition
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.setLineDash([2, 2]);
-    ctx.globalAlpha = 0.5;
+    ctx.lineWidth = 2;
     CIRCLE_CENTERS.forEach(circle => {
         ctx.beginPath();
         ctx.arc(circle.x + 10, circle.y + 10, CIRCLE_RADIUS, 0, Math.PI * 2);
         ctx.stroke();
     });
-    ctx.setLineDash([]); ctx.globalAlpha = 1;
+    ctx.setLineDash([]);
     
+    // Légende
     for (let i = 0; i < CLASS_NAMES.length; i++) {
         ctx.fillStyle = CLASS_COLORS[i];
-        ctx.fillRect(230, 50 + i * 20, 15, 15);
+        ctx.fillRect(230, 50 + i * 25, 15, 15);
         ctx.fillStyle = '#333';
-        ctx.fillText(CLASS_NAMES[i], 250, 60 + i * 20);
+        ctx.fillText(CLASS_NAMES[i], 250, 60 + i * 25);
     }
     
     document.getElementById('predictionsVisualization').classList.remove('hidden');
@@ -556,24 +816,43 @@ function visualizePredictions() {
 // SPECIFIC POINT TEST
 // ========================================================================
 
+/**
+ * Affiche le formulaire de test pour un point spécifique
+ */
 function testSpecificPoint() {
     document.getElementById('specificPointTest').classList.remove('hidden');
 }
 
+/**
+ * Teste un point spécifique sur le réseau
+ */
 function runSpecificPointTest() {
     const x = parseInt(document.getElementById('testX').value);
     const y = parseInt(document.getElementById('testY').value);
+    
+    // Vérifier que les coordonnées sont valides
+    if (isNaN(x) || isNaN(y) || x < 0 || x >= TABLET_WIDTH || y < 0 || y >= TABLET_HEIGHT) {
+        alert(`Coordonnées invalides. Entrez des valeurs entre 0 et ${TABLET_WIDTH-1} pour x, et 0 et ${TABLET_HEIGHT-1} pour y.`);
+        return;
+    }
+    
     const xNorm = x / (TABLET_WIDTH - 1);
     const yNorm = y / (TABLET_HEIGHT - 1);
     
-    let trueClass = 4;
+    // Déterminer la vraie classe
+    let trueClass = 3; // Noir par défaut
     for (let i = 0; i < CIRCLE_CENTERS.length; i++) {
-        if (isPointInCircle(x, y, i)) { trueClass = i; break; }
+        if (isPointInCircle(x, y, i)) {
+            trueClass = i;
+            break;
+        }
     }
     
+    // Prédiction
     const output = network.predict(xNorm, yNorm);
     const predictedClass = network.predictClass(xNorm, yNorm);
     
+    // Afficher les résultats
     const result = document.getElementById('testResult');
     result.innerHTML = `
         <div class="important-box">
@@ -581,7 +860,7 @@ function runSpecificPointTest() {
             <p><strong>Vraie classe:</strong> <span style="color:${CLASS_COLORS[trueClass]};font-weight:bold">${CLASS_NAMES[trueClass]}</span></p>
             <p><strong>Prédite:</strong> <span style="color:${CLASS_COLORS[predictedClass]};font-weight:bold">${CLASS_NAMES[predictedClass]}</span></p>
             <p><strong>Sortie:</strong> [${output.map(v => v.toFixed(4)).join(', ')}]</p>
-            <p><strong>Résultat:</strong> ${trueClass === predictedClass ? '<span style="color:green;font-weight:bold">✓ Correct</span>' : '<span style="color:red;font-weight:bold">✗ Incorrect</span>'}</p>
+            <p><strong>Résultat:</strong> ${trueClass === predictedClass ? '<span style="color:green;font-weight:bold">Correct</span>' : '<span style="color:red;font-weight:bold">Incorrect</span>'}</p>
         </div>
     `;
 }
@@ -590,29 +869,44 @@ function runSpecificPointTest() {
 // CONFUSION MATRIX
 // ========================================================================
 
+/**
+ * Calcule et affiche la matrice de confusion
+ */
 function computeConfusionMatrix() {
-    if (!network) { alert('Entraînez le réseau d\'abord.'); return; }
+    if (!network) { 
+        alert('Entraînez le réseau d\'abord.'); 
+        return; 
+    }
     
-    const nClasses = 5;
+    const nClasses = 4; // Rouge, Vert, Bleu, Noir
     const matrix = [];
-    for (let i = 0; i < nClasses; i++) matrix[i] = new Array(nClasses).fill(0);
+    for (let i = 0; i < nClasses; i++) {
+        matrix[i] = new Array(nClasses).fill(0);
+    }
     
+    // Calculer la matrice
     for (const point of validationData) {
         const predictedClass = network.predictClass(point.x, point.y);
         matrix[point.trueClass][predictedClass]++;
     }
     
-    let html = '<table><tr><th>Vrai\\Class</th>';
-    for (let i = 0; i < nClasses; i++) html += `<th>${CLASS_NAMES[i]}</th>`;
+    // Générer le HTML
+    let html = '<table><tr><th>Vrai\Class</th>';
+    for (let i = 0; i < nClasses; i++) {
+        html += `<th>${CLASS_NAMES[i]}</th>`;
+    }
     html += '</tr>';
     
     for (let i = 0; i < nClasses; i++) {
         html += `<tr><th>${CLASS_NAMES[i]}</th>`;
-        for (let j = 0; j < nClasses; j++) html += `<td>${matrix[i][j]}</td>`;
+        for (let j = 0; j < nClasses; j++) {
+            html += `<td>${matrix[i][j]}</td>`;
+        }
         html += '</tr>';
     }
     html += '</table><h4>Précision par classe:</h4><ul>';
     
+    // Précision par classe
     for (let i = 0; i < nClasses; i++) {
         const total = matrix[i].reduce((a, b) => a + b, 0);
         const correct = matrix[i][i];
@@ -621,8 +915,12 @@ function computeConfusionMatrix() {
     }
     html += '</ul>';
     
+    // Précision globale
     const total = validationData.length;
-    let correct = 0; for (let i = 0; i < nClasses; i++) correct += matrix[i][i];
+    let correct = 0;
+    for (let i = 0; i < nClasses; i++) {
+        correct += matrix[i][i];
+    }
     html += `<p><strong>Accuracy globale:</strong> ${correct}/${total} (${(correct/total*100).toFixed(2)}%)</p>`;
     
     document.getElementById('confusionMatrixContainer').innerHTML = html;
@@ -630,16 +928,25 @@ function computeConfusionMatrix() {
 }
 
 // ========================================================================
-// EXPORT/IMPORT
+// EXPORT/IMPORT FUNCTIONS
 // ========================================================================
 
+/**
+ * Exporte le modèle sous forme de JSON
+ */
 function exportModel() {
-    if (!network) { alert('Entraînez le réseau d\'abord.'); return; }
+    if (!network) { 
+        alert('Entraînez le réseau d\'abord.'); 
+        return; 
+    }
     const json = JSON.stringify(network.toJSON(), null, 2);
     document.getElementById('modelJson').value = json;
     document.getElementById('modelExport').classList.remove('hidden');
 }
 
+/**
+ * Copie le modèle JSON dans le presse-papiers
+ */
 function copyModelToClipboard() {
     const textarea = document.getElementById('modelJson');
     textarea.select();
@@ -647,18 +954,26 @@ function copyModelToClipboard() {
     showStatus('trainingStatus', 'Modèle copié!', 'success');
 }
 
+/**
+ * Ouvre la boîte de dialogue pour importer un modèle
+ */
 function importModel() {
     document.getElementById('modelFileInput').click();
 }
 
+/**
+ * Charge un modèle depuis un fichier
+ */
 function loadModelFile(event) {
     const file = event.target.files[0];
     if (!file) return;
+    
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
             const model = JSON.parse(e.target.result);
-            network = new NeuralNetwork(2, 12, 4);
+            const hiddenSize = model.hiddenSize || 12;
+            network = new NeuralNetwork(2, hiddenSize, 3);
             network.fromJSON(model);
             showStatus('trainingStatus', 'Modèle importé!', 'success');
             document.getElementById('predictBtn').disabled = false;
@@ -676,15 +991,18 @@ function loadModelFile(event) {
 // CODE DISPLAY
 // ========================================================================
 
+/**
+ * Affiche le code complet du réseau
+ */
 function showFullNetworkCode() {
     const code = `
 // ========================================================================
-// NEURAL NETWORK MLP 2-12-4
-// ReLU (hidden) + Sigmoid (output)
+// NEURAL NETWORK MLP 2-H-3
+// Réseau pour classer les zones tactiles RGB sur tablette 200x400
 // ========================================================================
 
 class NeuralNetwork {
-    constructor(inputSize, hiddenSize, outputSize) {
+    constructor(inputSize = 2, hiddenSize = 12, outputSize = 3) {
         // Xavier/Glorot initialization
         this.W1 = this.xavierInit(inputSize, hiddenSize);
         this.b1 = new Array(hiddenSize).fill(0);
@@ -694,7 +1012,12 @@ class NeuralNetwork {
         // Adam optimizer state
         this.mW1 = this.zerosMatrix(inputSize, hiddenSize);
         this.vW1 = this.zerosMatrix(inputSize, hiddenSize);
-        // ... (mb1, vb1, mW2, vW2, mb2, vb2)
+        this.mb1 = new Array(hiddenSize).fill(0);
+        this.vb1 = new Array(hiddenSize).fill(0);
+        this.mW2 = this.zerosMatrix(hiddenSize, outputSize);
+        this.vW2 = this.zerosMatrix(hiddenSize, outputSize);
+        this.mb2 = new Array(outputSize).fill(0);
+        this.vb2 = new Array(outputSize).fill(0);
     }
     
     xavierInit(rows, cols) {
@@ -702,6 +1025,10 @@ class NeuralNetwork {
         return Array.from({length: rows}, () =>
             Array.from({length: cols}, () => (Math.random() - 0.5) * 2 * scale)
         );
+    }
+    
+    zerosMatrix(rows, cols) {
+        return Array.from({length: rows}, () => new Array(cols).fill(0));
     }
     
     // Activation functions
@@ -722,7 +1049,7 @@ class NeuralNetwork {
             hidden[i] = this.relu(sum);
         }
         
-        // Output layer (Sigmoid)
+        // Output layer (Sigmoid) - 3 neurones pour R, V, B
         const output = new Array(this.outputSize).fill(0);
         for (let i = 0; i < this.outputSize; i++) {
             let sum = this.b2[i];
@@ -745,25 +1072,44 @@ class NeuralNetwork {
         return loss / output.length;
     }
     
-    // Training with Adam
-    train(data, batchSize, lr, epochs, valData) {
-        const beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8;
-        
-        for (let epoch = 0; epoch < epochs; epoch++) {
-            // Forward, backward, update weights
-            // ... (implemented in network.js)
+    // Convert output to class
+    outputToClass(output) {
+        const tolerance = 0.5;
+        for (let i = 0; i < output.length; i++) {
+            if (output[i] > tolerance) return i; // 0=Rouge, 1=Vert, 2=Bleu
         }
+        return 3; // Noir (fond)
+    }
+    
+    // Training with Adam optimizer
+    train(data, batchSize, lr, epochs, valData, onEpoch) {
+        const beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8;
+        // ... (see full implementation in network.js)
     }
 }
+
+// Configuration:
+// - Entrée: 2 neurones (x, y) normalisés dans [0, 1]
+// - Cachée: 12 neurones avec activation ReLU (configurable)
+// - Sortie: 3 neurones avec activation Sigmoïde (R, V, B)
+// - Fonction de coût: Binary Cross-Entropy
+// - Optimiseur: Adam (β1=0.9, β2=0.999, ε=1e-8)
+// - Architecture: forward(x, y) → hidden[H] → output[3]
     `;
     document.getElementById('fullNetworkCode').innerHTML = '<div class="code-block">' + code + '</div>';
     document.getElementById('fullNetworkCode').classList.remove('hidden');
 }
 
 // ========================================================================
-// UTILITY
+// UTILITY FUNCTION
 // ========================================================================
 
+/**
+ * Affiche un message de statut
+ * @param {string} elementId - ID de l'élément
+ * @param {string} message - Message à afficher
+ * @param {string} type - Type de message (info, success, error)
+ */
 function showStatus(elementId, message, type) {
     const el = document.getElementById(elementId);
     el.textContent = message;
@@ -774,20 +1120,30 @@ function showStatus(elementId, message, type) {
     el.style.display = 'block';
 }
 
-// Initialize network code display
+// ========================================================================
+// INITIALIZATION
+// ========================================================================
+
+// Afficher la description du réseau au chargement
 document.getElementById('networkCode').textContent = `
-// Réseau MLP 2-12-4
+// Réseau MLP 2-H-3 pour classification RGB
 // - Entrée: 2 neurones (x, y) normalisés dans [0, 1]
-// - Cachée: 12 neurones avec activation ReLU
-// - Sortie: 4 neurones avec activation Sigmoïde
+// - Cachée: H neurones avec activation ReLU (12 par défaut)
+// - Sortie: 3 neurones avec activation Sigmoïde (R, V, B)
 // 
 // Fonction de coût: Binary Cross-Entropy
 // Optimiseur: Adam (β1=0.9, β2=0.999, ε=1e-8)
 // 
+// Sorties:
+//   [1,0,0] → Rouge
+//   [0,1,0] → Vert  
+//   [0,0,1] → Bleu
+//   [0,0,0] → Noir (fond)
+// 
 // Architecture:
-//   forward(x, y) → hidden[12] → output[4]
+//   forward(x, y) → hidden[H] → output[3]
 //   backward() → mise à jour des poids avec Adam
 `;
 
-// Console log for debugging
-console.log('Feux tricolores - Network loaded successfully!');
+// Log de démarrage
+console.log('Feux tricolores RGB - Network loaded successfully!');
