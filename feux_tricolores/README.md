@@ -37,8 +37,7 @@ Entrée (2) ────► Cachée (12, ReLU) ────► Sortie (3, Sigmo�
 
 ```
 feux_tricolores/
-├── index.html          # Page principale avec interface complète
-├── entrainement.html    # Page dédiée à l'entraînement
+├── index.html          # Page principale interactive (génération dataset + entraînement + visualisation)
 ├── description.html    # Documentation détaillée
 ├── network.js          # Implémentation du réseau de neurones
 └── README.md           # Ce fichier
@@ -200,8 +199,7 @@ network.fromJSON(model);
 ## 🔗 Liens Utiles
 
 - [Documentation complète](description.html)
-- [Interface d'entraînement](entrainement.html)
-- [Interface principale](index.html)
+- [Démonstration interactive](index.html)
 
 ## 📝 Notes
 

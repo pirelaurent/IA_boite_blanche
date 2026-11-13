@@ -28,6 +28,15 @@ let trainingChart = null;
 let isTraining = false;
 let trainingTimeout = null;
 
+// Fonction utilitaire pour brasser un tableau (Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 // ========================================================================
 // DATASET GENERATION
 // ========================================================================
@@ -70,8 +79,12 @@ function generateDataset() {
         validationData.push(generateOutsidePoint());
     }
     
+    // Brasser les datasets pour un apprentissage efficace
+    shuffleArray(trainingData);
+    shuffleArray(validationData);
+    
     datasetGenerated = true;
-    showStatus('datasetStatus', `Dataset: ${trainingData.length} train, ${validationData.length} val`, 'success');
+    showStatus('datasetStatus', `Dataset: ${trainingData.length} train, ${validationData.length} val (brassés)`, 'success');
     document.getElementById('previewBtn').disabled = false;
     document.getElementById('visualizeBtn').disabled = false;
     document.getElementById('trainBtn').disabled = false;
@@ -184,6 +197,10 @@ function visualizeDataset() {
     const canvas = document.getElementById('datasetCanvas');
     const ctx = canvas.getContext('2d');
     
+    // Créer une copie brassée du dataset pour la visualisation
+    const shuffledData = [...trainingData];
+    shuffleArray(shuffledData);
+    
     // Effacer le canvas
     ctx.fillStyle = '#f0f0f0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -203,8 +220,8 @@ function visualizeDataset() {
     });
     ctx.setLineDash([]);
     
-    // Dessiner les points du dataset
-    trainingData.slice(0, 500).forEach(point => {
+    // Dessiner les points du dataset brassé (limité à 800 pour la lisibilité)
+    shuffledData.slice(0, 800).forEach(point => {
         const color = CLASS_COLORS[point.trueClass];
         ctx.fillStyle = color;
         ctx.beginPath();
@@ -465,7 +482,7 @@ class NeuralNetwork {
         };
         
         for (let epoch = 0; epoch < epochs; epoch++) {
-            this.shuffleArray(data);
+            shuffleArray(data);
             
             let epochTrainLoss = 0;
             let correctTrain = 0;
@@ -538,15 +555,25 @@ class NeuralNetwork {
     
     /**
      * Convertit la sortie du réseau en classe prédite
-     * @param {Array} output - Sortie du réseau
+     * Utilise argmax avec seuil pour détecter la classe Noir
+     * @param {Array} output - Sortie du réseau (3 valeurs: R, V, B)
      * @returns {number} Classe prédite (0=Rouge, 1=Vert, 2=Bleu, 3=Noir)
      */
     outputToClass(output) {
-        const tolerance = 0.5;
-        for (let i = 0; i < output.length; i++) {
-            if (output[i] > tolerance) return i;
+        // Trouver l'index de la valeur maximale (argmax)
+        let maxIndex = 0;
+        let maxValue = output[0];
+        for (let i = 1; i < output.length; i++) {
+            if (output[i] > maxValue) {
+                maxValue = output[i];
+                maxIndex = i;
+            }
         }
-        return 3; // Noir (fond)
+        
+        // Si la valeur maximale est faible (< 0.3), c'est Noir (classe 3)
+        // Ce seuil permet de mieux distinguer les points à l'extérieur des cercles
+        if (maxValue < 0.3) return 3;
+        return maxIndex;
     }
     
     /**
@@ -569,19 +596,6 @@ class NeuralNetwork {
     predict(x, y) {
         const { output } = this.forward(x, y);
         return output;
-    }
-    
-    /**
-     * Mélange un tableau (pour randomiser l'ordre des données)
-     * @param {Array} array - Tableau à mélanger
-     * @returns {Array} Tableau mélangé
-     */
-    shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
     }
     
     /**
@@ -871,6 +885,7 @@ function runSpecificPointTest() {
 
 /**
  * Calcule et affiche la matrice de confusion
+ * Avec coloration pour mieux visualiser les performances
  */
 function computeConfusionMatrix() {
     if (!network) { 
@@ -890,30 +905,49 @@ function computeConfusionMatrix() {
         matrix[point.trueClass][predictedClass]++;
     }
     
-    // Générer le HTML
-    let html = '<table><tr><th>Vrai\Class</th>';
+    // Générer le HTML avec coloration
+    let html = '<div class="important-box">';
+    html += '<h3 style="margin-top:0;">Matrice de Confusion (Méthode Argmax)</h3>';
+    html += '<p style="margin-bottom:15px;"><strong>Diagonale = Prédictions correctes (vert clair)<br>';
+    html += 'Hors diagonale = Erreurs (rose)</strong></p>';
+    html += '</div>';
+    
+    html += '<table style="margin:20px 0;"><tr><th>Vrai\Class</th>';
     for (let i = 0; i < nClasses; i++) {
-        html += `<th>${CLASS_NAMES[i]}</th>`;
+        html += `<th style="color:${CLASS_COLORS[i]}; font-weight:bold;">${CLASS_NAMES[i]}</th>`;
     }
     html += '</tr>';
     
     for (let i = 0; i < nClasses; i++) {
-        html += `<tr><th>${CLASS_NAMES[i]}</th>`;
+        html += `<tr><th style="color:${CLASS_COLORS[i]}; font-weight:bold;">${CLASS_NAMES[i]}</th>`;
         for (let j = 0; j < nClasses; j++) {
-            html += `<td>${matrix[i][j]}</td>`;
+            const isCorrect = (i === j);
+            const bgColor = isCorrect ? '#e8f5e9' : '#ffebee';
+            html += `<td style="background:${bgColor}; text-align:center; padding:10px;">
+                <strong>${matrix[i][j]}</strong><br>
+                <small style="color:#666;">${i !== j ? CLASS_NAMES[i] + '→' + CLASS_NAMES[j] : '✓'}</small>
+            </td>`;
         }
         html += '</tr>';
     }
-    html += '</table><h4>Précision par classe:</h4><ul>';
+    html += '</table>';
+    
+    html += '<div style="margin:20px 0;">';
+    html += '<h4>Précision par classe:</h4><ul style="list-style:none; padding:0;">';
     
     // Précision par classe
     for (let i = 0; i < nClasses; i++) {
         const total = matrix[i].reduce((a, b) => a + b, 0);
         const correct = matrix[i][i];
         const accuracy = total > 0 ? (correct / total * 100).toFixed(2) : 0;
-        html += `<li><strong>${CLASS_NAMES[i]}</strong>: ${correct}/${total} (${accuracy}%)</li>`;
+        const color = CLASS_COLORS[i];
+        html += `<li style="margin:10px 0; padding:10px; border-left:4px solid ${color}; background:#f9f9f9;">
+            <strong style="color:${color};">${CLASS_NAMES[i]}</strong>: 
+            <span style="color:${correct === total ? '#4CAF50' : '#F44336'};">${correct}/${total}</span> 
+            (<strong>${accuracy}%</strong>)
+        </li>`;
     }
-    html += '</ul>';
+    html += '</ul></div>';
     
     // Précision globale
     const total = validationData.length;
@@ -921,7 +955,14 @@ function computeConfusionMatrix() {
     for (let i = 0; i < nClasses; i++) {
         correct += matrix[i][i];
     }
-    html += `<p><strong>Accuracy globale:</strong> ${correct}/${total} (${(correct/total*100).toFixed(2)}%)</p>`;
+    const globalAccuracy = (correct/total*100).toFixed(2);
+    const globalColor = globalAccuracy >= 95 ? '#4CAF50' : globalAccuracy >= 90 ? '#FF9800' : '#F44336';
+    html += `<div style="margin:20px 0; padding:15px; background:#fff3cd; border-left:4px solid ${globalColor}; border-radius:5px;">
+        <h4 style="margin:0 0 10px 0;">Accuracy Globale</h4>
+        <p style="margin:0; font-size:20px; color:${globalColor}; font-weight:bold;">
+            ${correct}/${total} (${globalAccuracy}%)
+        </p>
+    </div>`;
     
     document.getElementById('confusionMatrixContainer').innerHTML = html;
     document.getElementById('confusionMatrixContainer').classList.remove('hidden');
@@ -1072,13 +1113,21 @@ class NeuralNetwork {
         return loss / output.length;
     }
     
-    // Convert output to class
+    // Convert output to class using argmax
     outputToClass(output) {
-        const tolerance = 0.5;
-        for (let i = 0; i < output.length; i++) {
-            if (output[i] > tolerance) return i; // 0=Rouge, 1=Vert, 2=Bleu
+        // Trouver l'index de la valeur maximale (argmax)
+        let maxIndex = 0;
+        let maxValue = output[0];
+        for (let i = 1; i < output.length; i++) {
+            if (output[i] > maxValue) {
+                maxValue = output[i];
+                maxIndex = i;
+            }
         }
-        return 3; // Noir (fond)
+        
+        // Si la valeur maximale est faible (< 0.3), c'est Noir (classe 3)
+        if (maxValue < 0.3) return 3; // Noir (fond)
+        return maxIndex; // 0=Rouge, 1=Vert, 2=Bleu
     }
     
     // Training with Adam optimizer

@@ -12,7 +12,7 @@
 
             <div class="section">
                 <h2>Combiner des neurones </h2>
-                <h4> Le neurone unique perceptron est un classifieur binaire </h4>
+                <h4> Le perceptron est un classifieur binaire </h4>
                 <p>
                     Tout neurone coupe l'espace en deux parties avec une
                     frontière linéaire qui sépare sa zone d'activation de sa
@@ -54,12 +54,13 @@
                                     <img
                                     width="240"
                                     src="img/chap2/cercleA12droites.png"
-                                    alt="Approximation d'un cercle par 12 droites (12 neurones)"
+                                    alt="Approximation d'un disque avec 12 droites (12 neurones)"
                                 />
-                                <br><em>Approximation d'un disque par des droites </em>
+                                <br><em>Approximation d'un disque avec 12 droites </em>
                             </td>
                             <td>
-                                On peut cibler toute figure convexe par de multiples droites issues de multiples perceptrons.
+                                On peut cibler toute figure convexe par de multiples droites 
+                                <br>issues de multiples perceptrons.
 
                             </td>
                         </tr>
@@ -74,7 +75,7 @@
                     
                     <br>La consolidation se fait à la <span class="keyword">couche de sortie</span> par une combinaison 
                         des sorties précédentes. 
-                    <br>Elle répondra au final dans le disque (1) ou en dehors du disque (0).
+                    <br>Elle répondra au final <i>dans</i> le disque (1) ou <i>en dehors</i> du disque (0).
                  
           
                     <div class="image-container">
@@ -85,7 +86,8 @@
                             />
                     </div>
     
-                    Un tel réseau de perceptron pourrait se construire à la main, en fixant les poids comme vu au chapitre 1 . 
+                    Un tel réseau de perceptron peut se construire en fixant les poids à la main comme vu au chapitre 1 . 
+                    <br> C'est même la seule manière de faire avec la fonction d'activation très limitée du perceptron. 
                 
 
                 <h4>Apprentissage des couches : une limite du perceptron </h4>
@@ -95,7 +97,8 @@
              
                     Avec la fonction d'activation à échelon, entre la zone « oui » et la zone « non »
                     il y a un front vertical.
-                    <br>L' erreur sera toujours discrète et les actions limitées: 0 (rester), +1 (descendre) ou −1 (remonter)   
+                    <br>L' erreur sera toujours discrète et les actions limitées: 
+                    0 (rester), +1 (trop haut: descendre) ou −1 (trop bas: remonter)   
              
                     <div class="image-container">
                         <img
@@ -110,7 +113,7 @@
                     <br><b>On n'a
                         aucun moyen de répartir cette erreur en arrière vers les neurones de la couche cachée</b>.
 
-                         <br>   Cette incapacité a bloqué le développement des réseaux avec couche cachée. 
+                         <br>   Cette incapacité a bloqué le développement des réseaux de neurones avec couche cachée. 
                             <i><h4>l'hiver de l'IA</h4></i>
                         
                         <div class="note">
@@ -124,8 +127,8 @@
             
                         <h4>Ce qu'il reste du perceptron d'origine</h4>
                 <p>
-                            <b>La mécanique</b> : tout neurone continue de fonctionner sur le même principe de calcul du score brut qui sépare l'espace en deux parties. 
-                            Ce sont les fonctions d'activation qui transforment le score brut en prédiction qui ont évolués.
+                            <b>Le mécanisme</b> : tout neurone continue de fonctionner sur le même principe de calcul d'un score brut qui sépare l'espace en deux parties. 
+                            Ce sont les fonctions d'activation qui transforment le score  en prédiction qui ont évolués.
                                 <br />
                                 <b>Le nom </b> : on continue d'utiliser le terme dans <b>MLP</b>
                                 , Multi Layer <b>Perceptron</b>, le nom générique des réseaux de neurones.
@@ -165,7 +168,7 @@
                         width="600px"
                         alt="Front lissé de la sigmoide"
                     />
-                    <br> Un bon entraineur de modèle choisira sa courbe en fonction du problème à traiter
+                    <br> Un bon entraîneur de modèle choisira sa courbe en fonction du problème à traiter
                 </div>
                 <h4>Fonctions d'activation </h4>
                 <ul> 
@@ -181,15 +184,13 @@
 
 
         </div>
-            <div class="section">            
+            <div class="section">              
                 <a href="./chapitre3.html">
-                <h4>
-                    Comprendre l'apprentissage : comment les poids se fixent.
-                </h4>
+                 <h4>Aller au chapitre 3</h4>
                 <p>
-                    Comment minimiser les erreurs et faire tendre un réseau vers ses objectifs au plus haut taux de réussite possible.
-            
-               </p>
+                    Comprendre l'apprentissage : comment les poids se fixent.
+                </p>
+                
                   </a>
         </div>
     </div>

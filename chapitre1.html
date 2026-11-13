@@ -37,7 +37,7 @@
                     dans la décision commune. 
                     <br>Par des multiplications et une sommation, il va produire un
                     <span class="keyword">score brut</span>. 
-                    <br>Ce score brut est traduit en
+                    <br>Ce score  est traduit en
                     <span class="keyword">prédiction</span> par une
                     <span class="keyword">fonction d'activation</span> 
                     <br>Le <span class = "keyword">perceptron</span> est comme le neurone d'origine: Il s'active sur un dépassement de seuil (ou échelon).
@@ -52,13 +52,14 @@
                     <p><em>Schéma d'un neurone artificiel à deux entrées</em></p>
                 </div>
                 <p>
-                    Le <span class="keyword">score brut</span> est un calcul simple : <i>somme(xi.wi) + biais</i>. Ci-dessus  <i>w1·x1 + w2·x2 + b</i>
+                    Le <span class="keyword">score brut</span> est un calcul simple : <i>somme(xi.wi) + biais</i>. 
+                    ( ci-dessus : <i>w1·x1 + w2·x2 + b</i>).
                    <br />
-                    Avec deux entrées x1,x2, c' est l'équation d'une droite dans le plan, décalée de l'origine par le <span class="keyword">biais b</span>.
-                    <br>La droite est une frontière qui sépare les scores bruts positifs des négatifs.
+                    Avec seulement deux entrées, c'est l'équation d'une droite dans un plan, décalée de l'origine par le <span class="keyword">biais b</span>.
+                    <br>Cette frontière sépare les scores positifs des scores négatifs.Les scores nuls sont sur la frontière elle-même.
                 </p>
 
-                <h4>Représentation géométrique du score brut d'un neurone artificiel</h4>
+                <h4>Représentation géométrique des scores bruts d'un neurone artificiel</h4>
       
                 <div class="image-container">
                     <img
@@ -70,8 +71,8 @@
                         <em>
                             Les poids w1,w2 conditionnent la pente de la droite, et le biais son décalage de l'origine.
                             <br />
-                            Les scores bruts montrent la distance, positive ou négative, d'un point à la frontière de
-                    décision.
+                            Un score brut est la distance, positive ou négative, d'un point à la frontière de
+                            décision.
                         </em>
                     </p>
                 </div>
@@ -79,19 +80,18 @@
 
                 <h4>Tout neurone artificiel découpe son espace de nombres en deux parties.</h4>
                 <ul>
-                    <li>Avec deux entrées il sépare le plan (x1,x2) en deux parties par une droite.</li>
-                    <li>Avec trois entrées, il séparera l'espace en deux parties par un plan.</li>
-                    <li>Avec n entrées, il séparera un hyperespace en deux parties par un hyperplan.</li>
+                    <li>Avec deux entrées il sépare <b>le plan</b> (x1,x2) en deux parties par <b>une droite</b>.</li>
+                    <li>Avec trois entrées, il séparera <b>l'espace</b> habituel en deux parties par <b>un plan</b>.</li>
+                    <li>Avec n entrées, il séparera <b>un hyperespace</b> en deux parties par <b>un hyperplan</b>.</li>
                 </ul>
 
                 <h3>La fonction d'activation crée la prédiction</h3>
                 <p>
-                    La <span class="keyword">fonction d'activation <b>f</b></span> transforme le
-                    <span class="keyword">score brut</span> en une <span class="keyword">prédiction.</span>
-                </p>
-                <p>
+                    La <span class="keyword">fonction d'activation </span> transforme le
+                    <span class="keyword">score </span> en une <span class="keyword">prédiction.</span>
+          <br>
                     Celle du perceptron historique est la <span class="keyword">fonction échelon H</span>
-                    (<i>Heaviside step function</i> du nom de son inventeur).
+                    (<i>Heaviside step function</i> du nom de son inventeur):
                 </p>
                 <ul>
                     <li>La prédiction est 1 (vrai) si le <b>score brut</b> est supérieur ou égal à 0</li>
@@ -105,29 +105,29 @@
 
                 <h4>Classifieur binaire</h4>
                 <p>
-                    La fonction d'activation échelon crée des classifieurs binaires, tout ou rien, vrai ou faux.
-                    <br>Au final, de nombreuses demandes sont binaires: 
+                    La fonction d'activation <i>à échelon</i> crée des classifieurs binaires, tout ou rien, vrai ou faux.
+                    <br>De nombreux usages sont binaires en fin de traitement : 
+                
+                    <ul>
+                        <li><b>Filtrage de spam</b> (un message est-il spam ou non)</li>
+                        <li><b>Détection de fraude</b> bancaire (transaction frauduleuse ou légitime)</li>
+                        <li><b>Diagnostic médical</b> (présence ou absence d'un marqueur de maladie)</li>
+                        <li><b>Analyse de sentiment</b> (avis positif ou négatif)</li>
+                        <li>etc.</li>
+                    </ul>
                 </p>
-                <ul>
-                    <li><b>Filtrage de spam</b> (un message est-il spam ou non)</li>
-                    <li><b>Détection de fraude</b> bancaire (transaction frauduleuse ou légitime)</li>
-                    <li><b>Diagnostic médical</b> (présence ou absence d'un marqueur de maladie)</li>
-                    <li><b>Analyse de sentiment</b> (avis positif ou négatif)</li>
-                    <li>etc.</li>
-                </ul>
-
                 <h4>Classification multiple</h4>
                 <p>
-                    Si on a plusieurs catégories à isoler on entraîne N classifieurs, un par classe.<br />
-                    Si les catégories sont exclusives <i>One-vs-all (OvA)</i> il faut veiller à ce qu'une seule
-                    sortie soit positive.
+                    Si on a N catégories différentes à isoler, on entraîne N classifieurs différents, un par classe.<br />
+                    Si les catégories sont exclusives (<i>One-vs-all</i>) il faut veiller à ce qu'une seule
+                    sortie soit positive à la fois.
                 </p>
             </div>
 
             <hr />
 
             <div class="section">
-                <h2>🟡 Un exemple simplifié: un feu tricolore, deux interrupteurs</h2>
+                <h2>🟡 Illustration libre: un feu tricolore, deux interrupteurs</h2>
                 <p>
                     Le <b>perceptron</b> est le premier et le plus simple des neurones artificiels, mais il est
                     suffisant pour en illustrer le fonctionnement.
@@ -135,7 +135,7 @@
 
              
 
-                <b>On imagine n'avoir que deux interrupteurs pour allumer distinctment chacun des trois feux.</b>
+                <b>On imagine n'avoir que deux interrupteurs pour allumer distinctement chacun des trois feux.</b>
                 <p>
                     <span class="note">
                         Du code simplissime pourrait le faire. L'ambition est d'utiliser des perceptrons pour en
@@ -218,8 +218,9 @@
                         </tbody>
                     </table>
                 </div>
-                <p>On a un système déterministe élémentaire avec 4 cas à superviser. 
-                <br> Simplissime, on peut entraîner un réseau soi-même.</p>
+                <p>L'avantage de simuler un interrupteur c'est qu'il ne peut prendre que deux valeurs entières.
+                <br>ça en fait un système déterministe élémentaire avec seulement 4 cas à traiter. 
+                <br>Simplissime, on peut entraîner le réseau soi-même.</p>
 
                 <h3>Un neurone par feu</h3>
                 <p>
@@ -235,26 +236,27 @@
                     <p>
                         <em>
                             Représentation du réseau avec 3 neurones perceptrons en parallèle<br />
-                            Chacun multiplie les mêmes entrées mais avec ses propres poids.<br />
+                            Chacun multiplie les entrées communes avec ses propres poids.<br />
                             La couche de sortie doit allumer un seul feu à la fois.
                         </em>
                     </p>
                 </div>
 
-                <h4>La taille d'un modèle</h4>
+                <h4>La taille du modèle</h4>
                 <p>
                     Le <span class="keyword">modèle</span> est le tableau numérique des paramètres une fois le
                     réseau entraîné. Sa taille est son nombre de paramètres.<br />
 
-                    Notre réseau a <span class="keyword">1 couche</span> (de sortie) et 3 neurones avec 3
-                    paramètres chacun. C'est un <span class="keyword">modèle à <b>9</b> paramètres</span>.<br />
+                    Notre <span class="keyword">modèle à <b>9</b> paramètres</span> :
+                     1 seule <span class="keyword">couche de sortie </span> faite de 3 neurones avec 3
+                    paramètres chacun. <br />
                     Les réseaux  pour la reconnaissance d'images ont <b>des millions (10<sup>6</sup>)</b>
                     de paramètres et des dizaines de couches.<br />
                     Les grands <span class="keyword">LLM (Large Language Model)</span> qui répondent aux questions en ont des
-                    <b>milliers de milliards (10<sup>12</sup>)</b> avec des centaines de couches.<br />
+                    <b>milliers de milliards (10<sup>12</sup>)</b> et des centaines de couches.<br />
                     
-                    <br>Le fonctionnement de base reste le même</b> que ce soit pour 10, 10<sup>6</sup> ou
-                    10<sup>12</sup> paramètres, mais la puissance de calcul à mobiliser est exponentielle.
+                    <br><b>Le fonctionnement de base fait de calculs reste le même</b>, que ce soit pour 10, 10<sup>6</sup> ou
+                    10<sup>12</sup> paramètres, <br>mais la puissance de calcul à mobiliser est exponentielle.
                 </p>
                 </div>
                 <div class = "section">
@@ -265,16 +267,22 @@
                 </h4>
                 <p>
                     On peut entrainer soi-même ce modèle en modifiant ses poids par petits pas comme le fait un apprentissage automatique. 
-                    <br>La matrice des poids est initialisée au hasard, à vous de corriger par étapes pour réduire l'erreur de prédiction.
-                    <br> En deux dimensions, vous pourrez voir les droites à orienter (changer les poids) afin d'isoler chaque feu indépendamment.
-            
-               </p>
-                  </a>
-         
+                    <br>Les poids sont initialisés au hasard et leurs frontières sont visualisées avec les positions des interrupteurs.
+                    <br>Le but est de changer les poids pour isoler chaque feu indépendamment.
+                    
+                </a><div class = "image-container">
+                <img src = "img/chap1/troisDroites.png"
+                    width =340
+                    />
+                    <br><em> Exemple de résultat valable qui sépare les 4 cagétories indépendamment</em>
+                    </div>
+                </p>
+               
+         <hr>
                  <a href="./chapitre2.html">
-                <h4>Sauter l'expérience et aller au chapitre 2</h4>
+                <h4>ou sauter l'expérimentation et aller directement au chapitre 2</h4>
                       <p>
-                 Surtout si vous avez déjà fait et réussi le test.
+                 Surtout si vous l'avez déjà faite...
                     </p>
                 </a>
              

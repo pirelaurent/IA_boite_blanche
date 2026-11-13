@@ -158,8 +158,7 @@
         <h1>📖 Feux Tricolores RGB - Description Complète</h1>
         
         <div class="center" style="margin: 20px 0;">
-            <a href="index.html" class="btn">Retour à l'accueil</a>
-            <a href="entrainement.html" class="btn btn-secondary">Aller à l'entraînement</a>
+            <a href="index.html" class="btn">Vers la démonstration interactive</a>
         </div>
         
         <div class="section">
@@ -371,16 +370,57 @@ z<sub>2</sub>[k] = b<sub>2</sub>[k] + Σ (hidden[j] × W2[j][k])  pour k = 0..2
 output[k] = σ(z<sub>2</sub>[k]) = 1 / (1 + e<sup>-z<sup>2</sup>[k]</sup>)
             </div>
             
-            <h3>Classification</h3>
+            <h3>Classification (Méthode Argmax)</h3>
             <p>
-                La sortie <span class="math">[o<sub>0</sub>, o<sub>1</sub>, o<sub>2</sub>]</span> est interprétée comme suit :
+                La sortie <span class="math">[o<sub>0</sub>, o<sub>1</sub>, o<sub>2</sub>]</span> est interprétée 
+                en utilisant la méthode <strong>Argmax avec seuil</strong> :
+            </p>
+            <ol>
+                <li><strong>Trouver l'index de la valeur maximale (Argmax)</strong> : 
+                    identifier quelle couleur a la plus forte probabilité</li>
+                <li><strong>Appliquer un seuil adaptatif</strong> : 
+                    si la valeur maximale < 0.3, classer comme Noir (fond)</li>
+            </ol>
+            
+            <div class="code-block">
+// Méthode Argmax avec seuil pour la détection du fond
+function outputToClass(output) {
+    // 1. Trouver l'index de la valeur maximale
+    let maxIndex = 0;
+    let maxValue = output[0];
+    for (let i = 1; i < output.length; i++) {
+        if (output[i] > maxValue) {
+            maxValue = output[i];
+            maxIndex = i;
+        }
+    }
+    
+    // 2. Si max < 0.3, c'est le fond Noir
+    if (maxValue < 0.3) return 3; // Noir
+    return maxIndex; // Rouge(0), Vert(1), Bleu(2)
+}
+            </div>
+            
+            <p>
+                <strong>Pourquoi cette approche ?</strong>
             </p>
             <ul>
-                <li>Si <span class="math">o<sub>0</sub> > 0.5</span> : Clic dans le <strong>cercle Rouge</strong> → <code>[1,0,0]</code></li>
-                <li>Si <span class="math">o<sub>1</sub> > 0.5</span> : Clic dans le <strong>cercle Vert</strong> → <code>[0,1,0]</code></li>
-                <li>Si <span class="math">o<sub>2</sub> > 0.5</span> : Clic dans le <strong>cercle Bleu</strong> → <code>[0,0,1]</code></li>
-                <li>Si toutes <span class="math">≤ 0.5</span> : Clic dans le <strong>fond Noir</strong> → <code>[0,0,0]</code></li>
+                <li><strong>Robustesse :</strong> Argmax est plus stable qu'un seuil fixe sur chaque sortie</li>
+                <li><strong>Détection du Noir :</strong> Le seuil de 0.3 permet de bien distinguer les points 
+                    à l'extérieur des cercles (où toutes les sorties sont faibles)</li>
+                <li><strong>Adaptabilité :</strong> Fonctionne même si les sorties ne sont pas parfaitement 
+                    calibrées à 0.5</li>
             </ul>
+            
+            <div class="note-box">
+                <strong>💡 Remarque :</strong> Avec cette méthode, les classifications sont :
+                <ul>
+                    <li><code>maxIndex=0, maxValue≥0.3</code> → <strong>Rouge</strong></li>
+                    <li><code>maxIndex=1, maxValue≥0.3</code> → <strong>Vert</strong></li>
+                    <li><code>maxIndex=2, maxValue≥0.3</code> → <strong>Bleu</strong></li>
+                    <li><code>maxValue<0.3</code> → <strong>Noir</strong> (fond)</li>
+                </ul>
+            </div>
         </div>
         
         <div class="section">
@@ -507,47 +547,60 @@ Accuracy = (Nombre de prédictions correctes) / (Nombre total de prédictions)
             
             <h3>Matrice de Confusion</h3>
             <p>
-                La matrice de confusion permet de visualiser les performances par classe :
+                La matrice de confusion permet de visualiser les performances par classe 
+                et d'identifier où le réseau fait des erreurs :
             </p>
             <table>
                 <tr>
                     <th>Vrai \ Prédit</th>
-                    <th>Rouge</th>
-                    <th>Vert</th>
-                    <th>Bleu</th>
-                    <th>Noir</th>
+                    <th style="color: #F44336;">Rouge</th>
+                    <th style="color: #4CAF50;">Vert</th>
+                    <th style="color: #2196F3;">Bleu</th>
+                    <th style="color: #000;">Noir</th>
                 </tr>
                 <tr>
-                    <th>Rouge</th>
-                    <td style="background: #e8f5e9;">TP</td>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #ffebee;">FP</td>
+                    <th style="color: #F44336;">Rouge</th>
+                    <td style="background: #e8f5e9;">Vrais Positifs<br><small>R→R</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>R→V</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>R→B</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>R→N</small></td>
                 </tr>
                 <tr>
-                    <th>Vert</th>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #e8f5e9;">TP</td>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #ffebee;">FP</td>
+                    <th style="color: #4CAF50;">Vert</th>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>V→R</small></td>
+                    <td style="background: #e8f5e9;">Vrais Positifs<br><small>V→V</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>V→B</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>V→N</small></td>
                 </tr>
                 <tr>
-                    <th>Bleu</th>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #e8f5e9;">TP</td>
-                    <td style="background: #ffebee;">FP</td>
+                    <th style="color: #2196F3;">Bleu</th>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>B→R</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>B→V</small></td>
+                    <td style="background: #e8f5e9;">Vrais Positifs<br><small>B→B</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>B→N</small></td>
                 </tr>
                 <tr>
-                    <th>Noir</th>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #ffebee;">FP</td>
-                    <td style="background: #e8f5e9;">TP</td>
+                    <th style="color: #000;">Noir</th>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>N→R</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>N→V</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>N→B</small></td>
+                    <td style="background: #e8f5e9;">Vrais Positifs<br><small>N→N</small></td>
                 </tr>
             </table>
+            
+            <div class="note-box">
+                <strong>💡 Interprétation :</strong>
+                <ul>
+                    <li><strong>Diagonale (vert clair) :</strong> Prédictions correctes (TP - Vrais Positifs)</li>
+                    <li><strong>Hors diagonale (rose) :</strong> Erreurs de classification (FP - Faux Positifs)</li>
+                    <li><strong>Attention au Noir :</strong> La classe Noir est souvent mal détectée avec un seuil fixe. 
+                        La méthode Argmax corrige ce problème.</li>
+                </ul>
+            </div>
+            
             <p style="margin-top: 10px;">
-                <strong>TP</strong> = Vrai Positif, <strong>FP</strong> = Faux Positif
+                <strong>TP</strong> = Vrai Positif (prédiction correcte), 
+                <strong>FP</strong> = Faux Positif (prédiction incorrecte)
             </p>
             
             <h3>Précision par Classe</h3>
@@ -687,8 +740,7 @@ Précision = TP / (TP + FP) = Vrais Positifs / Total des prédictions pour cette
         </div>
         
         <div class="center" style="margin: 40px 0;">
-            <a href="index.html" class="btn">Retour à l'accueil</a>
-            <a href="entrainement.html" class="btn btn-secondary">Aller à l'entraînement</a>
+            <a href="index.html" class="btn">Vers la démonstration interactive</a>
         </div>
     </div>
 </body>

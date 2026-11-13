@@ -3,275 +3,352 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>3—Apprentissage</title>
+        <title>3 — Apprentissage</title>
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
         <div class="container">
-            <h1>Comprendre l'apprentissage </h1>
-
-
-
+            <h1>L'apprentissage</h1>
+            <h2 align= "center">Comment les poids se fixent</h2>
 
             <div class="section">
-                <h2>Les fonctions d'activation dérivables</h2>
+                <h2>Les fonctions d'activation <i>dérivables</i></h2>
+                <div class= "note">Une fonction est dérivable en un point si sa courbe admet une tangente non verticale 
+                (une pente précise et finie) à cet endroit exact.</div>
                 <p>
-                  <b>Une fonction d'activation </b>continue et dérivable,  
-                  bornée entre 0 et 1, permet de mesurer l'erreur. 
-                  <br>  
-                  La position de la prédiction P et l'inclinaison de la tangente à ce point de la courbe donnent la direction à suivre.
-                  
-                  </p>
-                 <div class="center">
+                    <b>Une fonction d'activation</b> continue et dérivable,
+                    bornée entre 0 et 1, permet de mesurer l'erreur.
+                    <br />
+                    La position de la prédiction P et l'inclinaison de la tangente à ce point de la courbe donnent la direction à suivre.
+                </p>
+                <div class="center">
                     <img
                         src="img/chap3/tangente.png"
                         width="360px"
-                   
                         alt="Front lissé de la sigmoide"
                     />
-                    <br><em> 
-                    La surface de prédiction avec une fonction d'activation <b>sigmoïde</b>.                    
-                </em>
+                    <br />
+                    <em>
+                        La surface de prédiction avec une fonction d'activation <b>sigmoïde</b>.
+                    </em>
                 </div>
-         
-                
 
-                <h3> L'apprentissage  </h3>
-                <h4> Réduire l'erreur consiste à descendre de la montagne par temps de brouillard </h4>
-                <p> 
-                    Dans le brouillard, on ne sait pas où on est.
-                    <br> Mais on arrive à sentir sous ses pieds comment est la pente.
-                    <br> On fait le choix de descendre - tant qu'on peut. 
-                    <h4>La descente de gradient</h4>
-       
-                    La montagne des erreurs a un relief: chaque position (valeur des poids) a son altitude (une valeur d'erreur). 
-                    <br>Cette description du relief à un nom :  la <span class = "keyword">fonction de coût</span>. 
-                    On ne connaît ni son maximum ni son minimum.
-
-
-                    <br><br> A chaque nouvelle position ( changement des poids ), 
-                    on peut mesurer la pente de l'erreur, son <span class = "keyword">gradient.</span>
-                    <br>On fait alors le choix rationnel d'un petit pas dans la direction où l'erreur diminue 
-                    et on recommence tant qu'on peut la réduire: 
-                    <br>C'est la <span class = "keyword"> descente de gradient. </span> 
-                    <span class= "image-container">
-                                    <img
-                                            src="img/chap3/descenteDeGradient.png"
-                                            width="360px"
-                                    
-                                            alt="Descente de gradient"
-                                        />
-
-                    </span>
-
-
-
-                    <br><br>On ne peut pas savoir si on est loin du fond de la vallée, 
-                        ni même s'il existe une seule vallée plutôt que plusieurs.
-                    <br> De plus, le relief peut tromper: 
-                    Si on a atteint une cuvette au lieu de la vallée, l'erreur restera grande.
-                    <br><b>L'apprentissage peut être médiocre </b>: il faut des techniques de validation postérieure à l'entraînement.
-                </p>
-        </div>
-        <div class = "section">
-            <h3>La rétropropagation</h3>
-
-            <p>
-                Le génie des années 80, c'est la <span class = "keyword">rétropropagation </span>: 
-                on a su démontrer qu'en composant des fonctions dérivables en couches, 
-                on peut remonter l'erreur de la sortie jusqu'aux premières couches, et donc d'<b>entraîner des couches cachées.</b>
-  
-                <h4> Principes </h4>
-              Pour chaque neurone de sortie on mesure l'erreur, son ampleur et la direction à prendre pour la diminuer. 
-                <br> Cette erreur est renvoyée aux neurones de la couche cachée au prorata de leur influence.
-                <br>Chaque neurone caché sait à son tour de quel côté descendre et de combien se corriger et ainsi de suite si plusieurs couches.
-
-
-
-          
-           
-            </p>
-
-            <h4>Ce que les couches cachées finissent par détecter</h4>
-            <p>
-                Comme plusieurs sorties peuvent demander à la couche cachée des ajustements contradictoires, 
-                les exigences s'additionnent et le pas suit la résultante : 
-                <b>les neurones cachés deviennent des compromis, qui révèlent ce que les sorties ont en commun.</b>
-                </p>
+                <h3>L'apprentissage</h3>
+                <h4>Réduire l'erreur consiste à descendre une montagne par temps de brouillard</h4>
                 <p>
-                Dans la <b>reconnaissance d'images</b>, on observe après apprentissage que les premières couches cachées détectent des éléments très simples : des arêtes, des contrastes, des petites textures.
-                <br>Les couches suivantes les combinent : des coins, des courbes, des motifs récurrents.
-                <br>Les suivantes encore : des morceaux d'objets, un œil, une roue, un toit. 
-                <br>Les dernières couches n'ont plus qu'à assembler ces pièces pour <b>reconnaître un visage, une voiture, une maison.</b>
+                    Dans le brouillard, on ne sait pas où on est.
+                    <br />
+                    On peut arriver à sentir sous ses pieds comment est la pente.
+                    <br />
+                    On fait le choix de descendre - tant qu'on peut.
+                </p>
 
-                        <span class= "image-container">     
-                            <img
-                                    src="img/chap3/recoFaces.png"
-                                    width="500px"
-                            
-                                    alt="Arêtes cachées"
-                                />
+                <h4>La descente de gradient</h4>
+                <p>
+                    La montagne des erreurs a un relief : chaque position (valeur des poids) a une altitude (une valeur d'erreur).
+                    <br />
+                    Cette description du relief a un nom : la <span class="keyword">fonction de coût</span>.
+                    On ne connaît ni son maximum ni son minimum.
+                    <br />
+                    <br />
+                    À chaque nouvelle position (changement des poids),
+                    on peut mesurer <b>la pente de l'erreur finale</b>, son <span class="keyword">gradient</span>.
+                    <br />
+                    On fait alors le choix rationnel d'un petit pas dans la direction où cette erreur diminue
+                    et on recommence tant qu'on peut :
+                    <br />
+                    C'est la <span class="keyword">descente de gradient</span>.
+                </p>
 
-                    </span>
+                <div class="image-container">
+                    <img
+                        src="img/chap3/descenteDeGradient.png"
+                        width="360px"
+                        alt="Descente de gradient"
+                    />
+                </div>
 
-                <br>
-                <br>Dans <b>l'analyse de texte</b>, même progression : les premières couches repèrent des suites de lettres et de mots, les suivantes des tournures récurrentes proches de la grammaire, les suivantes le sens des expressions, jusqu'aux intentions générales du texte.
-                <br>
-                <h4>Aucune de ces aptitudes n'a été programmée, elles émergent.</h4>
-               Par des compromis successifs chaque couche apprend ce qui est commun aux demandes de la suivante.
-            </p>
-            <h4>Le jeu d'entraînement fixe le plafond </h4> 
-            Un réseau ne peut apprendre que ce qui est déjà  présent, sous forme de régularités, dans ses exemples.</h4>
+                <p>
+                    On ne peut pas savoir si on est loin du fond de la vallée,
+                    ni même s'il existe une seule vallée plutôt que plusieurs.
+                    <br />
+                    Le relief peut tromper :
+                    si on a atteint une cuvette au lieu de la vallée, l'erreur restera grande.
+                    <br />
+                    <b>L'apprentissage n'est jamais sûr</b> : il faut des validations postérieures à l'entraînement.
+                </p>
+            </div>
 
-        </div>
+            <div class="section">
+                <h3>La rétropropagation</h3>
+                <p>
+                    Le génie des années 80, c'est la <span class="keyword">rétropropagation</span> :
+                    on a su démontrer qu'en composant des fonctions dérivables en couches,
+                    on peut remonter l'erreur de la sortie jusqu'aux premières couches, et donc d'<b>entraîner des couches cachées</b>.
+                </p>
 
+                <h4>Principes</h4>
+                <p>
+                    Pour chaque neurone de sortie on mesure l'erreur, son ampleur et la direction à prendre pour la diminuer.
+                    <br />
+                    Cette erreur est renvoyée aux neurones de la couche cachée précédente au prorata de leur influence.
+                    <br />
+                    Chaque neurone caché sait à son tour de quel côté descendre et de combien se corriger.
+                     </p>
 
+                <h4>Ce que les couches cachées finissent par détecter</h4>
+                <p>
+                    Comme plusieurs sorties peuvent demander à une couche cachée des ajustements contradictoires,
+                    les exigences s'additionnent. 
+                    <br><b>La couche de neurones cachés fabrique alors des compromis, qui révèlent ce que les sorties ont en commun.</b>
+                </p>
 
+                <p>
+                    Dans la <b>reconnaissance d'images</b>, on observe après apprentissage que les premières couches cachées détectent des éléments très simples : des arêtes, des contrastes, des petites textures.
+                    <br />
+                    Les couches suivantes les combinent : des coins, des courbes, des motifs récurrents.
+                    <br />
+                    Les suivantes encore : des morceaux d'objets, un œil, une roue, un toit.
+                    <br />
+                    Les dernières couches n'ont plus qu'à assembler ces pièces pour <b>reconnaître un visage, une voiture, une maison</b>.
+                </p>
 
-        <hr>
-        <div class = "section">
+                <div class="image-container">
+                    <img
+                        src="img/chap3/recoFaces.png"
+                        width="500px"
+                        alt="Arêtes cachées"
+                    />
+                </div>
+
+                <p>
+                    Dans <b>l'analyse de texte</b>, même progression : les premières couches repèrent des suites de lettres et de mots, les suivantes des tournures récurrentes proches de la grammaire, les suivantes le sens des expressions, jusqu'aux intentions générales du texte.
+                    <br />
+                    <h4>Les réseaux font émerger des aptitudes </h4>
+                    <b>Aucune de ces aptitudes n'a été programmée, elles émergent de la masse.</b>
+                    <br>Par des compromis successifs chaque couche apprend ce qui est commun aux demandes de la suivante.
+
+                    <br><b>Un réseau ne peut apprendre que ce qui est déjà présent, sous forme de régularités,
+                     dans son <span class ="keyword">jeu d'entraînement</span></b>.
+                </p>
+            </div>
+
+            <hr />
+
+            <div class="section">
                 <h2>Exemple d'apprentissage d'un réseau</h2>
 
-                    <h3>Topologie exemple: un   MLP (multi layer perceptron)</h3>
-                      Choix optimaux pour un problème de classification non-linéaire à deux entrées pour 3 catégories:
-                    <ul>
-                        <li>
-                            <h4>Couches de neurones</h4>
-                            <ul>
-                                <li><strong>Couche d'entrée</strong> : 2 neurones (x, y) coordonnées sur un écran 200x400, soit 80 000 pixels</li>
-                                <li><strong>Couche cachée</strong> : 12 neurones</li>
-                                <li><strong>Couche de sortie</strong> : 3 neurones </li>
-                            </ul>
-                        </li>
-                        <li> 
-                            <h4>Fonctions d'activation</h4>
-                            <ul>
-                                <li><strong>Couche cachée</strong> : <span class="keyword">ReLU</span> (Rectified Linear Unit)
-                                <span class="note"><br>Évite le problème du gradient évanescent (méplat) et permet un apprentissage plus rapide.</span>
-                                </li>
-                                <li><strong>Couche de sortie</strong> : <span class="keyword">Sigmoïde</span>
-                                <span class="note"><br>Produit des valeurs entre 0 et 1 pour chaque sortie, adaptée aux étiquettes binaires.
-                           
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                 <br>
-
-                 <span class= "image-container"> 
-                        <img
-                            width="500"
-                            src="img/chap2/reseauA12Et3sorties.png"
-                            alt="un réseau MLP de 12 neurones"
-                        />
-
-                    <br>Ce modèle a 75 paramètres :
-              
-                    <div class="note" style="margin: 0 0 0 20px ;">
-                        Du coté de l'entrée on trouve: 2 fois (12 poids + 1 biais) soit 36 paramètres.
-                        <br> Du coté couche de sortie on a: 3 fois (12 poids + 1 biais) soit 39 paramètres. 
-                    </div>
-                </span>
-
-                 <h4> Pourquoi 12 neurones </h4>
-                 <p> Au départ, on ne sait pas exactement combien . 
-                 <br>  On a dû tester différentes architectures et regarder les résultats obtenus par le jeu de test. 
-
-            <div class = "info">
-                8 neurones cachés : 93,25% de précision
-                <br>10 neurones cachés : 96,75% de précision
-                <br><b>12 neurones cachés : 97,00% de précision</b>
-                <br>16 neurones cachés : 94,75% de précision
-                <br><em>On aura noté que plus de neurones ne font pas toujours de meilleurs résultats</em>
-            </div>
-       </div>
-     
-<div class = "section">
-    <h3>Apprentissage supervisé</h3>
-    <span class = "keyword">Supervisé</span> indique qu'on fournit au départ un <span class = "keyword">dataset</span> avec les couples (entrée : sortie) à apprendre .
-
-     <h4>Un dataset à créer</h4>
-            On ne peut pas fournir les 80 000 entrées avec pour chacune le résultat attendu. 
-            <br>On va se baser sur le nombre de paramètres avec une <b>Règle empirique:</b>.
-      
-            prendre 10 à 100 fois plus de données que de paramètres.
-   
-        <br> si on retient un facteur 20, il faut créer 1500 entrées dans le jeu d'entraînement.
+                <h3>Topologie exemple : un MLP (Multi Layer Perceptron)</h3>
  
 
-<h4> Entraînement vs Validation </h4>
-            Ces données sont mélangées puis réparties en deux lots: entraînement et validation, en règle général <b>80% et 20%</b>.  
-            <br>Le réseau est entraîné avec le premier lot (1200 entrées) et on obtient son <b>modèle</b> ( le tableau des paramètres).
-            <br>On passe le jeu de validation (300 entrées) sur ce modèle pour voir s'il prédit correctement. 
-            <h4> Taux de précision </h4>
-Un entrainement est considéré comme correct si:
-<table>
-  <thead>
-    <tr>
-      <th>Domaine</th>
-      <th>Seuil typique</th>
-      <th>Exemple</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Projet pédagogique (comme ici)</td>
-      <td>90-95%</td>
-      <td>Acceptable pour l'apprentissage</td>
-    </tr>
-    <tr>
-      <td>Recommandation de produits</td>
-      <td>85-90%</td>
-      <td>Les erreurs sont tolérées</td>
-    </tr>
-    <tr>
-      <td>Reconnaissance faciale</td>
-      <td>99,9%</td>
-      <td>Faux positifs inacceptables</td>
-    </tr>
-    <tr>
-      <td>Diagnostic médical</td>
-      <td>99,99%</td>
-      <td>Une erreur peut coûter une vie</td>
-    </tr>
-    <tr>
-      <td>Conduite autonome</td>
-      <td>99,999%</td>
-      <td>tolérance quasi nulle</td>
-    </tr>
-  </tbody>
-</table>
+                <ul>
+                    <li>
+                        <h4>Couches de neurones</h4>
+                        <ul>
+                            <li><strong>Couche d'entrée</strong> : 2 neurones (x, y) coordonnées sur un écran 200x400, soit 80 000 pixels</li>
+                            <li><strong>Couche cachée</strong> : 12 neurones</li>
+                            <li><strong>Couche de sortie</strong> : 3 neurones</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>Fonctions d'activation</h4>
+                        <ul>
+                            <li>
+                                <strong>Couche cachée</strong> : <span class="keyword">ReLU</span> (Rectified Linear Unit)
+                                <div class="note">
+                                    Évite le problème du gradient évanescent (méplat) et permet un apprentissage plus rapide.
+                                </div>
+                            </li>
+                            <li>
+                                <strong>Couche de sortie</strong> : <span class="keyword">Sigmoïde</span>
+                                <div class="note">
+                                    Produit des valeurs entre 0 et 1 pour chacune des sorties.
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
 
+                <div class="image-container">
+                    <img
+                        width="500"
+                        src="img/chap2/reseauA12Et3sorties.png"
+                        alt="un réseau MLP de 12 neurones"
+                    />
+                    <br />
+                    Ce modèle a 75 paramètres :
+                    <div class="note">
+                        Du côté de l'entrée on trouve : 2 fois (12 poids + 1 biais) soit 36 paramètres.
+                        <br />
+                        Du côté couche de sortie on a : 3 fois (12 poids + 1 biais) soit 39 paramètres.
+                    </div>
+                </div>
 
-        </p>
-<h4> Déroulement en différentes <span class = "keyword">Epoch</span>
+                <h4>Pourquoi 12 neurones</h4>
+                <p>
+                    Au départ, on ne sait pas exactement combien.
+                    <br />
+                    On teste différentes architectures et on regarde les résultats obtenus par le jeu de test pour choisir la meilleure configuration.
+                </p>
 
-Une <b>Epoch</b> correspond aux passages de tous les cas du jeu de tests une fois.
-<br>A la fin d'une epoch, on observe la précision et on s'arrête si elle plafonne. 
+                <div class="info">
+                    8 neurones cachés : 93,25% de précision
+                    <br />
+                    10 neurones cachés : 96,75% de précision
+                    <br />
+                    <b>12 neurones cachés : 97,00% de précision</b>
+                    <br />
+                    16 neurones cachés : 94,75% de précision
+                    <br />
+                    <em>On aura noté que plus de neurones ne font pas toujours de meilleurs résultats</em>
+                </div>
+            </div>
 
+            <div class="section">
+                <h3>Apprentissage supervisé</h3>
+                <p>
+                    <span class="keyword">Supervisé</span> indique qu'on fournit au départ un <span class="keyword">dataset</span> avec les couples (entrée : sortie) à apprendre.
+                </p>
 
+                <h4>Un dataset à créer</h4>
+                <p> A supposer en entrée les coordonnées d'un clic sur un écran 200 x 400 qui porte des cercles différents<br>
+                    On ne peut pas fournir les 80 000 entrées avec pour chacune le résultat attendu.
+                    <br /><br>
+                    On peut se baser une <b>règle empirique</b> :
+                   
+                    prendre 10 à 100 fois plus de données que de paramètres.
+                    <br />
+                    Si on retient un facteur 20, il faut avoir environ 1500 entrées dans ce jeu d'entraînement.
+                </p>
 
-<span class = "code">
-=== Test avec 12 neurones cachés ===
+                <h4>Entraînement vs Validation</h4>
+                <p>
+                    Ces données sont brassées puis réparties en deux lots : entraînement <b>80%</b> et validation<b>20%</b>.
+                    <br />
+                    Le réseau est entraîné avec le premier lot (1200 entrées) et on obtient un <b>modèle</b> (le tableau des paramètres).
+                    <br />
+                    On passe ensuite le jeu de validation (300 entrées) sur ce modèle pour voir s'il prédit correctement.
+                </p>
 
-  <br>Epoch 0: Loss=1.8974, Accuracy=23.88%
-  <br>Epoch 200: Loss=0.5561, Accuracy=87.38%
-  <br>Epoch 400: Loss=0.3315, Accuracy=92.13%
-  <br>Epoch 600: Loss=0.2496, Accuracy=94.13%
-  <br>Epoch 800: Loss=0.2168, Accuracy=95.50%
-  <br>Epoch 1000: Loss=0.1999, Accuracy=95.38%
-  <br>Epoch 1200: Loss=0.1895, Accuracy=95.50%
-  <br>Epoch 1400: Loss=0.1834, Accuracy=95.38%
-  <br>Epoch 1600: Loss=0.1785, Accuracy=95.50%
-  <br>Epoch 1800: Loss=0.1711, Accuracy=95.75%
-<br>Temps d'entraînement: 1.00s
-<br>Précision sur le jeu de test: 388/400 (97.00%)
-</span>
+                <h4>Taux de précision</h4>
+                <p>
+                    Un entraînement est considéré comme correct si son taux de précision est supérieur au seuil adapté à son domaine.
+                </p>
 
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Domaine</th>
+                            <th>Seuil typique</th>
+                            <th>Exemple</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Projet pédagogique</td>
+                            <td>90-95%</td>
+                            <td>Acceptable pour l'apprentissage</td>
+                        </tr>
+                        <tr>
+                            <td>Recommandation de produits</td>
+                            <td>85-90%</td>
+                            <td>Les erreurs sont tolérées</td>
+                        </tr>
+                        <tr>
+                            <td>Reconnaissance faciale</td>
+                            <td>99,9%</td>
+                            <td>Faux positifs inacceptables</td>
+                        </tr>
+                        <tr>
+                            <td>Diagnostic médical</td>
+                            <td>99,99%</td>
+                            <td>Une erreur peut coûter une vie</td>
+                        </tr>
+                        <tr>
+                            <td>Conduite autonome</td>
+                            <td>99,999%</td>
+                            <td>Tolérance quasi nulle</td>
+                        </tr>
+                    </tbody>
+                </table>
 
+                <h4>Apprentissage en  <span class="keyword">Epoch</span></h4>
+                <p>
+                    Une <b>Epoch</b> correspond au passage de tous les cas du jeu d'entraînement une fois.
+                    <br />
+                    À la fin d'une epoch, on observe la précision et on s'arrête si elle plafonne.
+                </p>
 
+                <div class="code">
+                    === Test avec 12 neurones cachés ===
+                    <br />
+                    Epoch 0: Loss=1.8974, Accuracy=23.88%
+                    <br />
+                    Epoch 200: Loss=0.5561, Accuracy=87.38%
+                    <br />
+                    Epoch 400: Loss=0.3315, Accuracy=92.13%
+                    <br />
+                    Epoch 600: Loss=0.2496, Accuracy=94.13%
+                    <br />
+                    Epoch 800: Loss=0.2168, Accuracy=95.50%
+                    <br />
+                    Epoch 1000: Loss=0.1999, Accuracy=95.38%
+                    <br />
+                    Epoch 1200: Loss=0.1895, Accuracy=95.50%
+                    <br />
+                    Epoch 1400: Loss=0.1834, Accuracy=95.38%
+                    <br />
+                    Epoch 1600: Loss=0.1785, Accuracy=95.50%
+                    <br />
+                    Epoch 1800: Loss=0.1711, Accuracy=95.75%
+                    <br />
+                    Temps d'entraînement: <b>1.00s</b>
+                    <br />
+                    Précision sur le jeu de test: 388/400 (<b>97.00%</b>)
+                </div>
+                <h4>Prise de conscience énergétique</h4>
+                    Rien que sur ce tout petit réseau : 
+                    <ul>
+                    <li>
+                    pour 1 test (x1,x2): 60 multiplications et 63 additions pour le calcul d'un score.
+                    </li><li>pour une Epoch (1200 tests): 72 000 multiplications et 75 800 additions , soit 147 600 opérations arithmétiques.
+                    </li><li>pour les  1800 Epoch de l'apprentissage exemple: 
+                    <b>265 680 000 opérations arithmétiques!</b>
+                    </li><li>On recommence souvent l'apprentissage. Pour 4 petites essais :<b> plus d'un milliard d'opérations ! </b>  
+                    </li>
+                    </ul>
+            </div>
+            <div class="section">
+            <h3>Approfondir ce sujet</h3>
+            <p>
+                Exemple concret : piloter les feux tricolores du chapitre 1,
+                mais en détectant les clics sur une tablette dotée de boutons colorés.
+            </p>
+                <a href="./feux_tricolores/description.html">
+                    <h4>Voir la description complète et détaillée du projet</h4>
+Illustration des concepts fondamentaux des réseaux de neurones
+                </a>
 
-</div>
-    </div>
+                <a href="./feux_tricolores/index.html">
+                    <h4>Lancer directement la démonstration interactive</h4>
+                    <p>
+                    Tout le code pour ce réseau de neurones, y compris son apprentissage, tourne directement dans le navigateur. 
+                    
+                    <br>Si on a les données, c'est relativement facile aujourd'hui d'entrainer son propre réseau de neurones. 
+                    <br>
+                    Restera à surveiller le temps de calcul et la facture d'électricité correspondante à la puissance du ou des ordinateurs. 
+                </p>
+                     </a>
+            </div>
+            <div class = "section">
+                 <a href="./index.html">
+                <h4>Sauter l'expérimentation et aller au chapitre suivant</h4>
+                      <p>
+                      
+                    </p>
+                </a>
+         
+            </div>
+        </div>
     </body>
 </html>
