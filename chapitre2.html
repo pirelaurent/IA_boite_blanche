@@ -11,94 +11,74 @@
             <h1>Composer des transformations</h1>
 
             <div class="section">
-                <h2>Combiner des neurones </h2>
-                <h4> Le perceptron est un classifieur binaire </h4>
+                <h2>Combiner des neurones</h2>
+                <h4>Le perceptron est un classifieur binaire</h4>
                 <p>
                     Tout neurone coupe l'espace en deux parties avec une
                     frontière linéaire qui sépare sa zone d'activation de sa
                     zone d'inhibition.
-                    <br> En deux dimensions, c'est une droite de séparation.
-                        
-           
-                  <br>
-                        
-                        
-            
-               </p>
-
-                    <table style="border-collapse: collapse; border: none;max-width: 800px;">
-                    <tr>
-                            <td >
-                                <img
-                                    width="100"
-                                    src="img/chap2/droite01.png"
-                                    alt="découpage du plan"
-                                />
-                            </td>
-                            <td >
-                                La<b> fonction d'activation</b> à échelon du perceptron
-                                            ramène toute prédiction à 0 ou à 1.
-                            </td>
-                    </tr>
-
-                    </table>
-
-
-
-
-                <h4>Détecter une portion de l'espace </h4>
-
-                    <table style="border-collapse: collapse; border: none;  max-width: 800px;">
-                        <tr>
-                            <td >
-                                    <img
-                                    width="240"
-                                    src="img/chap2/cercleA12droites.png"
-                                    alt="Approximation d'un disque avec 12 droites (12 neurones)"
-                                />
-                                <br><em>Approximation d'un disque avec 12 droites </em>
-                            </td>
-                            <td>
-                                On peut cibler toute figure convexe par de multiples droites 
-                                <br>issues de multiples perceptrons.
-
-                            </td>
-                        </tr>
-                    </table>
-
-             
-                    
+                    <br> En deux dimensions, c'est une droite qui sépare <i>tout à 0</i> de <i>tout à 1</i>.
                 </p>
-                <h4>Couche cachée  </h4>
-                <p>
-                    Le découpage se fait par une <span class="keyword">couche cachée</span> qui porte les neurones nécessaires.
-                    
-                    <br>La consolidation se fait à la <span class="keyword">couche de sortie</span> par une combinaison 
-                        des sorties précédentes. 
-                    <br>Elle répondra au final <i>dans</i> le disque (1) ou <i>en dehors</i> du disque (0).
-                 
-          
-                    <div class="image-container">
+<!--
+                <table style="border-collapse: collapse; border: none; max-width: 800px;">
+                    <tr>
+                        <td>
                             <img
-                                width="500"
-                                src="img/chap2/reseauA12.png"
-                                alt="Approximation d'un cercle par un réseau de 12 neurones"
+                                width="100"
+                                src="img/chap2/droite01.png"
+                                alt="découpage du plan"
                             />
+                        </td>
+                        <td>
+                            La <b>fonction d'activation</b> à échelon du perceptron
+                            ramène toute prédiction à 0 ou à 1.
+                        </td>
+                    </tr>
+                </table>
+-->
+                <h4>Détecter une figure convexe dans l'espace</h4>
+                <table style="border-collapse: collapse; border: none; max-width: 800px;">
+                    <tr>
+                        <td>
+                            <img
+                                width="240"
+                                src="img/chap2/cercleA12droites.png"
+                                alt="Approximation d'un disque avec 12 droites (12 neurones)"
+                            />
+                            <br><em>Approximation d'un disque avec 12 droites</em>
+                        </td>
+                        <td>
+                            On peut cibler toute figure convexe par de multiples droites
+                            <br>issues de multiples perceptrons.
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Couche cachée</h4>
+                <p> Il faut deux niveaux : le découpage avec 12 neurones et la consolidation avec un neurone final.
+                   <br> Le découpage se fait par une <span class="keyword">couche cachée</span> qui porte les neurones nécessaires.
+                    <br>La consolidation se fait à la <span class="keyword">couche de sortie</span> par une combinaison
+                    des sorties précédentes.
+                    <br>Elle répondra au final <i>dans</i> le disque (1) ou <i>en dehors</i> du disque (0).
+
+                    <div class="image-container">
+                        <img
+                            width="500"
+                            src="img/chap2/reseauA12.png"
+                            alt="Approximation d'un cercle par un réseau de 12 neurones"
+                        />
                     </div>
-    
-                    Un tel réseau de perceptron peut se construire en fixant les poids à la main. 
-                    <br> C'est même la seule manière de faire avec la fonction d'activation très limitée du perceptron. 
-                
 
-                <h4>Apprentissage des couches : une limite du perceptron </h4>
+                    Un tel réseau de perceptron peut se construire en fixant les poids à la main.
+                    <br>C'est même la seule manière de faire car la fonction d'activation  du perceptron est très limitée.
+                </p>
 
-                 
-             Si la prédiction n'est pas sur le bon plateau, celui de la cible,  l'<span class = "keyword">erreur</span>, à rattraper sera de 1 ou -1.
-             <br>La correction doit faire des sauts brutaux : +1 (trop haut: descendre) ou −1 (trop bas: remonter). 
-            
+                <h4>Apprentissage des couches : une limite du perceptron</h4>
+                <p>
+                    Si la prédiction n'est pas sur le bon plateau, celui de la cible,
+                    l'<span class="keyword">erreur</span> à rattraper sera de 1 ou -1.
+                    <br>La correction doit faire des sauts brutaux : +1 (trop haut : descendre) ou −1 (trop bas : remonter).
 
-   
-             
                     <div class="image-container">
                         <img
                             src="img/chap2/relief01.png"
@@ -106,89 +86,118 @@
                             alt="Front vertical du perceptron"
                         />
                     </div>
-              
-                    <br>On n'a aucun moyen de <b>répartir</b> cette erreur toujours entière en arrière vers les neurones de la couche cachée</b>.
 
-                         <br>   Cette incapacité a bloqué le développement des réseaux de neurones basés sur une fonction d'activation à seuil. 
-                            <i><h4>l'hiver de l'IA</h4></i>
-                        
-                        <div class="note">
-                              Le premier <i><b>hiver de l'IA</b></i> commence à la fin des années 1960, quand on démontre
-                                mathématiquement les limites du perceptron (1969). Le doute s'aggrave avec un rapport très
-                                critique de 1973 (Lighthill) qui entraîne l'arrêt des financements publics. Il ne prendra
-                                fin qu'au début des années 1980, avec l'essor des systèmes experts puis le renouveau des
-                                réseaux de neurones à rétropropagation (1986).
-                        
-                        </div>
-            
-                        <h4>Ce qu'il reste du perceptron d'origine</h4>
-                <p>
-                            <b>Le mécanisme</b> : tout neurone continue de fonctionner sur le même principe de calcul d'un score brut qui sépare l'espace en deux parties. 
-                            Ce sont les fonctions d'activation qui transforment le score  en prédiction qui ont évolués.
-                                <br />
-                                <b>Le nom </b> : on continue d'utiliser le terme dans <b>MLP</b>
-                                , Multi Layer <b>Perceptron</b>, le nom générique des réseaux de neurones.
+                    <br>On n'a aucun moyen de <b>répartir</b> cette erreur entière vers les neurones arrière de la couche cachée.
+
+                    <br>Cette incapacité a bloqué le développement des réseaux de neurones et provoqué l'<i>l'hiver</i> de l'IA.
+                    <i><h4>l'hiver de l'IA</h4></i>
+
+                    <div class="note">
+                        Le premier <i><b>hiver de l'IA</b></i> commence à la fin des années 1960, quand on démontre
+                        mathématiquement les limites du perceptron (1969). Le doute s'aggrave avec un rapport très
+                        critique de 1973 (Lighthill) qui entraîne l'arrêt des financements publics. Il ne prendra
+                        fin qu'au début des années 1980, avec l'essor des systèmes experts puis le renouveau des
+                        réseaux de neurones à rétropropagation (1986).
+                    </div>
+
+                    <h4>Ce qu'il reste du perceptron d'origine</h4>
+                    <p>
+                        <b>Le mécanisme</b> : Tout neurone continue de fonctionner sur le même principe de calcul d'un score brut qui sépare l'espace en deux parties.
+                        Ce sont les fonctions d'activation qui transforment le score en prédiction qui ont évolué.
+                        <br />
+                        <b>Le nom</b> : On continue d'utiliser abusivement le terme, comme dans <b>MLP</b> - 
+                        Multi Layer <b>Perceptron</b>, alors que les neurones ne fonctionnent plus par dépassement de seuil.
+                    </p>
                 </p>
             </div>
-     
+
             <hr />
 
             <div class="section">
-                <h2>Remplacer le mur par une pente</h2>
+                <h2>L'idée qui a tout changé: remplacer le mur par une pente</h2>
                 <p>
-                  <b>Une fonction d'activation </b> en pente douce (continue et dérivable),  
-                  bornée entre 0 et 1, permet de mesurer l'erreur. 
-                  <br> Là où le seuil ne disait rien, 
-                  la position dit tout : la pente donne la direction et la distance à la frontière donne l'écart à combler.
-                  
-                  </p>
-                 <div class="center">
+                    <b>Une fonction d'activation</b> en pente douce (continue et dérivable),
+                    bornée entre 0 et 1, permet de mesurer l'erreur.
+                    <br>Là où le seuil ne disait rien,
+                    la position dit tout : la pente donne la direction ; la distance à la frontière donne l'écart à combler.
+                </p>
+
+                <div class="center">
                     <img
                         src="img/chap2/derivable.png"
                         width="500px"
-                        height ="200px"
+                        height="200px"
                         alt="Front lissé de la sigmoide"
                     />
-                    <br><em> 
-                    La surface de prédiction avec une fonction d'activation <b>sigmoïde</b>. 
-                    <br>la frontière correspond à une sortie de 0,5. 
-                   
-                </em>
+                    <br><em>
+                        La surface de prédiction avec une fonction d'activation <b>sigmoïde</b>.
+                        <br>la frontière correspond à une sortie de 0,5.
+                    </em>
                 </div>
-         
-                <h3> Les principales fonctions d'activation et leurs courbes</h3>
-                    
+
+                <h3>Pentes des fonctions d'activation les plus communes</h3>
                 <div class="image-container">
                     <img
                         src="img/chap2/derivable_4.png"
                         width="600px"
                         alt="Front lissé de la sigmoide"
                     />
-                    <br> Un bon entraîneur de modèle choisira sa courbe en fonction du problème à traiter
+                    <br>Un bon entraîneur de modèle choisira ses courbes en fonction du problème à traiter
                 </div>
-                <h4>Fonctions d'activation </h4>
-                <ul> 
-                <li><b>A seuil (H) </b> : abandonnée
-                </li><li> <b>Sigmoïde</b> ( logistic, 1970s) : une courbe en S douce qui écrase toute valeur entre 0 et 1. 
-                </li><li> <b>Tanh</b> : la même courbe en S, mais entre -1 et +1. Centrée sur zéro, elle converge souvent plus vite.
-                </li><li> <b>ReLU</b> (Rectified Linear Unit, popularisée en 2010) : 
-                    si l'entrée est négative, sortie 0 ; sinon, sortie = entrée. Ultra simple à calculer, elle a permis d'entraîner des réseaux très profonds et a déclenché la révolution du <b>deep learning</b>.
-                </li>
+
+                <h4>Fonctions d'activation pour la sortie d'un neurone</h4>
+                <ul>
+                    <li><b>A seuil (H)</b> : abandonnée en entraînement.</li>
+                    <li><b>Sigmoïde</b> (logistic, 1970s) : une courbe en S douce qui écrase toute valeur entre 0 et 1.</li>
+                    <li><b>Tanh</b> : la même courbe en S, mais entre -1 et +1. Centrée sur zéro, elle converge souvent plus vite.</li>
+                    <li><b>ReLU</b> (Rectified Linear Unit, popularisée en 2010) :
+                        si l'entrée est négative, sortie 0 ; sinon, sortie = entrée. Ultra simple à calculer, elle a permis d'entraîner des réseaux très profonds et a déclenché la révolution du <b>deep learning</b>.
+                    </li>
                 </ul>
+            </div>
 
-                
-
-
-        </div>
-            <div class="section">              
-                <a href="./chapitre3.html">
-                 <h4>Aller au chapitre 3</h4>
+            <div class="section">
+                <h4>Fonction de groupe pour les classifications multi-classes : Softmax</h4>
                 <p>
-                    Comprendre l'apprentissage : comment les poids se fixent.
+                    En couche de sortie, quand il faut choisir parmi n classes,
+                    les fonctions d'activation des neurones de sortie produisent
+                    <br>des résultats numériques indépendants peu faciles à comparer.
+
+                    <br><br>La fonction d'activation <span class="keyword">Softmax</span> reprend <b>les scores de toutes les sorties</b>
+                    et produit <b>une distribution de probabilité</b>.
+                    <br>Les valeurs sont ramenées entre 0 et 1 et distribuées pour que leur somme fasse 1.
+                    <!-- <span class="note">
+                        <br>(Formule:
+                        Pour un vecteur des sorties initiales <b>z</b> = [z₁, z₂, ..., zₙ],
+                        on aura softmax(z)<sub>i</sub> = e<sup>zᵢ</sup> / Σ(e<sup>zⱼ</sup>) pour tout j.
+                    </span>
+                    -->
+                    <br>Cette distribution <b>amplifie les écarts</b> : Un score à peine plus élevé devient une probabilité bien plus grande.
                 </p>
-                
-                  </a>
+
+                <div class="center">
+                    <img
+                        src="img/chap2/softmax_curve.svg"
+                        width="500px"
+                        alt="Courbe du softmax : amplification des différences entre scores"
+                    />
+                    <br><em>
+                        <br>Les scores initiaux [2.0, 1.0, 0.1], sont distribués en [0.66, 0.24, 0.10] soit <b>[66%, 24%, 10%]</b>
+                    </em>
+                </div>
+                <br>
+                   C’est ainsi que sont calculés <span class = "keyword">les scores de confiance</span> dans les classifieurs multi-classes.
+            </div>
+
+            <div class="section">
+                Ces fonctions résolvent le problème du calcul des sorties, mais reste à résoudre celui, bien plus complexe, de l'apprentissage.
+                <a href="./chapitre3.html">
+                    <h4>Aller au chapitre 3</h4>
+                    <p>
+                        Comprendre l'apprentissage : comment les poids se fixent.
+                    </p>
+                </a>
+            </div>
         </div>
-    </div>
     </body>
 </html>
