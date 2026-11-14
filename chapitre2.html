@@ -86,19 +86,18 @@
                             />
                     </div>
     
-                    Un tel réseau de perceptron peut se construire en fixant les poids à la main comme vu au chapitre 1 . 
+                    Un tel réseau de perceptron peut se construire en fixant les poids à la main. 
                     <br> C'est même la seule manière de faire avec la fonction d'activation très limitée du perceptron. 
                 
 
                 <h4>Apprentissage des couches : une limite du perceptron </h4>
 
-                  L'apprentissage consiste à réduire l'<span class = "keyword">erreur</span>, la distance entre la prédiction et la cible en avançant dans la bonne direction.
-               
-             
-                    Avec la fonction d'activation à échelon, entre la zone « oui » et la zone « non »
-                    il y a un front vertical.
-                    <br>L' erreur sera toujours discrète et les actions limitées: 
-                    0 (rester), +1 (trop haut: descendre) ou −1 (trop bas: remonter)   
+                 
+             Si la prédiction n'est pas sur le bon plateau, celui de la cible,  l'<span class = "keyword">erreur</span>, à rattraper sera de 1 ou -1.
+             <br>La correction doit faire des sauts brutaux : +1 (trop haut: descendre) ou −1 (trop bas: remonter). 
+            
+
+   
              
                     <div class="image-container">
                         <img
@@ -108,12 +107,9 @@
                         />
                     </div>
               
-                        
-                    Cette erreur ne donne aucune information ni de distance ni d'orientation: 
-                    <br><b>On n'a
-                        aucun moyen de répartir cette erreur en arrière vers les neurones de la couche cachée</b>.
+                    <br>On n'a aucun moyen de <b>répartir</b> cette erreur toujours entière en arrière vers les neurones de la couche cachée</b>.
 
-                         <br>   Cette incapacité a bloqué le développement des réseaux de neurones avec couche cachée. 
+                         <br>   Cette incapacité a bloqué le développement des réseaux de neurones basés sur une fonction d'activation à seuil. 
                             <i><h4>l'hiver de l'IA</h4></i>
                         
                         <div class="note">

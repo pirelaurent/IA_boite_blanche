@@ -52,7 +52,7 @@
                     <p><em>Schéma d'un neurone artificiel à deux entrées</em></p>
                 </div>
                 <p>
-                    Le <span class="keyword">score brut</span> est un calcul simple : <i>somme(xi.wi) + biais</i>. 
+                    Le <span class="keyword">score brut</span> est un calcul  : <i>somme(xi.wi) + biais</i>. 
                     ( ci-dessus : <i>w1·x1 + w2·x2 + b</i>).
                    <br />
                     Avec seulement deux entrées, c'est l'équation d'une droite dans un plan, décalée de l'origine par le <span class="keyword">biais b</span>.
@@ -71,7 +71,7 @@
                         <em>
                             Les poids w1,w2 conditionnent la pente de la droite, et le biais son décalage de l'origine.
                             <br />
-                            Un score brut est la distance, positive ou négative, d'un point à la frontière de
+                            Le score brut est la distance, positive ou négative, d'un point à la frontière de
                             décision.
                         </em>
                     </p>
@@ -156,6 +156,13 @@
 
                 <h3>Le jeu de données et de test</h3>
                 Il définit le comportement attendu du réseau de neurones.
+                <p>
+    C'est ce qu'on appelle l'<span class="keyword">apprentissage supervisé</span> :
+    on fournit au modèle des <b>exemples étiquetés</b> (entrée + sortie attendue),
+    et il apprend à reproduire ce comportement.
+    <br>Ci-dessous, chaque ligne du tableau est un exemple supervisé :
+    <span class="code">(entrées) → (sortie souhaitée)</span>.
+</p>
                 <div class="center">
                     <table class="weight-table">
                         <thead>
@@ -218,9 +225,7 @@
                         </tbody>
                     </table>
                 </div>
-                <p>L'avantage de simuler un interrupteur c'est qu'il ne peut prendre que deux valeurs entières.
-                <br>ça en fait un système déterministe élémentaire avec seulement 4 cas à traiter. 
-                <br>Simplissime, on peut entraîner le réseau soi-même.</p>
+                <p>Il n'y a que 4 cas possibles à l'entrée: On peut tenter d'entraîner ce réseau simplissime manuellement.</p>
 
                 <h3>Un neurone par feu</h3>
                 <p>
@@ -236,11 +241,14 @@
                     <p>
                         <em>
                             Représentation du réseau avec 3 neurones perceptrons en parallèle<br />
-                            Chacun multiplie les entrées communes avec ses propres poids.<br />
-                            La couche de sortie doit allumer un seul feu à la fois.
                         </em>
                     </p>
                 </div>
+
+                <h4>L'entrée à 1 du biais</h4>
+                Pour que tous les neurones utilisent la même règle simple — <i>activer si le score est positif</i> —,
+on intègre le biais directement dans le calcul de la somme.
+Aussi, on ajoute une entrée fixe à 1, multipliée par le biais.
 
                 <h4>La taille du modèle</h4>
                 <p>
@@ -261,28 +269,32 @@
                 </div>
                 <div class = "section">
                 
-                <a href="./chapitre1-1.html">
-                <h4>
-                    Expérimenter ce réseau
-                </h4>
+                <h4>Expérimenter ce réseau</h4>
                 <p>
-                    On peut entrainer soi-même ce modèle en modifiant ses poids par petits pas comme le fait un apprentissage automatique. 
-                    <br>Les poids sont initialisés au hasard et leurs frontières sont visualisées avec les positions des interrupteurs.
-                    <br>Le but est de changer les poids pour isoler chaque feu indépendamment.
-                    
-                </a><div class = "image-container">
-                <img src = "img/chap1/troisDroites.png"
-                    width =340
-                    />
-                    <br><em> Exemple de résultat valable qui sépare les 4 cagétories indépendamment</em>
-                    </div>
+                    Les poids sont initialisés au hasard au début de chaque entraînement.
+                <br> Le but est de les ajuster  pour isoler chaque feu indépendamment.
+                    <br>On pourra entrainer soi-même ce modèle en modifiant ses poids ou voir un apprentissage automatique en action.
+                
                 </p>
+                <div class="center" style="margin: 20px 0;">
+                    <a href="./chapitre1-1.html" class="more-info-button">Aller à l'expérimentation</a>
+                </div>
+                <div class = "image-container">
+                    <img src = "img/chap1/troisDroites.png"
+                        width =340
+                        />
+                        <em>
+                        <br> La visualisation montrent les droites des trois neurones selon leurs paramètres courants.
+                        <br> Les points colorés indiquent quel feu DOIT s'allumer selon la combinaison des interrupteurs.
+               <br>Le point doit être du côté où le score brut est positif, ce qui se voit par une plage colorée.
+               </em>
+                </div>
                
          <hr>
                  <a href="./chapitre2.html">
-                <h4>ou sauter l'expérimentation et aller directement au chapitre 2</h4>
-                      <p>
-                 Surtout si vous l'avez déjà faite...
+                <h4>Aller directement au chapitre 2</h4>
+                <p>
+                 comment composer des transformations simples
                     </p>
                 </a>
              

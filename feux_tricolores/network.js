@@ -50,9 +50,15 @@ function generateDataset() {
     trainingData = [];
     validationData = [];
     
-    const pointsPerCircle = 300;
-    const pointsOutside = 300;
-    const totalTraining = pointsPerCircle * 3 + pointsOutside;
+    // Récupérer les tailles depuis l'interface (ou valeurs par défaut)
+    const trainSizeInput = document.getElementById('trainSize');
+    const validationSizeInput = document.getElementById('validationSize');
+    const totalTraining = trainSizeInput ? parseInt(trainSizeInput.value) || 1200 : 1200;
+    const validationSize = validationSizeInput ? parseInt(validationSizeInput.value) || 240 : 240;
+    
+    // Répartition : 75% dans les cercles, 25% à l'extérieur (comme l'original)
+    const pointsPerCircle = Math.floor(totalTraining * 0.75 / 3);
+    const pointsOutside = totalTraining - pointsPerCircle * 3;
     
     // Training set : points dans les cercles
     for (let circleIndex = 0; circleIndex < CIRCLE_CENTERS.length; circleIndex++) {
@@ -66,8 +72,7 @@ function generateDataset() {
         trainingData.push(generateOutsidePoint());
     }
     
-    // Validation set (20%)
-    const validationSize = Math.floor(totalTraining * 0.2);
+    // Validation set (utilisation de la valeur saisie)
     const validationPerClass = Math.floor(validationSize / 4);
     
     for (let circleIndex = 0; circleIndex < CIRCLE_CENTERS.length; circleIndex++) {
