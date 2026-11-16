@@ -89,7 +89,7 @@
 
                     <br>On n'a aucun moyen de <b>répartir</b> cette erreur entière vers les neurones arrière de la couche cachée.
 
-                    <br>Cette incapacité a bloqué le développement des réseaux de neurones et provoqué l'<i>l'hiver</i> de l'IA.
+                    <br>Cette incapacité a bloqué le développement des réseaux de neurones et provoqué <i>l'hiver</i> de l'IA.
                     <i><h4>l'hiver de l'IA</h4></i>
 
                     <div class="note">
@@ -116,8 +116,8 @@
             <div class="section">
                 <h2>L'idée qui a tout changé: remplacer le mur par une pente</h2>
                 <p>
-                    <b>Une fonction d'activation</b> en pente douce (continue et dérivable),
-                    bornée entre 0 et 1, permet de mesurer l'erreur.
+                    <b>Une fonction d'activation</b> en pente douce (continue et dérivable, 
+                    bornée entre 0 et 1) permet de mesurer l'erreur.
                     <br>Là où le seuil ne disait rien,
                     la position dit tout : la pente donne la direction ; la distance à la frontière donne l'écart à combler.
                 </p>
@@ -131,7 +131,7 @@
                     />
                     <br><em>
                         La surface de prédiction avec une fonction d'activation <b>sigmoïde</b>.
-                        <br>la frontière correspond à une sortie de 0,5.
+                        <br>La frontière correspond à une valeur de sortie du neurone à  0.5 
                     </em>
                 </div>
 
@@ -172,21 +172,24 @@
                         on aura softmax(z)<sub>i</sub> = e<sup>zᵢ</sup> / Σ(e<sup>zⱼ</sup>) pour tout j.
                     </span>
                     -->
-                    <br>Cette distribution <b>amplifie les écarts</b> : Un score à peine plus élevé devient une probabilité bien plus grande.
+                    <br><b>Cette distribution accentue les différences :</b>
+                     <br>Plus un score dépasse les autres, plus sa probabilité devient disproportionnellement grande.                     
                 </p>
 
                 <div class="center">
                     <img
-                        src="img/chap2/softmax_curve.svg"
-                        width="500px"
+                        src="img/chap2/softmax.png"
+                        width="800px"
                         alt="Courbe du softmax : amplification des différences entre scores"
                     />
                     <br><em>
-                        <br>Les scores initiaux [2.0, 1.0, 0.1], sont distribués en [0.66, 0.24, 0.10] soit <b>[66%, 24%, 10%]</b>
+                       (Formule:
+                        Pour un vecteur des sorties initiales <b>z</b> = [z₁, z₂, ..., zₙ],
+                        on aura softmax(z)<sub>i</sub> = e<sup>zᵢ</sup> / Σ(e<sup>zⱼ</sup>) pour tout j.
                     </em>
                 </div>
                 <br>
-                   C’est ainsi que sont calculés <span class = "keyword">les scores de confiance</span> dans les classifieurs multi-classes.
+                   C’est ainsi que sont présentés <span class = "keyword">les scores de confiance</span> dans les classifieurs multi-classes.
             </div>
 
             <div class="section">
