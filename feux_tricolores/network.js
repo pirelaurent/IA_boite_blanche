@@ -7,16 +7,16 @@ const TABLET_WIDTH = 200;
 const TABLET_HEIGHT = 400;
 const CIRCLE_RADIUS = 50;
 
-// Centres des cercles : Rouge, Vert, Bleu
+// Centres des cercles : Rouge, Vert, Orange
 const CIRCLE_CENTERS = [
     { x: 100, y: 320, color: '#F44336', label: 'Rouge' },
     { x: 100, y: 80, color: '#4CAF50', label: 'Vert' },
-    { x: 100, y: 200, color: '#2196F3', label: 'Bleu' }
+    { x: 100, y: 200, color: '#FF9800', label: 'Orange' }
 ];
 
-// Noms et couleurs des classes : [Rouge, Vert, Bleu, Noir(fond)]
-const CLASS_NAMES = ['Rouge', 'Vert', 'Bleu', 'Noir'];
-const CLASS_COLORS = ['#F44336', '#4CAF50', '#2196F3', '#000000'];
+// Noms et couleurs des classes : [Rouge, Vert, Orange, Noir(fond)]
+const CLASS_NAMES = ['Rouge', 'Vert', 'Orange', 'Noir'];
+const CLASS_COLORS = ['#F44336', '#4CAF50', '#FF9800', '#000000'];
 
 // Variables globales
 let trainingData = [];
@@ -97,7 +97,7 @@ function generateDataset() {
 
 /**
  * Génère un point aléatoire dans un cercle spécifié
- * @param {number} circleIndex - Index du cercle (0=Rouge, 1=Vert, 2=Bleu)
+ * @param {number} circleIndex - Index du cercle (0=Rouge, 1=Vert, 2=Orange)
  * @returns {Object} Point avec coordonnées, sortie attendue et classe
  */
 function generatePointForClass(circleIndex) {
@@ -116,7 +116,7 @@ function generatePointForClass(circleIndex) {
     const xNorm = x / (TABLET_WIDTH - 1);
     const yNorm = y / (TABLET_HEIGHT - 1);
     
-    // Créer la sortie attendue : [1,0,0] pour Rouge, [0,1,0] pour Vert, [0,0,1] pour Bleu
+    // Créer la sortie attendue : [1,0,0] pour Rouge, [0,1,0] pour Vert, [0,0,1] pour Orange
     const output = new Array(3).fill(0);
     output[circleIndex] = 1;
     
@@ -561,8 +561,8 @@ class NeuralNetwork {
     /**
      * Convertit la sortie du réseau en classe prédite
      * Utilise argmax avec seuil pour détecter la classe Noir
-     * @param {Array} output - Sortie du réseau (3 valeurs: R, V, B)
-     * @returns {number} Classe prédite (0=Rouge, 1=Vert, 2=Bleu, 3=Noir)
+     * @param {Array} output - Sortie du réseau (3 valeurs: R, V, O)
+     * @returns {number} Classe prédite (0=Rouge, 1=Vert, 2=Orange, 3=Noir)
      */
     outputToClass(output) {
         // Trouver l'index de la valeur maximale (argmax)
@@ -682,7 +682,7 @@ function trainNetwork() {
             datasets: [
                 { label: 'Perte Train', data: [], borderColor: '#4CAF50', yAxisID: 'y' },
                 { label: 'Perte Val', data: [], borderColor: '#F44336', yAxisID: 'y' },
-                { label: 'Acc Train', data: [], borderColor: '#2196F3', yAxisID: 'y1' },
+                { label: 'Acc Train', data: [], borderColor: '#FF9800', yAxisID: 'y1' },
                 { label: 'Acc Val', data: [], borderColor: '#FF9800', yAxisID: 'y1' }
             ] 
         },
@@ -898,7 +898,7 @@ function computeConfusionMatrix() {
         return; 
     }
     
-    const nClasses = 4; // Rouge, Vert, Bleu, Noir
+    const nClasses = 4; // Rouge, Vert, Orange, Noir
     const matrix = [];
     for (let i = 0; i < nClasses; i++) {
         matrix[i] = new Array(nClasses).fill(0);
@@ -1132,7 +1132,7 @@ class NeuralNetwork {
         
         // Si la valeur maximale est faible (< 0.3), c'est Noir (classe 3)
         if (maxValue < 0.3) return 3; // Noir (fond)
-        return maxIndex; // 0=Rouge, 1=Vert, 2=Bleu
+        return maxIndex; // 0=Rouge, 1=Vert, 2=Orange
     }
     
     // Training with Adam optimizer
@@ -1191,7 +1191,7 @@ document.getElementById('networkCode').textContent = `
 // Sorties:
 //   [1,0,0] → Rouge
 //   [0,1,0] → Vert  
-//   [0,0,1] → Bleu
+//   [0,0,1] → Orange
 //   [0,0,0] → Noir (fond)
 // 
 // Architecture:

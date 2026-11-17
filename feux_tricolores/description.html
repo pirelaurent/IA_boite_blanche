@@ -172,7 +172,7 @@
             <div class="important-box">
                 <strong>Objectif :</strong> Créer un système capable de classer automatiquement les coordonnées 
                 (x, y) d'un clic sur une tablette tactile en une des 4 catégories : 
-                <strong>Rouge</strong>, <strong>Vert</strong>, <strong>Bleu</strong>, ou <strong>Noir</strong> (fond).
+                <strong>Rouge</strong>, <strong>Vert</strong>, <strong>Orange</strong>, ou <strong>Noir</strong> (fond).
             </div>
             
             <p>
@@ -221,7 +221,7 @@
                     <td><code>[0, 1, 0]</code></td>
                 </tr>
                 <tr>
-                    <td style="color: #2196F3; font-weight: bold;">Bleu</td>
+                    <td style="color: #FF9800; font-weight: bold;">Orange</td>
                     <td>(100, 200)</td>
                     <td>50 pixels</td>
                     <td><code>[0, 0, 1]</code></td>
@@ -246,10 +246,10 @@
                     <text x="110" y="95" text-anchor="middle" font-size="14" fill="#4CAF50" font-weight="bold">VERT</text>
                     <text x="110" y="108" text-anchor="middle" font-size="11" fill="#666">(100,80)</text>
                     
-                    <!-- Cercle Bleu (y=200) -->
-                    <circle cx="110" cy="210" r="50" fill="none" stroke="#2196F3" stroke-width="3" stroke-dasharray="5,5"/>
-                    <circle cx="110" cy="210" r="3" fill="#2196F3"/>
-                    <text x="110" y="215" text-anchor="middle" font-size="14" fill="#2196F3" font-weight="bold">BLEU</text>
+                    <!-- Cercle Orange (y=200) -->
+                    <circle cx="110" cy="210" r="50" fill="none" stroke="#FF9800" stroke-width="3" stroke-dasharray="5,5"/>
+                    <circle cx="110" cy="210" r="3" fill="#FF9800"/>
+                    <text x="110" y="215" text-anchor="middle" font-size="14" fill="#FF9800" font-weight="bold">ORANGE</text>
                     <text x="110" y="228" text-anchor="middle" font-size="11" fill="#666">(100,200)</text>
                     
                     <!-- Cercle Rouge (y=320) -->
@@ -263,8 +263,8 @@
                         <text x="0" y="20" font-size="12" fill="#333">Légende :</text>
                         <circle cx="10" cy="40" r="8" fill="#4CAF50"/>
                         <text x="25" y="45" font-size="12" fill="#333">Vert</text>
-                        <circle cx="10" cy="60" r="8" fill="#2196F3"/>
-                        <text x="25" y="65" font-size="12" fill="#333">Bleu</text>
+                        <circle cx="10" cy="60" r="8" fill="#FF9800"/>
+                        <text x="25" y="65" font-size="12" fill="#333">Orange</text>
                         <circle cx="10" cy="80" r="8" fill="#F44336"/>
                         <text x="25" y="85" font-size="12" fill="#333">Rouge</text>
                         <circle cx="10" cy="100" r="8" fill="#000000"/>
@@ -397,7 +397,7 @@ function outputToClass(output) {
     
     // 2. Si max < 0.3, c'est le fond Noir
     if (maxValue < 0.3) return 3; // Noir
-    return maxIndex; // Rouge(0), Vert(1), Bleu(2)
+    return maxIndex; // Rouge(0), Vert(1), Orange(2)
 }
             </div>
             
@@ -417,7 +417,7 @@ function outputToClass(output) {
                 <ul>
                     <li><code>maxIndex=0, maxValue≥0.3</code> → <strong>Rouge</strong></li>
                     <li><code>maxIndex=1, maxValue≥0.3</code> → <strong>Vert</strong></li>
-                    <li><code>maxIndex=2, maxValue≥0.3</code> → <strong>Bleu</strong></li>
+                    <li><code>maxIndex=2, maxValue≥0.3</code> → <strong>Orange</strong></li>
                     <li><code>maxValue<0.3</code> → <strong>Noir</strong> (fond)</li>
                 </ul>
             </div>
@@ -555,7 +555,7 @@ Accuracy = (Nombre de prédictions correctes) / (Nombre total de prédictions)
                     <th>Vrai \ Prédit</th>
                     <th style="color: #F44336;">Rouge</th>
                     <th style="color: #4CAF50;">Vert</th>
-                    <th style="color: #2196F3;">Bleu</th>
+                    <th style="color: #FF9800;">Orange</th>
                     <th style="color: #000;">Noir</th>
                 </tr>
                 <tr>
@@ -573,10 +573,10 @@ Accuracy = (Nombre de prédictions correctes) / (Nombre total de prédictions)
                     <td style="background: #ffebee;">Faux Positifs<br><small>V→N</small></td>
                 </tr>
                 <tr>
-                    <th style="color: #2196F3;">Bleu</th>
-                    <td style="background: #ffebee;">Faux Positifs<br><small>B→R</small></td>
-                    <td style="background: #ffebee;">Faux Positifs<br><small>B→V</small></td>
-                    <td style="background: #e8f5e9;">Vrais Positifs<br><small>B→B</small></td>
+                    <th style="color: #FF9800;">Orange</th>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>O→R</small></td>
+                    <td style="background: #ffebee;">Faux Positifs<br><small>O→V</small></td>
+                    <td style="background: #e8f5e9;">Vrais Positifs<br><small>O→O</small></td>
                     <td style="background: #ffebee;">Faux Positifs<br><small>B→N</small></td>
                 </tr>
                 <tr>

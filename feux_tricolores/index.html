@@ -228,7 +228,7 @@
                             <ul>
                                 <li><span style="color: #F44336; font-weight: bold;">Rouge</span> : centre à (100, 320), rayon 50px</li>
                                 <li><span style="color: #4CAF50; font-weight: bold;">Vert</span> : centre à (100, 80), rayon 50px</li>
-                                <li><span style="color: #2196F3; font-weight: bold;">Bleu</span> : centre à (100, 200), rayon 50px</li>
+                                <li><span style="color: #FF9800; font-weight: bold;">Orange</span> : centre à (100, 200), rayon 50px</li>
                             </ul>
                         </li>
                         <li><strong>Fond :</strong> <span style="color: #000000; font-weight: bold;">Noir</span> (quand on clique en dehors des cercles)</li>
@@ -248,9 +248,9 @@
                         <circle cx="110" cy="90" r="50" fill="none" stroke="#4CAF50" stroke-width="2" stroke-dasharray="5,5"/>
                         <text x="110" y="90" text-anchor="middle" fill="#4CAF50" font-weight="bold">VERT</text>
                         
-                        <!-- Cercle Bleu (y=200) -->
-                        <circle cx="110" cy="210" r="50" fill="none" stroke="#2196F3" stroke-width="2" stroke-dasharray="5,5"/>
-                        <text x="110" y="210" text-anchor="middle" fill="#2196F3" font-weight="bold">BLEU</text>
+                        <!-- Cercle Orange (y=200) -->
+                        <circle cx="110" cy="210" r="50" fill="none" stroke="#FF9800" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="110" y="210" text-anchor="middle" fill="#FF9800" font-weight="bold">ORANGE</text>
                         
                         <!-- Légende -->
                         <text x="110" y="415" text-anchor="middle" font-size="12">Tablette 200×400 pixels</text>
@@ -278,8 +278,8 @@
                     <td><code>[0, 1, 0]</code></td>
                 </tr>
                 <tr>
-                    <td>Dans le cercle Bleu</td>
-                    <td style="color: #2196F3; font-weight: bold;">⬤ Bleu</td>
+                    <td>Dans le cercle Orange</td>
+                    <td style="color: #FF9800; font-weight: bold;">⬤ Orange</td>
                     <td><code>[0, 0, 1]</code></td>
                 </tr>
                 <tr>
@@ -320,7 +320,7 @@
        y ────┴───►│                    │         │
                   │                    │         ► V (Vert)
                   │   ReLU            │ Sigmoid  │
-                  │                    │         ► B (Bleu)
+                  │                    │         ► O (Orange)
                   └─────────────────┘         │
                                             └────────────────
                     </pre>
