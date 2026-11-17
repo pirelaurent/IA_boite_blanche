@@ -63,20 +63,29 @@
                 <div class="image-container">
                     <img
                         src="img/chap3/descenteDeGradient.png"
-                        width="360px"
+                        width="480px"
                         alt="Descente de gradient"
-                    />
+                    /><br><em>
+                    Paysage d'erreur en 3D <br> Les axes &theta;1 et &theta;2 représentent deux poids du réseau à ajuster,      
+                        et  L(&theta;)  la fonction de coût (Lost).
+                        <br> La descente de gradient suit
+                        la pente pour trouver le minimum.
+                    </em>
                 </div>
 
                 <p>
-                    On ne peut pas savoir si on est loin du fond de la vallée,
-                    ni même s'il existe une seule vallée plutôt que plusieurs.
-                    <br />
-                    Le relief peut tromper :
-                    si on a atteint une cuvette au lieu de la vallée, l'erreur restera grande.
-                    <br />
-                    <b>L'apprentissage n'est jamais sûr</b> : il faut des validations postérieures à l'entraînement.
-                </p>
+    On ne peut pas savoir si on est loin du fond de la vallée,
+    ni même s'il existe une seule vallée plutôt que plusieurs.
+    <br>
+    Le relief peut tromper :
+    si on a atteint une cuvette au lieu de la vallée, l'erreur restera grande.
+    <br>
+    <b>L'apprentissage n'est jamais sûr</b>, et de plus <b>il n'est pas déterministe</b> :
+    à cause de l'initialisation aléatoire des poids et de l'ordre de traitement des exemples,
+    deux entraînements successifs sur les mêmes données produisent des modèles
+    <b>légèrement différents</b>. 
+    <br><B>Il faut donc des validations postérieures à l'entraînement.</b>
+</p>
             </div>
 
             <div class="section">
@@ -127,13 +136,13 @@
                     <h4>Les réseaux en couches font <b>émerger</b> des aptitudes </h4>
                     <b>Aucune de ces aptitudes n'a été programmée, elles émergent de la masse.</b>
                     <br>Par des compromis successifs chaque couche apprend ce qui est commun aux demandes de la suivante.
-
-       
-                    <h4 align="center">Un réseau ne peut apprendre que ce qui est déjà présent 
-                    <br>sous forme de régularités 
-                     dans son <span class ="keyword">jeu d'entraînement</span></b>.
-                    </h4>
                 </p>
+                <div class="important-box">
+                    Un réseau ne peut apprendre que ce qui est déjà présent 
+                    sous forme de régularités 
+                     dans son <b>jeu d'entraînement</b>.
+               
+                    </div>
             </div>
 
             <hr />

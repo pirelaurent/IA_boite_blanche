@@ -14,7 +14,7 @@ Quand on regarde une IA de l'extérieur comme une _boîte noire_, on utilise des
  **Nommer le mécanisme sous le mot**, c'est  la démarche **_boîte blanche_**.
 
 ### Différents plans 
-L'IA  se compose de **plans superposés** avec des  **changements de  nature** de son objet.  
+L'IA  se compose de **strates superposés** avec des  **changements de  nature** de son objet.  
 
 Le parcours _boîte blanche_ avance par **changements de question** et, avec chaque question, l'objet à décrire. 
 

@@ -18,7 +18,7 @@
 
         <b>Tests :</b> changer x1 ou x2 ou appuyez sur un des tests pré-établis: le feu correspondant doit s'allumer <b>seul</b>.
         <br><b>Bloqué ?</b> Cliquez sur « Solution aléatoire » pour voir des modèles de poids qui satisfont la demande.
-        <br><b>Laisser faire ?</b> Lancez l'apprentissage automatique et observez.Vous pouvez changez les poids et recommencer. 
+        <br><b>Laisser faire ?</b> Lancez la résolution automatique et observez.Vous pouvez changez les poids et recommencer. 
       </div>
 
 
@@ -231,7 +231,7 @@
             </div>
           </div>
           
-          <!-- Apprentissage automatique et Solution aléatoire -->
+          <!-- Résolution automatique et Solution aléatoire -->
           <div class="learning-controls-section">
             <div class="auto-learning-section">
               <button class="learning-btn" onclick="fillSolution()" id="start-learning-btn">Solution aléatoire</button>
@@ -239,7 +239,7 @@
                 <button class="learning-btn" onclick="window.location.reload()">nouveaux poids</button>
               </div>
               <div class="auto-learning-controls">
-                <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Apprentissage<br> automatique</button>
+                <button class="learning-btn" onclick="startAutoLearning()" id="start-learning-btn">Résolution<br> automatique</button>
                 <button class="learning-btn" onclick="stopAutoLearning()" id="stop-learning-btn" disabled>Arrêter</button>
                 <span class="learning-status" id="learning-status"></span>
               </div>
@@ -261,34 +261,37 @@
         </div>
 
       </div>
-<h4>L'algorithme d'apprentissage automatique de Rosenblatt </h4>
-<p>
- Avec un perceptron classifieur, quel que soit le nombre d'entrées, 
- il n'y a que 2 prédictions possibles et 3 cas d'erreurs potentielles : 
 
-<table class="perceptron">
-    <thead>
-        <tr>
-            <th>objectif</th><th>prédiction</th><th>erreur e</th><th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td>0</td><td>0</td><td>0</td><td>rien</td></tr>
-        <tr><td>1</td><td>1</td><td>0</td><td>rien</td></tr>
-        <tr><td>0</td><td>1</td><td>−1</td><td><code>w ← w − η·x</code>, <code>b ← b − η</code> <br>(pour baisser le score brut)</td></tr>
-        <tr><td>1</td><td>0</td><td>+1</td><td><code>w ← w + η·x</code>, <code>b ← b + η</code> <<br>(pour monter le score brut )</td></tr>
-    </tbody>
-</table>
-Le <span class = "keyword"> taux d'apprentissage</span> η  
-(êta) est petit nombre positif qui contrôle l'amplitude de la correction à chaque erreur.
+      <hr>
+    <h4>L'algorithme de résolution automatique de Rosenblatt </h4>
+    <p>
+    Cet algorithme, ancêtre des techniques d'apprentissage automatique, effectue des corrections par petits étapes.
+    <br> 
+    En étant réduit à (O,1), on n'a que deux cas d'erreur à traiter : Une prédiction trop haute ou une prédiction trop basse:
+    <table class="perceptron" style="align:center">
+        <thead>
+            <tr>
+                <th>objectif</th><th>prédiction</th><th>erreur e</th><th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>0</td><td>0</td><td>0</td><td>rien</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>rien</td></tr>
+            <tr><td>0</td><td>1</td><td>−1</td><td><code>w ← w − η·x</code>, <code>b ← b − η</code> <br>(pour baisser le score brut)</td></tr>
+            <tr><td>1</td><td>0</td><td>+1</td><td><code>w ← w + η·x</code>, <code>b ← b + η</code> <<br>(pour monter le score brut )</td></tr>
+        </tbody>
+    </table>
+    Le pas η  
+    (êta) est petit nombre positif qui contrôle l'amplitude de la correction à chaque erreur.
 
-<br>Les poids convergent ainsi progressivement ( le plus souvent ) vers une séparation correcte.
-<br>
-<br>Pour accélérer l'apprentissage, les corrections commencent par de grands pas puis, au fil des itérations, ce pas est réduit.
-<br> Un pas trop grand et l'algorithme <i>danse à gauche à droite</i> au-dessus du minimum, trop petit, 
-il finit par <i>piétiner</i> :
-<br><b>Un apprentissage n'aboutit pas toujours au meilleur résultat.</b>
-</p>
+    <br>Les poids convergent ainsi progressivement ( le plus souvent ) vers une séparation correcte.
+
+    <br>Pour accélérer l'apprentissage, les corrections commencent par de grands pas puis, au fil des itérations, ce pas est réduit.
+    <br><br> Un pas trop grand et l'algorithme oscille entre plusieurs configurations sans jamais se stabiliser ; 
+    <br>Un pas trop petit fait progresser si lentement qu'il peut nécessiter un nombre prohibitif d'itérations.
+    <br><br>Un apprentissage n'aboutit pas toujours : l'algorithme du perceptron ne converge que si les données sont linéairement séparables 
+    <br>(c'est à dire par des droites en deux dimensions, par des plans en 3D, par des hyperplans en N dimensions)
+    </p>
 
 
 

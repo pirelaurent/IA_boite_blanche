@@ -99,7 +99,7 @@
                 </ul>
 
                 <div class="image-container">
-                    <img src="img/chap1/uneDroite_H.png" width="380" />
+                    <img src="img/chap1/uneDroite_H.png" width="480" />
                     <p><em>Le perceptron historique est un classifieur binaire.</em></p>
                 </div>
 
@@ -157,12 +157,12 @@
                 <h3>Le jeu de données et de test</h3>
                 Il définit le comportement attendu du réseau de neurones.
                 <p>
-    C'est ce qu'on appelle l'<span class="keyword">apprentissage supervisé</span> :
-    on fournit au modèle des <b>exemples étiquetés</b> (entrée + sortie attendue),
-    et il apprend à reproduire ce comportement.
-    <br>Ci-dessous, chaque ligne du tableau est un exemple supervisé :
-    <span class="code">(entrées) → (sortie souhaitée)</span>.
-</p>
+                C'est ce qu'on appelle l'<span class="keyword">apprentissage supervisé</span> :
+                on fournit au modèle des <b>exemples étiquetés</b> (entrée + sortie attendue),
+                et il apprend à reproduire ce comportement.
+                <br>Ci-dessous, chaque ligne du tableau est un exemple supervisé :
+                <span class="code">(entrées) → (sortie souhaitée)</span>.
+            </p>
                 <div class="center">
                     <table class="weight-table">
                         <thead>
@@ -229,18 +229,17 @@
 
                 <h3>Un neurone par feu</h3>
                 <p>
-                    Un neurone n'ayant qu'une sortie. Il faut un <span class="keyword">réseau</span> de 3 neurones
-                    distincts.
+                    Un neurone n'ayant qu'une sortie. Il faut associer trois neurones  distincts: un par feu.
                 </p>
                 <div class="image-container">
                     <img
                         width="600"
                         src="img/chap1/NeuronesUneCoucheVertical.png"
-                        alt="Représentation détaillée du réseau"
+                        alt="Représentation un neurone par feu"
                     />
                     <p>
                         <em>
-                            Représentation du réseau avec détail des 3 neurones perceptrons en parallèle<br />
+                            Association de 3 neurones Perceptron en vision boîte blanche<br />
                         </em>
                     </p>
                 </div>
@@ -273,7 +272,7 @@
                 <p>
                     Les poids sont initialisés au hasard au début de chaque entraînement.
                 <br> Le but est de les ajuster  pour isoler chaque feu indépendamment.
-                    <br>On pourra entrainer soi-même ce modèle en modifiant ses poids ou voir un apprentissage automatique en action.
+                    <br>On pourra entrainer soi-même ce modèle en modifiant ses poids ou voir un algorithme de résolution  automatique en action.
                 
                 </p>
                 <div class="center" style="margin: 20px 0;">
@@ -285,8 +284,8 @@
                         />
                         <em>
                         <br> La visualisation montre les droites des trois neurones selon leurs paramètres courants.
-                        <br> Les points colorés indiquent quel feu DOIT s'allumer selon la combinaison des interrupteurs.
-               <br>Le point doit être le seul du côté où le score brut est positif, ce qui se voit par une plage colorée.
+                        <br> Les points colorés indiquent quel feu DOIT s'allumer selon la position des interrupteurs.
+               <br>Un point doit être du côté où le score brut de son neurone est positif (plage colorée) et y être le seul.
                </em>
                 </div>
                
